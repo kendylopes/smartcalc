@@ -1,0 +1,199 @@
+@import "tailwindcss";
+
+:root {
+	--theme-color: #22d3ee;
+	--theme-glow: rgba(34, 211, 238, 0.2);
+	--theme-accent: #38bdf8;
+	--theme-border: rgba(34, 211, 238, 0.35);
+	--theme-bg-subtle: rgba(34, 211, 238, 0.08);
+}
+
+body {
+	font-family: "Outfit", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+	background-color: #0b0d13;
+	color: #ffffff;
+	user-select: none;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+.font-mono-math {
+	font-family: "JetBrains Mono", monospace;
+}
+
+.font-display {
+	font-family: "Outfit", sans-serif;
+}
+
+/* Fundo com iluminação ambiente sutil */
+.bg-ambient {
+	background-color: #0b0d13;
+	background-image: 
+		radial-gradient(at 0% 0%, rgba(34, 211, 238, 0.05) 0px, transparent 50%),
+		radial-gradient(at 100% 100%, rgba(192, 132, 252, 0.04) 0px, transparent 50%),
+		radial-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+	background-size: 100% 100%, 100% 100%, 28px 28px;
+}
+
+/* Custom Sleek Scrollbar */
+::-webkit-scrollbar {
+	width: 4px;
+	height: 4px;
+}
+
+::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+	background: rgba(255, 255, 255, 0.15);
+	border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: rgba(255, 255, 255, 0.3);
+}
+
+.scrollbar-none::-webkit-scrollbar {
+	display: none;
+}
+
+.scrollbar-none {
+	-ms-overflow-style: none;
+	scrollbar-width: none;
+}
+
+/* ==========================================================================
+   DARK NEUMORPHISM DESIGN SYSTEM (SOFT-UI TÁTIL)
+   ========================================================================== */
+
+/* 1. Chassi da Calculadora (Carcaça Extrudada 3D) */
+.neu-chassis {
+	background: linear-gradient(155deg, #141822 0%, #0d1017 100%);
+	border: 1px solid rgba(255, 255, 255, 0.06);
+	box-shadow: 
+		18px 18px 45px rgba(0, 0, 0, 0.85),
+		-10px -10px 30px rgba(255, 255, 255, 0.025),
+		inset 1px 1px 1.5px rgba(255, 255, 255, 0.08);
+}
+
+/* 2. Painel Lateral (Histórico) */
+.neu-panel {
+	background: linear-gradient(155deg, #131720 0%, #0c0f15 100%);
+	border: 1px solid rgba(255, 255, 255, 0.05);
+	box-shadow: 
+		14px 14px 35px rgba(0, 0, 0, 0.75),
+		-8px -8px 25px rgba(255, 255, 255, 0.02),
+		inset 1px 1px 1.5px rgba(255, 255, 255, 0.06);
+}
+
+/* 3. Visor Embutido (Cavidade com Sombra Interna Profunda) */
+.neu-display {
+	background: #06080d;
+	border: 1px solid rgba(255, 255, 255, 0.04);
+	box-shadow: 
+		inset 5px 5px 14px rgba(0, 0, 0, 0.95),
+		inset -3px -3px 10px rgba(255, 255, 255, 0.025),
+		0 1px 1.5px rgba(255, 255, 255, 0.05);
+}
+
+/* 4. Teclas e Botões Neumórficos Padrão (Extrudados) */
+.neu-btn-default {
+	background: linear-gradient(145deg, #1a202c 0%, #11151f 100%);
+	border: 1px solid rgba(255, 255, 255, 0.06);
+	box-shadow: 
+		5px 5px 12px rgba(0, 0, 0, 0.7),
+		-3px -3px 9px rgba(255, 255, 255, 0.035),
+		inset 0 1px 1px rgba(255, 255, 255, 0.08);
+}
+
+.neu-btn-default:hover {
+	background: linear-gradient(145deg, #1e2533 0%, #131824 100%);
+	box-shadow: 
+		6px 6px 14px rgba(0, 0, 0, 0.75),
+		-4px -4px 10px rgba(255, 255, 255, 0.05),
+		inset 0 1px 1px rgba(255, 255, 255, 0.12);
+}
+
+/* 5. Tecla Pressionada / Afundada (Sensação Física Inset) */
+.neu-btn-pressed,
+.neu-btn-default:active {
+	background: linear-gradient(145deg, #0e121a 0%, #141822 100%) !important;
+	box-shadow: 
+		inset 4px 4px 9px rgba(0, 0, 0, 0.9),
+		inset -2px -2px 6px rgba(255, 255, 255, 0.03) !important;
+	transform: translateY(1.5px);
+}
+
+/* 6. Botão de Operador Neumórfico */
+.neu-btn-operator {
+	background: linear-gradient(145deg, #171c27 0%, #0f131c 100%);
+	border: 1px solid rgba(255, 255, 255, 0.06);
+	box-shadow: 
+		5px 5px 12px rgba(0, 0, 0, 0.7),
+		-3px -3px 9px rgba(255, 255, 255, 0.03),
+		inset 0 1px 1px rgba(255, 255, 255, 0.06);
+}
+
+.neu-btn-operator:hover {
+	background: linear-gradient(145deg, #1c2230 0%, #121622 100%);
+}
+
+.neu-btn-operator-active {
+	background: linear-gradient(145deg, #0d1018 0%, #151a25 100%) !important;
+	box-shadow: 
+		inset 4px 4px 9px rgba(0, 0, 0, 0.9),
+		inset -2px -2px 6px rgba(255, 255, 255, 0.03),
+		0 0 16px var(--theme-glow) !important;
+	transform: translateY(1.5px);
+}
+
+/* 7. Botão de Ação (C, Del) */
+.neu-btn-action {
+	background: linear-gradient(145deg, #181d28 0%, #10141d 100%);
+	border: 1px solid rgba(255, 255, 255, 0.06);
+	box-shadow: 
+		5px 5px 12px rgba(0, 0, 0, 0.7),
+		-3px -3px 9px rgba(255, 255, 255, 0.03),
+		inset 0 1px 1px rgba(255, 255, 255, 0.06);
+}
+
+.neu-btn-action:hover {
+	background: linear-gradient(145deg, #201b22 0%, #141118 100%);
+	border-color: rgba(248, 113, 113, 0.2);
+}
+
+.neu-btn-action:active {
+	background: linear-gradient(145deg, #0f0c11 0%, #16121b 100%) !important;
+	box-shadow: 
+		inset 4px 4px 9px rgba(0, 0, 0, 0.9),
+		inset -2px -2px 6px rgba(255, 255, 255, 0.03) !important;
+	transform: translateY(1.5px);
+}
+
+/* 8. Botão de Igual (Destaque Iluminado) */
+.neu-btn-equal {
+	box-shadow: 
+		6px 6px 16px rgba(0, 0, 0, 0.8),
+		-3px -3px 10px rgba(255, 255, 255, 0.05),
+		0 0 25px var(--theme-glow),
+		inset 0 1px 1.5px rgba(255, 255, 255, 0.4);
+}
+
+.neu-btn-equal:active {
+	box-shadow: 
+		inset 4px 4px 9px rgba(0, 0, 0, 0.9),
+		inset -2px -2px 6px rgba(255, 255, 255, 0.05),
+		0 0 15px var(--theme-glow) !important;
+	transform: translateY(1.5px);
+}
+
+/* 9. Modais Técnicos Neumórficos */
+.tech-modal {
+	background: linear-gradient(160deg, #131720 0%, #0c0f15 100%);
+	border: 1px solid rgba(255, 255, 255, 0.08);
+	box-shadow: 
+		24px 24px 60px rgba(0, 0, 0, 0.95),
+		-12px -12px 35px rgba(255, 255, 255, 0.02),
+		inset 1px 1px 2px rgba(255, 255, 255, 0.08);
+}
