@@ -119,10 +119,9 @@ export const TopNavigation = memo(function TopNavigation({
 						focus-visible:ring-1
 						focus-visible:ring-cyan-400
 						cursor-pointer
-						${
-							isOpen
-								? "bg-zinc-800 text-white border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.08)]"
-								: "bg-white/4 text-zinc-300 border-white/8 hover:text-white hover:bg-white/8"
+						${isOpen
+							? "bg-zinc-800 text-white border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.08)]"
+							: "bg-white/4 text-zinc-300 border-white/8 hover:text-white hover:bg-white/8"
 						}
 					`}
 				>
@@ -267,11 +266,10 @@ export const TopNavigation = memo(function TopNavigation({
 											<span>Modo Científico</span>
 										</div>
 										<span
-											className={`text-[11px] px-2 py-0.5 rounded-full font-medium ${
-												isAdvanced
+											className={`text-[11px] px-2 py-0.5 rounded-full font-medium ${isAdvanced
 													? `${currentTheme.accentText} bg-white/10`
 													: "text-zinc-500 bg-white/4"
-											}`}
+												}`}
 										>
 											{isAdvanced ? "Ligado" : "Básico"}
 										</span>
@@ -300,11 +298,10 @@ export const TopNavigation = memo(function TopNavigation({
 												<span>Tela Sempre Acesa</span>
 											</div>
 											<span
-												className={`text-[11px] px-2 py-0.5 rounded-full font-medium ${
-													isWakeLockActive
+												className={`text-[11px] px-2 py-0.5 rounded-full font-medium ${isWakeLockActive
 														? "text-amber-400 bg-amber-500/10 font-semibold"
 														: "text-zinc-500 bg-white/4"
-												}`}
+													}`}
 											>
 												{isWakeLockActive ? "Ativa" : "Padrão"}
 											</span>
@@ -329,11 +326,10 @@ export const TopNavigation = memo(function TopNavigation({
 												<span>Modo Compacto</span>
 											</div>
 											<span
-												className={`text-[11px] px-2 py-0.5 rounded-full font-medium ${
-													isCompactMode
+												className={`text-[11px] px-2 py-0.5 rounded-full font-medium ${isCompactMode
 														? `${currentTheme.accentText} bg-white/10`
 														: "text-zinc-500 bg-white/4"
-												}`}
+													}`}
 											>
 												{isCompactMode ? "Ativo" : "Normal"}
 											</span>
@@ -377,11 +373,10 @@ export const TopNavigation = memo(function TopNavigation({
 											<span>Efeitos Sonoros</span>
 										</div>
 										<span
-											className={`text-[11px] px-2 py-0.5 rounded-full font-medium ${
-												!isMuted
+											className={`text-[11px] px-2 py-0.5 rounded-full font-medium ${!isMuted
 													? "text-emerald-400 bg-emerald-500/10"
 													: "text-zinc-500 bg-white/4"
-											}`}
+												}`}
 										>
 											{!isMuted ? "Ligado" : "Mudo"}
 										</span>
@@ -482,7 +477,7 @@ export const TopNavigation = memo(function TopNavigation({
 														justify-center
 													`}
 												>
-													{isSelected && <Check size={11} className="text-black stroke-[3]" />}
+													{isSelected && <Check size={11} className="text-black stroke-3" />}
 												</span>
 											</button>
 										);

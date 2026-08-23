@@ -1,6 +1,7 @@
 export * from "./BudgetBar";
 export * from "./CalculatorButton";
 export * from "./Display";
+export * from "./ExpenseChart";
 export * from "./HelpModal";
 export * from "./HistoryPanel";
 export * from "./KeyboardShortcutsModal";

@@ -7,6 +7,8 @@ import {
 	Download,
 	FileSpreadsheet,
 	FileText,
+	ListOrdered,
+	PieChart,
 	Share2,
 	ShoppingBag,
 	Tag,
@@ -17,6 +19,7 @@ import type { ThemeConfig } from "../hooks/useThemes";
 import type { HistoryItem } from "../types";
 import { formatDisplay, formatNumberPtBR } from "../utils/format";
 import { BudgetBar } from "./BudgetBar";
+import { ExpenseChart } from "./ExpenseChart";
 
 type Props = {
 	history: HistoryItem[];
@@ -29,11 +32,11 @@ type Props = {
 
 const PRESET_TAGS = [
 	{ label: "Mercado", icon: "🛒" },
-	{ label: "Casa", icon: "🏠" },
-	{ label: "Trabalho", icon: "💼" },
-	{ label: "Comida", icon: "🍔" },
+	{ label: "Açougue", icon: "🥩" },
+	{ label: "Padaria", icon: "🍞" },
+	{ label: "Hortifrúti", icon: "🥦" },
+	{ label: "Limpeza", icon: "🧼" },
 	{ label: "Contas", icon: "💡" },
-	{ label: "Transporte", icon: "🚗" },
 ];
 
 export const HistoryPanel = memo(function HistoryPanel({
@@ -44,6 +47,7 @@ export const HistoryPanel = memo(function HistoryPanel({
 	onClearAll,
 	theme,
 }: Props) {
+	const [activeTab, setActiveTab] = useState<"list" | "chart">("list");
 	const [copiedId, setCopiedId] = useState<string | null>(null);
 	const [tagEditingId, setTagEditingId] = useState<string | null>(null);
 	const [customTagInput, setCustomTagInput] = useState("");
@@ -255,6 +259,43 @@ _Calculado via SmartCalc_`;
 				currentTotal={history.reduce((acc, item) => acc + (Number(item.result) || 0), 0)}
 			/>
 
+			{/* Alternador de Visualização (Extrato vs Gráfico) */}
+			{history.length > 0 && (
+				<div className="grid grid-cols-2 gap-1 p-1 bg-zinc-950/80 rounded-xl border border-white/6 my-2">
+					<button
+						type="button"
+						onClick={() => setActiveTab("list")}
+						className={`
+							flex items-center justify-center gap-1.5 py-1 rounded-lg text-[11px] font-medium transition-all cursor-pointer outline-none
+							${
+								activeTab === "list"
+									? "bg-zinc-800 text-white shadow-sm font-semibold"
+									: "text-zinc-400 hover:text-zinc-200 hover:bg-white/3"
+							}
+						`}
+					>
+						<ListOrdered size={12} />
+						<span>Extrato</span>
+					</button>
+
+					<button
+						type="button"
+						onClick={() => setActiveTab("chart")}
+						className={`
+							flex items-center justify-center gap-1.5 py-1 rounded-lg text-[11px] font-medium transition-all cursor-pointer outline-none
+							${
+								activeTab === "chart"
+									? `${theme?.operatorBgActive ?? "bg-cyan-500/20"} ${theme?.accentText ?? "text-cyan-300"} shadow-sm font-semibold border ${theme?.operatorBorderActive ?? "border-cyan-500/30"}`
+									: "text-zinc-400 hover:text-zinc-200 hover:bg-white/3"
+							}
+						`}
+					>
+						<PieChart size={12} />
+						<span>Gráfico</span>
+					</button>
+				</div>
+			)}
+
 			{/* Empty State */}
 			{history.length === 0 && (
 				<div className="flex-1 flex flex-col items-center justify-center py-12 text-center">
@@ -265,8 +306,13 @@ _Calculado via SmartCalc_`;
 				</div>
 			)}
 
-			{/* History List com scroll contido e padding de respiro */}
-			{history.length > 0 && (
+			{/* Visualização: Gráfico de Categorias */}
+			{history.length > 0 && activeTab === "chart" && (
+				<ExpenseChart history={history} theme={theme} />
+			)}
+
+			{/* Visualização: Extrato / Lista de Itens */}
+			{history.length > 0 && activeTab === "list" && (
 				<div className="flex-1 overflow-y-auto max-h-115 pr-1 pb-1 space-y-2 scrollbar-none">
 					<AnimatePresence mode="popLayout">
 						{history.map((item) => (
