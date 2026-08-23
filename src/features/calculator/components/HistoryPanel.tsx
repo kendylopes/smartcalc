@@ -27,6 +27,7 @@ type Props = {
 	onDelete: (id: string) => void;
 	onUpdateTag?: (id: string, tag?: string) => void;
 	onClearAll?: () => void;
+	onClose?: () => void;
 	theme?: ThemeConfig;
 };
 
@@ -45,6 +46,7 @@ export const HistoryPanel = memo(function HistoryPanel({
 	onDelete,
 	onUpdateTag,
 	onClearAll,
+	onClose,
 	theme,
 }: Props) {
 	const [activeTab, setActiveTab] = useState<"list" | "chart">("list");
@@ -250,6 +252,19 @@ _Calculado via SmartCalc_`;
 								</button>
 							)}
 						</>
+					)}
+
+					{/* Botão de Fechar Painel do Histórico */}
+					{onClose && (
+						<button
+							type="button"
+							onClick={onClose}
+							aria-label="Fechar painel do histórico"
+							title="Fechar painel"
+							className="p-1 rounded-lg text-zinc-400 hover:text-white hover:bg-white/8 transition-colors outline-none focus-visible:ring-1 focus-visible:ring-cyan-400 cursor-pointer ml-1"
+						>
+							<X size={14} />
+						</button>
 					)}
 				</div>
 			</div>

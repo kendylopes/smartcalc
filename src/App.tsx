@@ -25,7 +25,7 @@ import { FinanceModal } from "@/features/finance";
 import { PwaInstallBanner, usePwaInstall, useWakeLock } from "@/features/pwa";
 
 export function App() {
-	const [showHistory, setShowHistory] = useState(true);
+	const [showHistory, setShowHistory] = useState(false);
 	const [isAdvanced, setIsAdvanced] = useState(false);
 	const [isCompactMode, setIsCompactMode] = useState(false);
 	const [isShortcutsOpen, setIsShortcutsOpen] = useState(false);
@@ -286,7 +286,7 @@ export function App() {
 							<span>Quantidade</span>
 						</button>
 
-						{/* Botão Alternar Histórico Mobile */}
+						{/* Botão Alternar Histórico */}
 						<button
 							type="button"
 							onClick={() => {
@@ -317,9 +317,11 @@ export function App() {
 							`}
 						>
 							<History size={13} />
-							<span className="hidden sm:inline">Histórico</span>
+							<span>Histórico</span>
 							{history.length > 0 && (
-								<span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+								<span className="text-[10px] px-1.5 py-0.2 rounded-full font-mono bg-cyan-500/20 text-cyan-300 font-semibold border border-cyan-500/30">
+									{history.length}
+								</span>
 							)}
 						</button>
 					</div>
@@ -372,34 +374,37 @@ export function App() {
 					</div>
 				</section>
 
-				{/* HISTÓRICO PANEL CARD NEUMÓRFICO */}
-				{showHistory && !isCompactMode && (
-					<motion.aside
-						initial={{ opacity: 0, x: 20 }}
-						animate={{ opacity: 1, x: 0 }}
-						exit={{ opacity: 0, x: 20 }}
-						transition={{ duration: 0.2 }}
-						className="relative w-full max-w-90 sm:max-w-95 md:w-76 overflow-hidden rounded-[2.4rem] neu-panel p-4 sm:p-4.5 flex flex-col justify-between"
-					>
-						<HistoryPanel
-							history={history}
-							theme={theme}
-							onSelect={(res) => {
-								playClick();
-								selectFromHistory(res);
-							}}
-							onDelete={(id) => {
-								playDelete();
-								deleteHistoryItem(id);
-							}}
-							onUpdateTag={updateHistoryItemTag}
-							onClearAll={() => {
-								playDelete();
-								clearHistory();
-							}}
-						/>
-					</motion.aside>
-				)}
+				{/* HISTÓRICO PANEL CARD NEUMÓRFICO COM ANIMAÇÃO */}
+				<AnimatePresence>
+					{showHistory && !isCompactMode && (
+						<motion.aside
+							initial={{ opacity: 0, x: 20, scale: 0.98 }}
+							animate={{ opacity: 1, x: 0, scale: 1 }}
+							exit={{ opacity: 0, x: 20, scale: 0.98 }}
+							transition={{ duration: 0.2 }}
+							className="relative w-full max-w-90 sm:max-w-95 md:w-76 overflow-hidden rounded-[2.4rem] neu-panel p-4 sm:p-4.5 flex flex-col justify-between"
+						>
+							<HistoryPanel
+								history={history}
+								theme={theme}
+								onClose={() => setShowHistory(false)}
+								onSelect={(res) => {
+									playClick();
+									selectFromHistory(res);
+								}}
+								onDelete={(id) => {
+									playDelete();
+									deleteHistoryItem(id);
+								}}
+								onUpdateTag={updateHistoryItemTag}
+								onClearAll={() => {
+									playDelete();
+									clearHistory();
+								}}
+							/>
+						</motion.aside>
+					)}
+				</AnimatePresence>
 			</div>
 
 			{/* Banner discreto de instalação PWA */}
