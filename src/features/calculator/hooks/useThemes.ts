@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 export type ThemeId = "cyan" | "violet" | "emerald" | "rose" | "amber";
+export type ColorMode = "dark" | "light";
 
 export type ThemeConfig = {
 	id: ThemeId;
@@ -24,7 +25,7 @@ export const THEMES: Record<ThemeId, ThemeConfig> = {
 		id: "cyan",
 		name: "Cyber Cyan",
 		hex: "#22d3ee",
-		glowColor: "rgba(34, 211, 238, 0.2)",
+		glowColor: "rgba(34, 211, 238, 0.25)",
 		dotColor: "bg-cyan-400",
 		accentText: "text-cyan-400",
 		accentBorder: "border-cyan-400/40",
@@ -36,7 +37,7 @@ export const THEMES: Record<ThemeId, ThemeConfig> = {
 		cursorColor: "text-cyan-400",
 		cssVars: {
 			"--theme-color": "#22d3ee",
-			"--theme-glow": "rgba(34, 211, 238, 0.2)",
+			"--theme-glow": "rgba(34, 211, 238, 0.25)",
 			"--theme-accent": "#38bdf8",
 			"--theme-border": "rgba(34, 211, 238, 0.35)",
 			"--theme-bg-subtle": "rgba(34, 211, 238, 0.08)",
@@ -46,7 +47,7 @@ export const THEMES: Record<ThemeId, ThemeConfig> = {
 		id: "violet",
 		name: "Electric Violet",
 		hex: "#c084fc",
-		glowColor: "rgba(192, 132, 252, 0.2)",
+		glowColor: "rgba(192, 132, 252, 0.25)",
 		dotColor: "bg-purple-400",
 		accentText: "text-purple-400",
 		accentBorder: "border-purple-400/40",
@@ -58,7 +59,7 @@ export const THEMES: Record<ThemeId, ThemeConfig> = {
 		cursorColor: "text-purple-400",
 		cssVars: {
 			"--theme-color": "#c084fc",
-			"--theme-glow": "rgba(192, 132, 252, 0.2)",
+			"--theme-glow": "rgba(192, 132, 252, 0.25)",
 			"--theme-accent": "#d8b4fe",
 			"--theme-border": "rgba(192, 132, 252, 0.35)",
 			"--theme-bg-subtle": "rgba(192, 132, 252, 0.08)",
@@ -68,7 +69,7 @@ export const THEMES: Record<ThemeId, ThemeConfig> = {
 		id: "emerald",
 		name: "Emerald Matrix",
 		hex: "#34d399",
-		glowColor: "rgba(52, 211, 153, 0.2)",
+		glowColor: "rgba(52, 211, 153, 0.25)",
 		dotColor: "bg-emerald-400",
 		accentText: "text-emerald-400",
 		accentBorder: "border-emerald-400/40",
@@ -80,7 +81,7 @@ export const THEMES: Record<ThemeId, ThemeConfig> = {
 		cursorColor: "text-emerald-400",
 		cssVars: {
 			"--theme-color": "#34d399",
-			"--theme-glow": "rgba(52, 211, 153, 0.2)",
+			"--theme-glow": "rgba(52, 211, 153, 0.25)",
 			"--theme-accent": "#6ee7b7",
 			"--theme-border": "rgba(52, 211, 153, 0.35)",
 			"--theme-bg-subtle": "rgba(52, 211, 153, 0.08)",
@@ -90,7 +91,7 @@ export const THEMES: Record<ThemeId, ThemeConfig> = {
 		id: "rose",
 		name: "Sunset Rose",
 		hex: "#fb7185",
-		glowColor: "rgba(251, 113, 133, 0.2)",
+		glowColor: "rgba(251, 113, 133, 0.25)",
 		dotColor: "bg-rose-400",
 		accentText: "text-rose-400",
 		accentBorder: "border-rose-400/40",
@@ -102,7 +103,7 @@ export const THEMES: Record<ThemeId, ThemeConfig> = {
 		cursorColor: "text-rose-400",
 		cssVars: {
 			"--theme-color": "#fb7185",
-			"--theme-glow": "rgba(251, 113, 133, 0.2)",
+			"--theme-glow": "rgba(251, 113, 133, 0.25)",
 			"--theme-accent": "#fda4af",
 			"--theme-border": "rgba(251, 113, 133, 0.35)",
 			"--theme-bg-subtle": "rgba(251, 113, 133, 0.08)",
@@ -112,7 +113,7 @@ export const THEMES: Record<ThemeId, ThemeConfig> = {
 		id: "amber",
 		name: "Solar Amber",
 		hex: "#fbbf24",
-		glowColor: "rgba(251, 191, 36, 0.2)",
+		glowColor: "rgba(251, 191, 36, 0.25)",
 		dotColor: "bg-amber-400",
 		accentText: "text-amber-400",
 		accentBorder: "border-amber-400/40",
@@ -124,7 +125,7 @@ export const THEMES: Record<ThemeId, ThemeConfig> = {
 		cursorColor: "text-amber-400",
 		cssVars: {
 			"--theme-color": "#fbbf24",
-			"--theme-glow": "rgba(251, 191, 36, 0.2)",
+			"--theme-glow": "rgba(251, 191, 36, 0.25)",
 			"--theme-accent": "#fde68a",
 			"--theme-border": "rgba(251, 191, 36, 0.35)",
 			"--theme-bg-subtle": "rgba(251, 191, 36, 0.08)",
@@ -142,6 +143,15 @@ export function useThemes() {
 		}
 	});
 
+	const [colorMode, setColorMode] = useState<ColorMode>(() => {
+		try {
+			const savedMode = localStorage.getItem("calculator-color-mode") as ColorMode;
+			return savedMode === "light" ? "light" : "dark";
+		} catch {
+			return "dark";
+		}
+	});
+
 	const theme = THEMES[themeId] || THEMES.cyan;
 
 	const setTheme = (id: ThemeId) => {
@@ -155,18 +165,40 @@ export function useThemes() {
 		}
 	};
 
-	// Atualiza as propriedades CSS customizadas dinamicamente
+	const toggleColorMode = () => {
+		setColorMode((prev) => {
+			const next = prev === "dark" ? "light" : "dark";
+			try {
+				localStorage.setItem("calculator-color-mode", next);
+			} catch (e) {
+				console.error(e);
+			}
+			return next;
+		});
+	};
+
+	// Atualiza as classes HTML e variáveis CSS dinamicamente
 	useEffect(() => {
 		const root = document.documentElement;
+		if (colorMode === "light") {
+			root.classList.remove("dark");
+			root.classList.add("light");
+		} else {
+			root.classList.remove("light");
+			root.classList.add("dark");
+		}
+
 		for (const [key, value] of Object.entries(theme.cssVars)) {
 			root.style.setProperty(key, value);
 		}
-	}, [theme]);
+	}, [theme, colorMode]);
 
 	return {
 		theme,
 		themeId,
 		setTheme,
+		colorMode,
+		toggleColorMode,
 		allThemes: Object.values(THEMES),
 	};
 }

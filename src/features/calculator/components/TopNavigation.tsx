@@ -4,14 +4,19 @@ import {
 	ArrowLeftRight,
 	BookOpen,
 	Check,
+	Command,
+	Database,
 	Download,
 	HelpCircle,
-	Maximize2,
+	LayoutDashboard,
+	Maximize,
 	Menu,
-	Minimize2,
+	Minimize,
+	Moon,
 	Palette,
 	Scale,
 	Sparkles,
+	Sun,
 	SunMedium,
 	TrendingUp,
 	Utensils,
@@ -19,7 +24,7 @@ import {
 	VolumeX,
 	X,
 } from "lucide-react";
-import type { ThemeConfig, ThemeId } from "../hooks/useThemes";
+import type { ColorMode, ThemeConfig, ThemeId } from "../hooks/useThemes";
 
 type Props = {
 	isAdvanced: boolean;
@@ -32,10 +37,17 @@ type Props = {
 	onOpenFinance: () => void;
 	onOpenComparator?: () => void;
 	onOpenHelp?: () => void;
+	onOpenBackup?: () => void;
 	isWakeLockActive?: boolean;
 	onToggleWakeLock?: () => void;
 	isCompactMode?: boolean;
 	onToggleCompactMode?: () => void;
+	isStudioMode?: boolean;
+	onToggleStudioMode?: () => void;
+	showKeycaps?: boolean;
+	onToggleKeycaps?: () => void;
+	colorMode?: ColorMode;
+	onToggleColorMode?: () => void;
 	isPwaInstallable?: boolean;
 	onInstallPwa?: () => void;
 	currentTheme: ThemeConfig;
@@ -54,16 +66,24 @@ export const TopNavigation = memo(function TopNavigation({
 	onOpenFinance,
 	onOpenComparator,
 	onOpenHelp,
+	onOpenBackup,
 	isWakeLockActive = false,
 	onToggleWakeLock,
 	isCompactMode = false,
 	onToggleCompactMode,
+	isStudioMode = false,
+	onToggleStudioMode,
+	showKeycaps = false,
+	onToggleKeycaps,
+	colorMode = "dark",
+	onToggleColorMode,
 	onInstallPwa,
 	currentTheme,
 	allThemes,
 	onSelectTheme,
 }: Props) {
 	const [isOpen, setIsOpen] = useState(false);
+	const [isFullscreen, setIsFullscreen] = useState(false);
 	const menuRef = useRef<HTMLDivElement>(null);
 
 	// Fechar menu ao clicar fora
@@ -83,6 +103,23 @@ export const TopNavigation = memo(function TopNavigation({
 		};
 	}, [isOpen]);
 
+	// Alternar Tela Cheia
+	const toggleFullscreen = () => {
+		try {
+			if (!document.fullscreenElement) {
+				document.documentElement.requestFullscreen();
+				setIsFullscreen(true);
+			} else {
+				if (document.exitFullscreen) {
+					document.exitFullscreen();
+				}
+				setIsFullscreen(false);
+			}
+		} catch (e) {
+			console.error(e);
+		}
+	};
+
 	return (
 		<div className="w-full flex items-center justify-between px-1 mb-3.5 select-none relative" ref={menuRef}>
 			{/* Lado Esquerdo: Logo 3D + SmartCalc */}
@@ -100,8 +137,26 @@ export const TopNavigation = memo(function TopNavigation({
 				/>
 			</div>
 
-			{/* Lado Direito: Botão Menu Hambúrguer */}
-			<div className="relative">
+			{/* Lado Direito: Ações Rápidas (Sol/Lua + Menu) */}
+			<div className="flex items-center gap-1.5">
+				{/* Alternância Rápida Dark / Light */}
+				{onToggleColorMode && (
+					<button
+						type="button"
+						onClick={onToggleColorMode}
+						aria-label="Alternar modo claro ou escuro"
+						title={colorMode === "dark" ? "Ativar Modo Claro Neumórfico" : "Ativar Modo Escuro Cyber"}
+						className="p-2 rounded-2xl border border-white/8 bg-white/4 hover:bg-white/8 text-zinc-300 hover:text-white transition-all cursor-pointer outline-none active:scale-95"
+					>
+						{colorMode === "dark" ? (
+							<Sun size={16} className="text-amber-400" />
+						) : (
+							<Moon size={16} className="text-cyan-400" />
+						)}
+					</button>
+				)}
+
+				{/* Botão Menu Hambúrguer */}
 				<motion.button
 					type="button"
 					onClick={() => setIsOpen((prev) => !prev)}
@@ -163,7 +218,7 @@ export const TopNavigation = memo(function TopNavigation({
 								top-11
 								right-0
 								z-50
-								w-72
+								w-76
 								p-2.5
 								rounded-3xl
 								border
@@ -171,6 +226,9 @@ export const TopNavigation = memo(function TopNavigation({
 								tech-modal
 								shadow-[0_20px_50px_rgba(0,0,0,0.95)]
 								space-y-2.5
+								max-h-[85vh]
+								overflow-y-auto
+								scrollbar-none
 							"
 						>
 							{/* Seção 1: Ferramentas & Utilitários */}
@@ -231,7 +289,7 @@ export const TopNavigation = memo(function TopNavigation({
 											<span>Rachar a Conta (Gorjeta)</span>
 										</div>
 										<kbd className="px-1.5 py-0.5 text-[10px] font-mono text-zinc-400 rounded bg-zinc-800 border border-zinc-700">
-											S
+											D
 										</kbd>
 									</button>
 
@@ -283,6 +341,85 @@ export const TopNavigation = memo(function TopNavigation({
 									Visual & Configurações
 								</p>
 								<div className="space-y-0.5 mt-0.5">
+									{/* Modo Estúdio Multi-Painel */}
+									{onToggleStudioMode && (
+										<button
+											type="button"
+											onClick={onToggleStudioMode}
+											className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium text-zinc-200 hover:text-white hover:bg-white/8 transition-colors outline-none cursor-pointer"
+										>
+											<div className="flex items-center gap-2.5">
+												<LayoutDashboard size={14} className={isStudioMode ? currentTheme.accentText : "text-zinc-400"} />
+												<span>Layout Estúdio Amplo</span>
+											</div>
+											<span
+												className={`text-[11px] px-2 py-0.5 rounded-full font-medium ${isStudioMode
+														? `${currentTheme.accentText} bg-white/10`
+														: "text-zinc-500 bg-white/4"
+													}`}
+											>
+												{isStudioMode ? "Ativo" : "Auto"}
+											</span>
+										</button>
+									)}
+
+									{/* Pro Keycaps (Dicas de Teclado) */}
+									{onToggleKeycaps && (
+										<button
+											type="button"
+											onClick={onToggleKeycaps}
+											className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium text-zinc-200 hover:text-white hover:bg-white/8 transition-colors outline-none cursor-pointer"
+										>
+											<div className="flex items-center gap-2.5">
+												<Command size={14} className={showKeycaps ? currentTheme.accentText : "text-zinc-400"} />
+												<span>Dicas de Teclas (Keycaps)</span>
+											</div>
+											<span
+												className={`text-[11px] px-2 py-0.5 rounded-full font-medium ${showKeycaps
+														? "text-cyan-300 bg-cyan-500/10 font-semibold"
+														: "text-zinc-500 bg-white/4"
+													}`}
+											>
+												{showKeycaps ? "Visíveis" : "Ocultas"}
+											</span>
+										</button>
+									)}
+
+									{/* Modo Compacto */}
+									{onToggleCompactMode && (
+										<button
+											type="button"
+											onClick={onToggleCompactMode}
+											className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium text-zinc-200 hover:text-white hover:bg-white/8 transition-colors outline-none cursor-pointer"
+										>
+											<div className="flex items-center gap-2.5">
+												<LayoutDashboard size={14} className={isCompactMode ? currentTheme.accentText : "text-zinc-400"} />
+												<span>Modo Compacto</span>
+											</div>
+											<span
+												className={`text-[11px] px-2 py-0.5 rounded-full font-medium ${isCompactMode
+														? `${currentTheme.accentText} bg-white/10`
+														: "text-zinc-500 bg-white/4"
+													}`}
+											>
+												{isCompactMode ? "Ativo" : "Normal"}
+											</span>
+										</button>
+									)}
+
+									{/* Tela Cheia Imersiva */}
+									<button
+										type="button"
+										onClick={toggleFullscreen}
+										className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium text-zinc-200 hover:text-white hover:bg-white/8 transition-colors outline-none cursor-pointer"
+									>
+										<div className="flex items-center gap-2.5">
+											{isFullscreen ? <Minimize size={14} /> : <Maximize size={14} />}
+											<span>Modo Tela Cheia</span>
+										</div>
+										<span className="text-[10px] text-zinc-500 font-mono">F11</span>
+									</button>
+
 									{/* Manter Tela Acesa (Wake Lock) */}
 									{onToggleWakeLock && (
 										<button
@@ -308,60 +445,10 @@ export const TopNavigation = memo(function TopNavigation({
 										</button>
 									)}
 
-									{/* Modo Compacto */}
-									{onToggleCompactMode && (
-										<button
-											type="button"
-											onClick={() => {
-												onToggleCompactMode();
-											}}
-											className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium text-zinc-200 hover:text-white hover:bg-white/8 transition-colors outline-none cursor-pointer"
-										>
-											<div className="flex items-center gap-2.5">
-												{isCompactMode ? (
-													<Maximize2 size={14} className={currentTheme.accentText} />
-												) : (
-													<Minimize2 size={14} className="text-zinc-400" />
-												)}
-												<span>Modo Compacto</span>
-											</div>
-											<span
-												className={`text-[11px] px-2 py-0.5 rounded-full font-medium ${isCompactMode
-														? `${currentTheme.accentText} bg-white/10`
-														: "text-zinc-500 bg-white/4"
-													}`}
-											>
-												{isCompactMode ? "Ativo" : "Normal"}
-											</span>
-										</button>
-									)}
-
-									{/* Instalar PWA */}
-									{onInstallPwa && (
-										<button
-											type="button"
-											onClick={() => {
-												onInstallPwa();
-												setIsOpen(false);
-											}}
-											className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium text-zinc-200 hover:text-white hover:bg-white/8 transition-colors outline-none cursor-pointer"
-										>
-											<div className="flex items-center gap-2.5">
-												<Download size={14} className="text-cyan-400" />
-												<span>Instalar Aplicativo</span>
-											</div>
-											<span className="text-[10px] px-1.5 py-0.5 rounded bg-cyan-500/15 text-cyan-300 font-semibold">
-												PWA
-											</span>
-										</button>
-									)}
-
 									{/* Som */}
 									<button
 										type="button"
-										onClick={() => {
-											onToggleMute();
-										}}
+										onClick={onToggleMute}
 										className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium text-zinc-200 hover:text-white hover:bg-white/8 transition-colors outline-none cursor-pointer"
 									>
 										<div className="flex items-center gap-2.5">
@@ -399,6 +486,44 @@ export const TopNavigation = memo(function TopNavigation({
 											?
 										</kbd>
 									</button>
+
+									{/* Backup & Restauração */}
+									{onOpenBackup && (
+										<button
+											type="button"
+											onClick={() => {
+												onOpenBackup();
+												setIsOpen(false);
+											}}
+											className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium text-zinc-200 hover:text-white hover:bg-white/8 transition-colors outline-none cursor-pointer"
+										>
+											<div className="flex items-center gap-2.5">
+												<Database size={14} className="text-cyan-400" />
+												<span>Backup & Restauração</span>
+											</div>
+											<span className="text-[10px] text-zinc-400 font-mono">.json</span>
+										</button>
+									)}
+
+									{/* Instalar PWA */}
+									{onInstallPwa && (
+										<button
+											type="button"
+											onClick={() => {
+												onInstallPwa();
+												setIsOpen(false);
+											}}
+											className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium text-zinc-200 hover:text-white hover:bg-white/8 transition-colors outline-none cursor-pointer"
+										>
+											<div className="flex items-center gap-2.5">
+												<Download size={14} className="text-cyan-400" />
+												<span>Instalar Aplicativo</span>
+											</div>
+											<span className="text-[10px] px-1.5 py-0.5 rounded bg-cyan-500/15 text-cyan-300 font-semibold">
+												PWA
+											</span>
+										</button>
+									)}
 
 									{/* Central de Ajuda & Guia de Uso */}
 									{onOpenHelp && (

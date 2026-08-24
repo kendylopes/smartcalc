@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Delete, History, ShoppingBag } from "lucide-react";
 
 import {
+	BackupModal,
 	CalculatorButton,
 	Display,
 	HelpModal,
@@ -10,12 +11,14 @@ import {
 	KeyboardShortcutsModal,
 	PriceComparatorModal,
 	QuantityModal,
+	QuickToolsPanel,
 	SplitBillModal,
 	TopNavigation,
 } from "@/features/calculator/components";
 import { BASIC_BUTTONS, SCIENTIFIC_FUNCTIONS } from "@/features/calculator/constants";
 import {
 	useCalculator,
+	useHapticFeedback,
 	useKeyboard,
 	useSoundFeedback,
 	useThemes,
@@ -29,8 +32,26 @@ export function App() {
 	const [showHistory, setShowHistory] = useState(false);
 	const [isAdvanced, setIsAdvanced] = useState(false);
 	const [isCompactMode, setIsCompactMode] = useState(false);
+	const [isStudioMode, setIsStudioMode] = useState<boolean>(() => {
+		try {
+			const saved = localStorage.getItem("smartcalc-studio-mode");
+			if (saved !== null) return saved === "true";
+			return typeof window !== "undefined" && window.innerWidth >= 1200;
+		} catch {
+			return false;
+		}
+	});
+	const [showKeycaps, setShowKeycaps] = useState<boolean>(() => {
+		try {
+			return localStorage.getItem("smartcalc-keycaps") !== "false";
+		} catch {
+			return true;
+		}
+	});
+
 	const [isShortcutsOpen, setIsShortcutsOpen] = useState(false);
 	const [isHelpOpen, setIsHelpOpen] = useState(false);
+	const [isBackupOpen, setIsBackupOpen] = useState(false);
 	const [isQuantityModalOpen, setIsQuantityModalOpen] = useState(false);
 	const [isComparatorOpen, setIsComparatorOpen] = useState(false);
 	const [isConverterOpen, setIsConverterOpen] = useState(false);
@@ -38,9 +59,10 @@ export function App() {
 	const [isFinanceOpen, setIsFinanceOpen] = useState(false);
 	const [activeKey, setActiveKey] = useState<string | null>(null);
 
-	const { theme, allThemes, setTheme } = useThemes();
+	const { theme, allThemes, setTheme, colorMode, toggleColorMode } = useThemes();
 	const { isMuted, toggleMute, playClick, playOperator, playResult, playDelete } =
 		useSoundFeedback();
+	const { triggerHaptic } = useHapticFeedback(true);
 	const { isInstallable, installApp } = usePwaInstall();
 	const { isActive: isWakeLockActive, toggleWakeLock } = useWakeLock();
 
@@ -67,28 +89,56 @@ export function App() {
 		isResult,
 	} = useCalculator();
 
+	const toggleStudioMode = () => {
+		setIsStudioMode((prev) => {
+			const next = !prev;
+			try {
+				localStorage.setItem("smartcalc-studio-mode", String(next));
+			} catch (e) {
+				console.error(e);
+			}
+			return next;
+		});
+	};
+
+	const toggleKeycaps = () => {
+		setShowKeycaps((prev) => {
+			const next = !prev;
+			try {
+				localStorage.setItem("smartcalc-keycaps", String(next));
+			} catch (e) {
+				console.error(e);
+			}
+			return next;
+		});
+	};
+
 	const handleKeyboardInput = useCallback(
 		(k: string) => {
 			playClick();
+			triggerHaptic("click");
 			input(k);
 		},
-		[playClick, input],
+		[playClick, triggerHaptic, input],
 	);
 
 	const handleKeyboardCalculate = useCallback(() => {
 		playResult();
+		triggerHaptic("result");
 		calculate();
-	}, [playResult, calculate]);
+	}, [playResult, triggerHaptic, calculate]);
 
 	const handleKeyboardClear = useCallback(() => {
 		playDelete();
+		triggerHaptic("delete");
 		clear();
-	}, [playDelete, clear]);
+	}, [playDelete, triggerHaptic, clear]);
 
 	const handleKeyboardDeleteLast = useCallback(() => {
 		playDelete();
+		triggerHaptic("delete");
 		deleteLast();
-	}, [playDelete, deleteLast]);
+	}, [playDelete, triggerHaptic, deleteLast]);
 
 	const handleOpenQuantity = useCallback(() => {
 		setIsQuantityModalOpen(true);
@@ -114,87 +164,90 @@ export function App() {
 		setIsFinanceOpen(true);
 	}, []);
 
+	const handleOpenBackup = useCallback(() => {
+		setIsBackupOpen(true);
+	}, []);
+
+	// Hook de Teclado Global
 	useKeyboard({
 		input: handleKeyboardInput,
 		calculate: handleKeyboardCalculate,
 		clear: handleKeyboardClear,
 		deleteLast: handleKeyboardDeleteLast,
-		setActiveKey,
 		openQuantity: handleOpenQuantity,
 		openComparator: handleOpenComparator,
 		openHelp: handleOpenHelp,
 		openConverter: handleOpenConverter,
 		openSplitBill: handleOpenSplitBill,
 		openFinance: handleOpenFinance,
+		setActiveKey: setActiveKey,
 	});
 
-	const handleClick = useCallback(
-		(val: string) => {
-			setActiveKey(val);
-			setTimeout(() => {
-				setActiveKey(null);
-			}, 70);
+	// Transferir valores de retorno dos modais
+	const handleTransferFromModal = (val: string) => {
+		clear();
+		const clean = val.replace(",", ".");
+		const parts = clean.split("");
+		for (const p of parts) {
+			input(p === "." ? "." : p);
+		}
+	};
 
-			if (val === "C") {
-				playDelete();
-				return clear();
-			}
-
-			if (val === "Del") {
-				playDelete();
-				return deleteLast();
-			}
-
-			if (val === "+/-") {
-				playOperator();
-				return toggleSign();
-			}
-
-			if (val === "=") {
-				playResult();
-				return calculate();
-			}
-
-			if (["+", "-", "*", "/"].includes(val)) {
-				playOperator();
-				return input(val);
-			}
-
-			playClick();
-			input(val);
-		},
-		[clear, deleteLast, toggleSign, calculate, input, playClick, playOperator, playResult, playDelete],
-	);
-
-	const handleTransferFromModal = useCallback(
-		(val: string) => {
+	const handleClick = (btn: string) => {
+		if (btn === "C") {
+			playDelete();
+			triggerHaptic("delete");
+			clear();
+		} else if (btn === "Del") {
+			playDelete();
+			triggerHaptic("delete");
+			deleteLast();
+		} else if (btn === "=") {
 			playResult();
-			input(val);
-		},
-		[input, playResult],
-	);
+			triggerHaptic("result");
+			calculate();
+		} else if (btn === "+/-") {
+			playClick();
+			triggerHaptic("click");
+			toggleSign();
+		} else if (["+", "-", "*", "/", "%"].includes(btn)) {
+			playOperator();
+			triggerHaptic("operator");
+			input(btn);
+		} else {
+			playClick();
+			triggerHaptic("click");
+			input(btn);
+		}
+	};
 
 	return (
-		<main className="min-h-screen w-full flex flex-col items-center justify-center p-3 sm:p-4 bg-ambient text-foreground transition-colors duration-300 font-sans overflow-x-hidden">
+		<main className="min-h-screen w-full bg-ambient flex flex-col items-center justify-center p-2 sm:p-4 md:p-6 select-none overflow-x-hidden font-display transition-colors duration-300">
 			{/* CONTAINER PRINCIPAL */}
-			<div
-				className={`
-					relative
-					w-full
-					flex
-					flex-col
-					md:flex-row
-					items-center
-					md:items-stretch
-					justify-center
-					gap-3.5
-					sm:gap-4.5
-					transition-all
-					duration-300
-					${isCompactMode ? "max-w-76" : "max-w-95 md:max-w-4xl"}
-				`}
-			>
-				{/* CALCULADORA CARD NEUMÓRFICO */}
+			<div className="w-full max-w-7xl flex flex-col lg:flex-row items-center lg:items-stretch justify-center gap-4 sm:gap-6">
+				{/* MODO ESTÚDIO: PAINEL ESQUERDO DE FERRAMENTAS RÁPIDAS (DESKTOP) */}
+				{isStudioMode && !isCompactMode && (
+					<motion.div
+						initial={{ opacity: 0, x: -20 }}
+						animate={{ opacity: 1, x: 0 }}
+						exit={{ opacity: 0, x: -20 }}
+						transition={{ duration: 0.25 }}
+						className="hidden lg:flex"
+					>
+						<QuickToolsPanel
+							theme={theme}
+							onOpenComparator={handleOpenComparator}
+							onOpenSplitBill={handleOpenSplitBill}
+							onOpenFinance={handleOpenFinance}
+							onOpenConverter={handleOpenConverter}
+							onOpenHelp={handleOpenHelp}
+							onOpenBackup={handleOpenBackup}
+							onPlayClick={playClick}
+						/>
+					</motion.div>
+				)}
+
+				{/* CARD PRINCIPAL DA CALCULADORA */}
 				<section
 					className={`
 						relative
@@ -225,10 +278,17 @@ export function App() {
 						onOpenFinance={() => setIsFinanceOpen(true)}
 						onOpenComparator={() => setIsComparatorOpen(true)}
 						onOpenHelp={handleOpenHelp}
+						onOpenBackup={handleOpenBackup}
 						isWakeLockActive={isWakeLockActive}
 						onToggleWakeLock={toggleWakeLock}
 						isCompactMode={isCompactMode}
 						onToggleCompactMode={() => setIsCompactMode((prev) => !prev)}
+						isStudioMode={isStudioMode}
+						onToggleStudioMode={toggleStudioMode}
+						showKeycaps={showKeycaps}
+						onToggleKeycaps={toggleKeycaps}
+						colorMode={colorMode}
+						onToggleColorMode={toggleColorMode}
 						isPwaInstallable={isInstallable}
 						onInstallPwa={installApp}
 						currentTheme={theme}
@@ -246,6 +306,7 @@ export function App() {
 						operatorColor={theme.accentText}
 						onSwipeDelete={() => {
 							playDelete();
+							triggerHaptic("delete");
 							deleteLast();
 						}}
 					/>
@@ -257,6 +318,7 @@ export function App() {
 							type="button"
 							onClick={() => {
 								playClick();
+								triggerHaptic("click");
 								setIsQuantityModalOpen(true);
 							}}
 							title="Adicionar produto / quantidade (Q)"
@@ -292,6 +354,7 @@ export function App() {
 							type="button"
 							onClick={() => {
 								playClick();
+								triggerHaptic("click");
 								setShowHistory((prev) => !prev);
 							}}
 							title="Mostrar / Ocultar Histórico"
@@ -311,7 +374,7 @@ export function App() {
 								outline-none
 								cursor-pointer
 								${
-									showHistory
+									showHistory || isStudioMode
 										? `${theme.accentText} ${theme.operatorBgActive} ${theme.operatorBorderActive}`
 										: "bg-white/4 text-zinc-400 border-white/8 hover:text-white hover:bg-white/8"
 								}
@@ -344,8 +407,10 @@ export function App() {
 											label={btn}
 											variant="scientific"
 											size="compact"
+											showKeycap={showKeycaps}
 											onClick={() => {
 												playOperator();
+												triggerHaptic("operator");
 												if (btn === "√") applySquareRoot();
 												if (btn === "x²") applySquare();
 												if (btn === "1/x") applyInverse();
@@ -369,6 +434,7 @@ export function App() {
 								icon={btn === "Del" ? <Delete size={18} /> : undefined}
 								onClick={() => handleClick(btn)}
 								isActive={activeKey === btn}
+								showKeycap={showKeycaps}
 								theme={theme}
 							/>
 						))}
@@ -377,13 +443,13 @@ export function App() {
 
 				{/* HISTÓRICO PANEL CARD NEUMÓRFICO COM ANIMAÇÃO */}
 				<AnimatePresence>
-					{showHistory && !isCompactMode && (
+					{(showHistory || (isStudioMode && !isCompactMode)) && (
 						<motion.aside
 							initial={{ opacity: 0, x: 20, scale: 0.98 }}
 							animate={{ opacity: 1, x: 0, scale: 1 }}
 							exit={{ opacity: 0, x: 20, scale: 0.98 }}
 							transition={{ duration: 0.2 }}
-							className="relative w-full max-w-90 sm:max-w-95 md:w-76 overflow-hidden rounded-[2.4rem] neu-panel p-4 sm:p-4.5 flex flex-col justify-between"
+							className="relative w-full max-w-90 sm:max-w-95 md:w-76 lg:w-80 overflow-hidden rounded-[2.4rem] neu-panel p-4 sm:p-4.5 flex flex-col justify-between"
 						>
 							<HistoryPanel
 								history={history}
@@ -391,15 +457,18 @@ export function App() {
 								onClose={() => setShowHistory(false)}
 								onSelect={(res) => {
 									playClick();
+									triggerHaptic("click");
 									selectFromHistory(res);
 								}}
 								onDelete={(id) => {
 									playDelete();
+									triggerHaptic("delete");
 									deleteHistoryItem(id);
 								}}
 								onUpdateTag={updateHistoryItemTag}
 								onClearAll={() => {
 									playDelete();
+									triggerHaptic("delete");
 									clearHistory();
 								}}
 							/>
@@ -473,6 +542,13 @@ export function App() {
 			<HelpModal
 				isOpen={isHelpOpen}
 				onClose={() => setIsHelpOpen(false)}
+				theme={theme}
+			/>
+
+			{/* Modal de Backup & Restauração JSON */}
+			<BackupModal
+				isOpen={isBackupOpen}
+				onClose={() => setIsBackupOpen(false)}
 				theme={theme}
 			/>
 

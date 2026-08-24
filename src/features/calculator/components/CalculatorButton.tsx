@@ -11,7 +11,35 @@ type Props = {
 	disabled?: boolean;
 	size?: "normal" | "compact";
 	icon?: ReactNode;
+	showKeycap?: boolean;
 	theme?: ThemeConfig;
+};
+
+const KEYCAP_MAP: Record<string, string> = {
+	C: "Esc",
+	Del: "⌫",
+	"=": "↵",
+	"/": "/",
+	"*": "*",
+	"-": "-",
+	"+": "+",
+	"%": "%",
+	".": ",",
+	"0": "0",
+	"1": "1",
+	"2": "2",
+	"3": "3",
+	"4": "4",
+	"5": "5",
+	"6": "6",
+	"7": "7",
+	"8": "8",
+	"9": "9",
+	"√": "r",
+	"x²": "s",
+	"π": "p",
+	"(": "(",
+	")": ")",
 };
 
 export const CalculatorButton = memo(function CalculatorButton({
@@ -23,6 +51,7 @@ export const CalculatorButton = memo(function CalculatorButton({
 	disabled = false,
 	size = "normal",
 	icon,
+	showKeycap = false,
 	theme,
 }: Props) {
 	const isCompact = size === "compact";
@@ -130,6 +159,8 @@ export const CalculatorButton = memo(function CalculatorButton({
 		}
 	};
 
+	const keycap = KEYCAP_MAP[label];
+
 	return (
 		<motion.button
 			type="button"
@@ -164,6 +195,13 @@ export const CalculatorButton = memo(function CalculatorButton({
 				}
 			`}
 		>
+			{/* Legenda visual do atalho de teclado (Keycap Pro) */}
+			{showKeycap && keycap && (
+				<span className="absolute top-1.5 right-2 text-[9px] font-mono text-zinc-500 opacity-60 group-hover:opacity-100 transition-opacity pointer-events-none select-none">
+					{keycap}
+				</span>
+			)}
+
 			{/* Rótulo do botão ou ícone */}
 			<motion.span
 				className={`

@@ -1,3 +1,4 @@
+export * from "./BackupModal";
 export * from "./BudgetBar";
 export * from "./CalculatorButton";
 export * from "./Display";
@@ -7,5 +8,6 @@ export * from "./HistoryPanel";
 export * from "./KeyboardShortcutsModal";
 export * from "./PriceComparatorModal";
 export * from "./QuantityModal";
+export * from "./QuickToolsPanel";
 export * from "./SplitBillModal";
 export * from "./TopNavigation";
