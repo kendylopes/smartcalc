@@ -15,6 +15,7 @@ import {
 	Trash2,
 	X,
 } from "lucide-react";
+import { toast } from "sonner";
 import type { ThemeConfig } from "../hooks/useThemes";
 import type { HistoryItem } from "../types";
 import { formatDisplay, formatNumberPtBR } from "../utils/format";
@@ -105,7 +106,9 @@ ${lines.join("\n")}
 _Calculado via SmartCalc_`;
 
 		navigator.clipboard.writeText(msg);
-		alert("Cupom de compras copiado! Pronto para colar no WhatsApp.");
+		toast.success("Cupom copiado! Pronto para colar no WhatsApp.", {
+			description: `${history.length} itens acumulados • R$ ${formatNumberPtBR(totalSum.toFixed(2))}`,
+		});
 	};
 
 	// Exportar como TXT
@@ -130,6 +133,7 @@ _Calculado via SmartCalc_`;
 		a.download = `historico-calculadora-${new Date().toISOString().slice(0, 10)}.txt`;
 		a.click();
 		URL.revokeObjectURL(url);
+		toast.success("Arquivo de texto (.txt) baixado com sucesso!");
 	};
 
 	// Exportar como CSV para Excel / Google Planilhas
@@ -163,6 +167,7 @@ _Calculado via SmartCalc_`;
 		a.download = `historico-smartcalc-${new Date().toISOString().slice(0, 10)}.csv`;
 		a.click();
 		URL.revokeObjectURL(url);
+		toast.success("Planilha Excel (.csv) gerada com sucesso!");
 	};
 
 	const handleSaveTag = (id: string, tagValue?: string) => {

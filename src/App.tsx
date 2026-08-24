@@ -23,6 +23,7 @@ import {
 import { ConverterModal } from "@/features/converter";
 import { FinanceModal } from "@/features/finance";
 import { PwaInstallBanner, usePwaInstall, useWakeLock } from "@/features/pwa";
+import { Toaster } from "@/components/ui/sonner";
 
 export function App() {
 	const [showHistory, setShowHistory] = useState(false);
@@ -474,6 +475,9 @@ export function App() {
 				onClose={() => setIsHelpOpen(false)}
 				theme={theme}
 			/>
+
+			{/* Notificações Toast do shadcn/ui */}
+			<Toaster />
 		</main>
 	);
 }

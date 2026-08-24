@@ -1,6 +1,7 @@
 import { memo, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { AlertCircle, Edit2, Plus, Target, Trash2, X } from "lucide-react";
+import { toast } from "sonner";
 import { formatNumberPtBR } from "../utils/format";
 
 type Props = {
@@ -37,6 +38,9 @@ export const BudgetBar = memo(function BudgetBar({ currentTotal }: Props) {
 		if (num > 0) {
 			setBudget(num);
 			setIsEditing(false);
+			toast.success(`Meta de gastos definida para R$ ${formatNumberPtBR(num.toFixed(2))}!`, {
+				icon: "🎯",
+			});
 		}
 	};
 
@@ -44,6 +48,7 @@ export const BudgetBar = memo(function BudgetBar({ currentTotal }: Props) {
 		setBudget(null);
 		setIsEditing(false);
 		setInputBudget("");
+		toast.info("Meta de gastos removida.");
 	};
 
 	const percent = budget && budget > 0 ? Math.min(100, (currentTotal / budget) * 100) : 0;

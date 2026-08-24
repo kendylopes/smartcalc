@@ -10,6 +10,7 @@ import {
 	TrendingUp,
 	X,
 } from "lucide-react";
+import { toast } from "sonner";
 import type { ThemeConfig } from "@/features/calculator/hooks/useThemes";
 import { formatNumberPtBR } from "@/features/calculator/utils/format";
 import { calculateCompoundInterest, calculateInstallments } from "../logic/finance";
@@ -108,6 +109,11 @@ export const FinanceModal = memo(function FinanceModal({
 				? String(installmentResult.monthlyPayment)
 				: String(investmentResult.finalBalance);
 		onTransferToCalculator(val);
+		toast.success(
+			activeTab === "installments"
+				? `Parcela de R$ ${formatNumberPtBR(val)} transferida para a calculadora!`
+				: `Saldo de R$ ${formatNumberPtBR(val)} transferido para a calculadora!`,
+		);
 		onClose();
 	};
 

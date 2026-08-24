@@ -8,6 +8,7 @@ import {
 	Trophy,
 	X,
 } from "lucide-react";
+import { toast } from "sonner";
 import type { ThemeConfig } from "../hooks/useThemes";
 import { formatNumberPtBR } from "../utils/format";
 
@@ -149,6 +150,9 @@ export const PriceComparatorModal = memo(function PriceComparatorModal({
 		if (!comparison) return;
 		onPlayConfirm?.();
 		onTransferToCalculator(String(comparison.winningPrice));
+		toast.success(`Preço vencedor R$ ${formatNumberPtBR(String(comparison.winningPrice))} transferido!`, {
+			description: `Opção ${comparison.winner} (${comparison.savingsPercent}% mais econômica)`,
+		});
 		onClose();
 	};
 

@@ -12,6 +12,7 @@ import {
 	Utensils,
 	X,
 } from "lucide-react";
+import { toast } from "sonner";
 import type { ThemeConfig } from "../hooks/useThemes";
 import { formatNumberPtBR } from "../utils/format";
 
@@ -97,12 +98,16 @@ _Calculado via SmartCalc_`;
 
 		navigator.clipboard.writeText(msg);
 		setCopied(true);
+		toast.success("Divisão copiada! Pronto para colar no WhatsApp.", {
+			description: `R$ ${formatNumberPtBR(String(calculation.perPerson))} por pessoa (${peopleCount} pessoas)`,
+		});
 		setTimeout(() => setCopied(false), 2000);
 	};
 
 	const handleTransfer = () => {
 		onPlayConfirm?.();
 		onTransferToCalculator(String(calculation.perPerson));
+		toast.success(`R$ ${formatNumberPtBR(String(calculation.perPerson))} transferido para a calculadora!`);
 		onClose();
 	};
 
