@@ -123,7 +123,7 @@ export const FeaturesSection = memo(function FeaturesSection({
 						key={feat.id}
 						className="
 							relative
-							rounded-[2rem]
+							rounded-4xl
 							neu-panel
 							p-6
 							flex
