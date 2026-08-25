@@ -7,6 +7,7 @@ import { formatNumberPtBR } from "../utils/format";
 type Props = {
 	isOpen: boolean;
 	initialUnitPrice: string;
+	initialProductName?: string;
 	onClose: () => void;
 	onConfirm: (unitPrice: string, quantity: number, productName?: string) => void;
 	theme?: ThemeConfig;
@@ -32,6 +33,7 @@ const MARKET_PRODUCT_PRESETS = [
 export const QuantityModal = memo(function QuantityModal({
 	isOpen,
 	initialUnitPrice,
+	initialProductName = "",
 	onClose,
 	onConfirm,
 	theme,
@@ -51,9 +53,9 @@ export const QuantityModal = memo(function QuantityModal({
 					: "";
 			setUnitPrice(cleanPrice);
 			setQuantity(2);
-			setProductName("");
+			setProductName(initialProductName || "");
 		}
-	}, [isOpen, initialUnitPrice]);
+	}, [isOpen, initialUnitPrice, initialProductName]);
 
 	// Atalhos de teclado no modal (Enter para confirmar, Escape para fechar)
 	useEffect(() => {

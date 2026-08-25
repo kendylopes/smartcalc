@@ -131,7 +131,6 @@ export const TopNavigation = memo(function TopNavigation({
 
 			{/* Lado Direito: Ações Rápidas (Menu) */}
 			<div className="flex items-center gap-1.5">
-
 				{/* Botão Menu Hambúrguer */}
 				<motion.button
 					type="button"

@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { Check, Copy } from "lucide-react";
+import { Check, Copy, History, Tag } from "lucide-react";
 import { memo, useEffect, useMemo, useRef, useState } from "react";
 import { formatDisplay, formatNumberPtBR, tokenizeDisplay } from "../utils/format";
 
@@ -11,6 +11,10 @@ type Props = {
 	cursorColor?: string;
 	operatorColor?: string;
 	onSwipeDelete?: () => void;
+	onToggleHistory?: () => void;
+	historyCount?: number;
+	isHistoryOpen?: boolean;
+	activeProductName?: string;
 };
 
 export const Display = memo(function Display({
@@ -21,6 +25,10 @@ export const Display = memo(function Display({
 	cursorColor = "text-cyan-400",
 	operatorColor = "text-cyan-400",
 	onSwipeDelete,
+	onToggleHistory,
+	historyCount = 0,
+	isHistoryOpen = false,
+	activeProductName = "",
 }: Props) {
 	const [copied, setCopied] = useState(false);
 	const scrollRef = useRef<HTMLDivElement>(null);
@@ -99,31 +107,84 @@ export const Display = memo(function Display({
 				{/* Borda interna técnica de alta precisão */}
 				<div className="absolute inset-px rounded-[calc(1.8rem-1px)] border border-white/5 pointer-events-none" />
 
-				{/* Top bar do display: Indicador de Copiar / Copiado */}
-				<div className="w-full flex items-center justify-between pointer-events-none z-10">
-					<div className="text-[10px] font-mono text-zinc-500 uppercase tracking-wider select-none">
-						{isResult ? "RESULTADO" : "ENTRADA"}
+				{/* Top bar do display: Botão de Histórico + Nome do Produto Ativo + Indicador de Copiar */}
+				<div className="w-full flex items-center justify-between z-10">
+					{/* Canto Esquerdo: Ícone de Histórico e Produto Ativo */}
+					<div className="flex items-center gap-2">
+						{onToggleHistory && (
+							<button
+								type="button"
+								onClick={(e) => {
+									e.stopPropagation();
+									onToggleHistory();
+								}}
+								title={isHistoryOpen ? "Ocultar Histórico" : "Abrir Histórico"}
+								className={`
+									flex
+									items-center
+									gap-1.5
+									px-2.5
+									py-1
+									rounded-full
+									border
+									transition-all
+									cursor-pointer
+									active:scale-95
+									text-[11px]
+									${
+										isHistoryOpen
+											? "bg-cyan-500/20 text-cyan-300 border-cyan-500/40 shadow-[0_0_10px_rgba(6,182,212,0.25)]"
+											: "bg-white/4 text-zinc-400 border-white/8 hover:text-white hover:bg-white/8 hover:border-white/15"
+									}
+								`}
+							>
+								<History size={13} className={isHistoryOpen ? "text-cyan-400" : "text-zinc-400"} />
+								<span className="font-mono text-[10px] uppercase tracking-wider font-semibold">
+									Histórico
+								</span>
+								{historyCount > 0 && (
+									<span className="px-1.5 py-0.2 rounded-full font-mono text-[10px] bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/30">
+										{historyCount}
+									</span>
+								)}
+							</button>
+						)}
+
+						{/* Tag de Produto Ativo se houver */}
+						{activeProductName && (
+							<motion.div
+								initial={{ opacity: 0, scale: 0.9 }}
+								animate={{ opacity: 1, scale: 1 }}
+								className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-300 text-[11px] font-medium"
+							>
+								<Tag size={11} />
+								<span className="truncate max-w-28 font-semibold">{activeProductName}</span>
+							</motion.div>
+						)}
 					</div>
 
-					<AnimatePresence>
-						{copied ? (
-							<motion.div
-								initial={{ opacity: 0, y: -2 }}
-								animate={{ opacity: 1, y: 0 }}
-								exit={{ opacity: 0 }}
-								transition={{ duration: 0.1 }}
-								className="flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 text-[11px] font-medium"
-							>
-								<Check size={11} />
-								<span>Copiado!</span>
-							</motion.div>
-						) : (
-							<div className="opacity-0 group-hover/display:opacity-60 transition-opacity duration-150 flex items-center gap-1 text-[11px] text-zinc-400">
-								<Copy size={11} />
-								<span>Copiar</span>
-							</div>
-						)}
-					</AnimatePresence>
+					{/* Canto Direito: Copiar / Copiado */}
+					<div className="pointer-events-none">
+						<AnimatePresence>
+							{copied ? (
+								<motion.div
+									initial={{ opacity: 0, y: -2 }}
+									animate={{ opacity: 1, y: 0 }}
+									exit={{ opacity: 0 }}
+									transition={{ duration: 0.1 }}
+									className="flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 text-[11px] font-medium"
+								>
+									<Check size={11} />
+									<span>Copiado!</span>
+								</motion.div>
+							) : (
+								<div className="opacity-0 group-hover/display:opacity-60 transition-opacity duration-150 flex items-center gap-1 text-[11px] text-zinc-400">
+									<Copy size={11} />
+									<span>Copiar</span>
+								</div>
+							)}
+						</AnimatePresence>
+					</div>
 				</div>
 
 				{/* Área Principal de Exibição (Linha ÚNICA horizontal estável, sem quebrar linhas e sem tremer) */}
@@ -138,84 +199,51 @@ export const Display = memo(function Display({
 							</div>
 						) : showInitialZero ? (
 							<div className="flex items-baseline justify-end text-3xl sm:text-4xl md:text-[2.6rem] font-light text-white tabular-nums">
-								<span>0</span>
+								<span className="font-light">0</span>
 								<span
-									className={`inline-block ml-1 font-extralight select-none animate-pulse ${cursorColor}`}
-								>
-									|
-								</span>
+									className={`inline-block w-0.5 h-7 sm:h-9 bg-cyan-400 ml-1.5 animate-pulse rounded-full ${cursorColor}`}
+								/>
 							</div>
 						) : (
-							<div className="flex items-baseline justify-end text-3xl sm:text-4xl md:text-[2.6rem] font-light text-white tabular-nums flex-nowrap shrink-0">
-								{tokens.map((token, idx) => {
-									const tokenKey = `t-${idx}-${token.raw}`;
-									if (token.type === "operator") {
-										return (
-											<span
-												key={tokenKey}
-												className={`inline-flex items-center justify-center px-1 font-normal select-none ${operatorColor}`}
-											>
-												{token.formatted}
-											</span>
-										);
-									}
-									if (token.type === "parenthesis") {
-										return (
-											<span
-												key={tokenKey}
-												className="inline-block px-0.5 text-zinc-400 font-normal select-none"
-											>
-												{token.formatted}
-											</span>
-										);
-									}
-									return (
-										<span
-											key={tokenKey}
-											className="inline-block text-white font-light tracking-tight tabular-nums"
-										>
-											{token.formatted}
-										</span>
-									);
-								})}
-
-								{/* Cursor de digitação estático e firme */}
+							<div className="flex items-baseline justify-end text-3xl sm:text-4xl md:text-[2.6rem] font-light text-white tabular-nums">
+								{tokens.map((token, idx) => (
+									<span
+										key={`${token.raw}-${idx}`}
+										className={
+											token.type === "operator"
+												? `mx-1 font-medium select-none ${operatorColor}`
+												: "text-white select-all"
+										}
+									>
+										{token.formatted}
+									</span>
+								))}
 								<span
-									className={`inline-block ml-1 font-extralight select-none animate-pulse ${cursorColor}`}
-								>
-									|
-								</span>
+									className={`inline-block w-0.5 h-7 sm:h-9 bg-cyan-400 ml-1.5 animate-pulse rounded-full ${cursorColor}`}
+								/>
 							</div>
 						)}
 					</div>
 				</div>
 
-				{/* Área do Live Preview (Resultado prévio em tempo real fixo no rodapé do visor) */}
-				<div className="h-6 w-full flex items-center justify-end">
-					{safePreview && !isResult ? (
-						<div className="flex items-baseline justify-end gap-1.5 text-zinc-400">
-							<span className="text-zinc-600 font-light text-sm select-none">=</span>
-							<span className="text-base sm:text-lg font-light text-zinc-300 tracking-tight tabular-nums">
-								{formatNumberPtBR(safePreview)}
-							</span>
-						</div>
-					) : null}
+				{/* Rodapé Interno do Display: Preview Dinâmico do Resultado em Tempo Real */}
+				<div className="w-full flex items-center justify-end min-h-6 z-10 pointer-events-none">
+					<AnimatePresence>
+						{safePreview && !isResult && (
+							<motion.div
+								initial={{ opacity: 0, y: 3 }}
+								animate={{ opacity: 1, y: 0 }}
+								exit={{ opacity: 0, y: 3 }}
+								transition={{ duration: 0.12 }}
+								className="text-xs sm:text-sm font-medium tracking-wide text-zinc-400 tabular-nums flex items-center gap-1"
+							>
+								<span className="text-[11px] font-mono text-zinc-500 select-none">=</span>
+								<span>{formatNumberPtBR(safePreview)}</span>
+							</motion.div>
+						)}
+					</AnimatePresence>
 				</div>
 			</div>
-
-			{/* Mensagem de limite de caracteres atingido */}
-			<AnimatePresence>
-				{isLimitReached && (
-					<motion.p
-						initial={{ opacity: 0, y: 2 }}
-						animate={{ opacity: 1, y: 0 }}
-						exit={{ opacity: 0 }}
-						className="mt-1 text-xs text-right text-red-400/90 font-medium"
-					>
-						Limite máximo de caracteres atingido
-					</motion.p>
-				)}
-			</AnimatePresence>
 		</div>
 	);
 });

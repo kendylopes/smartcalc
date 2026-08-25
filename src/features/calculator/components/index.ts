@@ -7,6 +7,7 @@ export * from "./HelpModal";
 export * from "./HistoryPanel";
 export * from "./KeyboardShortcutsModal";
 export * from "./PriceComparatorModal";
+export * from "./ProductNameModal";
 export * from "./QuantityModal";
 export * from "./QuickToolsPanel";
 export * from "./SplitBillModal";

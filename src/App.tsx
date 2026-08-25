@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { Delete, History, ShoppingBag } from "lucide-react";
+import { Delete, ShoppingBag, Tag } from "lucide-react";
 import { useCallback, useState } from "react";
 import { Toaster } from "@/components/ui/sonner";
 import {
@@ -10,6 +10,7 @@ import {
 	HistoryPanel,
 	KeyboardShortcutsModal,
 	PriceComparatorModal,
+	ProductNameModal,
 	QuantityModal,
 	QuickToolsPanel,
 	SplitBillModal,
@@ -60,6 +61,8 @@ export function App() {
 	const [isHelpOpen, setIsHelpOpen] = useState(false);
 	const [isBackupOpen, setIsBackupOpen] = useState(false);
 	const [isPixOpen, setIsPixOpen] = useState(false);
+	const [isProductNameModalOpen, setIsProductNameModalOpen] = useState(false);
+	const [activeProductName, setActiveProductName] = useState("");
 	const [isQuantityModalOpen, setIsQuantityModalOpen] = useState(false);
 	const [isComparatorOpen, setIsComparatorOpen] = useState(false);
 	const [isConverterOpen, setIsConverterOpen] = useState(false);
@@ -330,25 +333,35 @@ export function App() {
 								triggerHaptic("delete");
 								deleteLast();
 							}}
+							onToggleHistory={() => {
+								playClick();
+								triggerHaptic("click");
+								setShowHistory((prev) => !prev);
+							}}
+							historyCount={history.length}
+							isHistoryOpen={showHistory || isStudioMode}
+							activeProductName={activeProductName}
 						/>
 
 						{/* BARRA DE AÇÕES RÁPIDAS SUPERIOR */}
-						<div className="flex items-center justify-between gap-1.5 my-2.5 px-0.5">
-							{/* Botão Multiplicador de Quantidade / Compras */}
+						<div className="flex items-center justify-between gap-2 my-2.5 px-0.5">
+							{/* Botão 1: Nome do produto */}
 							<button
 								type="button"
 								onClick={() => {
 									playClick();
 									triggerHaptic("click");
-									setIsQuantityModalOpen(true);
+									setIsProductNameModalOpen(true);
 								}}
-								title="Adicionar produto / quantidade (Q)"
+								title="Escolher ou digitar nome do produto"
 								className="
+									flex-1
 									flex
 									items-center
+									justify-center
 									gap-1.5
 									px-3
-									py-1.5
+									py-2
 									rounded-2xl
 									bg-white/4
 									hover:bg-white/8
@@ -364,50 +377,55 @@ export function App() {
 									active:scale-95
 									outline-none
 									cursor-pointer
+									min-w-0
 								"
 							>
-								<ShoppingBag size={13} className={theme.accentText} />
-								<span>Quantidade</span>
+								<Tag
+									size={13}
+									className={activeProductName ? "text-amber-400" : theme.accentText}
+								/>
+								<span className="truncate">
+									{activeProductName ? activeProductName : "Nome do produto"}
+								</span>
 							</button>
 
-							{/* Botão Alternar Histórico */}
+							{/* Botão 2: Quantidade de produto */}
 							<button
 								type="button"
 								onClick={() => {
 									playClick();
 									triggerHaptic("click");
-									setShowHistory((prev) => !prev);
+									setIsQuantityModalOpen(true);
 								}}
-								title="Mostrar / Ocultar Histórico"
-								className={`
+								title="Adicionar quantidade e calcular produto (Q)"
+								className="
+									flex-1
 									flex
 									items-center
+									justify-center
 									gap-1.5
 									px-3
-									py-1.5
+									py-2
 									rounded-2xl
+									bg-white/4
+									hover:bg-white/8
 									border
-									transition-all
-									duration-150
+									border-white/8
+									hover:border-white/15
+									text-zinc-300
+									hover:text-white
 									text-xs
 									font-medium
+									transition-all
+									duration-150
 									active:scale-95
 									outline-none
 									cursor-pointer
-									${
-										showHistory || isStudioMode
-											? `${theme.accentText} ${theme.operatorBgActive} ${theme.operatorBorderActive}`
-											: "bg-white/4 text-zinc-400 border-white/8 hover:text-white hover:bg-white/8"
-									}
-								`}
+									min-w-0
+								"
 							>
-								<History size={13} />
-								<span>Histórico</span>
-								{history.length > 0 && (
-									<span className="text-[10px] px-1.5 py-0.2 rounded-full font-mono bg-cyan-500/20 text-cyan-300 font-semibold border border-cyan-500/30">
-										{history.length}
-									</span>
-								)}
+								<ShoppingBag size={13} className={theme.accentText} />
+								<span className="truncate">Quantidade de produto</span>
 							</button>
 						</div>
 
@@ -522,13 +540,28 @@ export function App() {
 			{/* Modal de Atalhos de Teclado */}
 			<KeyboardShortcutsModal isOpen={isShortcutsOpen} onClose={() => setIsShortcutsOpen(false)} />
 
+			{/* Modal de Escolha do Nome do Produto com Lista Inteligente */}
+			<ProductNameModal
+				isOpen={isProductNameModalOpen}
+				currentProductName={activeProductName}
+				onClose={() => setIsProductNameModalOpen(false)}
+				onSelectProduct={(name) => {
+					setActiveProductName(name);
+				}}
+				theme={theme}
+				onPlayClick={playClick}
+				onPlayConfirm={playResult}
+			/>
+
 			{/* Subtela / Modal de Quantidade & Produto de Supermercado */}
 			<QuantityModal
 				isOpen={isQuantityModalOpen}
 				initialUnitPrice={getLastNumber() || ""}
+				initialProductName={activeProductName}
 				onClose={() => setIsQuantityModalOpen(false)}
 				onConfirm={(unitPrice, qty, productName) => {
-					applyQuantity(unitPrice, qty, productName);
+					applyQuantity(unitPrice, qty, productName || activeProductName);
+					setActiveProductName("");
 				}}
 				theme={theme}
 				onPlayClick={playClick}
