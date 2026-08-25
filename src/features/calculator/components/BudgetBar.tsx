@@ -2,10 +2,17 @@ import { motion } from "framer-motion";
 import { AlertCircle, Edit2, Plus, Target, Trash2, X } from "lucide-react";
 import { memo, useEffect, useState } from "react";
 import { toast } from "sonner";
-import { formatNumberPtBR } from "../utils/format";
+import type { ThemeConfig } from "../hooks/useThemes";
+import {
+	formatCurrencyInput,
+	formatInitialPrice,
+	formatNumberPtBR,
+	parseCurrencyToNumber,
+} from "../utils/format";
 
 type Props = {
 	currentTotal: number;
+	theme?: ThemeConfig;
 };
 
 export const BudgetBar = memo(function BudgetBar({ currentTotal }: Props) {
@@ -34,7 +41,7 @@ export const BudgetBar = memo(function BudgetBar({ currentTotal }: Props) {
 	}, [budget]);
 
 	const handleSave = () => {
-		const num = Number(inputBudget.replace(",", ".")) || 0;
+		const num = parseCurrencyToNumber(inputBudget);
 		if (num > 0) {
 			setBudget(num);
 			setIsEditing(false);
@@ -97,10 +104,10 @@ export const BudgetBar = memo(function BudgetBar({ currentTotal }: Props) {
 							<span className="text-xs text-zinc-500">R$</span>
 							<input
 								type="text"
-								inputMode="decimal"
+								inputMode="numeric"
 								value={inputBudget}
-								onChange={(e) => setInputBudget(e.target.value.replace(/[^0-9.,]/g, ""))}
-								placeholder="200,00"
+								onChange={(e) => setInputBudget(formatCurrencyInput(e.target.value))}
+								placeholder="0,00"
 								autoFocus
 								onKeyDown={(e) => {
 									if (e.key === "Enter") handleSave();
@@ -173,7 +180,7 @@ export const BudgetBar = memo(function BudgetBar({ currentTotal }: Props) {
 							<button
 								type="button"
 								onClick={() => {
-									setInputBudget(String(budget));
+									setInputBudget(budget ? formatInitialPrice(String(budget)) : "");
 									setIsEditing(true);
 								}}
 								title="Editar meta"

@@ -14,7 +14,12 @@ import {
 import { memo, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import type { ThemeConfig } from "../hooks/useThemes";
-import { formatNumberPtBR } from "../utils/format";
+import {
+	formatCurrencyInput,
+	formatInitialPrice,
+	formatNumberPtBR,
+	parseCurrencyToNumber,
+} from "../utils/format";
 
 type Props = {
 	isOpen: boolean;
@@ -38,7 +43,7 @@ export const SplitBillModal = memo(function SplitBillModal({
 	onPlayClick,
 	onPlayConfirm,
 }: Props) {
-	const [billAmount, setBillAmount] = useState(initialAmount || "");
+	const [billAmount, setBillAmount] = useState("");
 	const [peopleCount, setPeopleCount] = useState(2);
 	const [tipPercentage, setTipPercentage] = useState(10);
 	const [copied, setCopied] = useState(false);
@@ -46,10 +51,7 @@ export const SplitBillModal = memo(function SplitBillModal({
 	// Atualiza valor inicial ao abrir
 	useEffect(() => {
 		if (isOpen) {
-			const clean =
-				initialAmount && initialAmount !== "0" && initialAmount !== "Error"
-					? initialAmount.replace(".", ",")
-					: "";
+			const clean = formatInitialPrice(initialAmount);
 			setBillAmount(clean);
 			setCopied(false);
 		}
@@ -71,7 +73,7 @@ export const SplitBillModal = memo(function SplitBillModal({
 
 	// Cálculos
 	const calculation = useMemo(() => {
-		const rawNum = Number(billAmount.replace(",", ".")) || 0;
+		const rawNum = parseCurrencyToNumber(billAmount);
 		const tipAmount = rawNum * (tipPercentage / 100);
 		const totalAmount = rawNum + tipAmount;
 		const perPerson = peopleCount > 0 ? totalAmount / peopleCount : 0;
@@ -98,8 +100,8 @@ _Calculado via SmartCalc_`;
 
 		navigator.clipboard.writeText(msg);
 		setCopied(true);
-		toast.success("Divisão copiada! Pronto para colar no WhatsApp.", {
-			description: `R$ ${formatNumberPtBR(String(calculation.perPerson))} por pessoa (${peopleCount} pessoas)`,
+		toast.success("Mensagem formatada copiada para o WhatsApp!", {
+			icon: "📲",
 		});
 		setTimeout(() => setCopied(false), 2000);
 	};
@@ -126,7 +128,7 @@ _Calculado via SmartCalc_`;
 						className="absolute inset-0 bg-black/80 backdrop-blur-md"
 					/>
 
-					{/* Modal Card Padronizado */}
+					{/* Modal Card */}
 					<motion.div
 						initial={{ opacity: 0, scale: 0.95, y: 15 }}
 						animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -140,41 +142,39 @@ _Calculado via SmartCalc_`;
 							rounded-[2.2rem]
 							border
 							border-white/10
+							bg-[#0d0f17]/95
+							p-5 sm:p-6
+							shadow-2xl
 							tech-modal
-							p-4 sm:p-5
-							shadow-[0_24px_70px_rgba(0,0,0,0.85)]
+							flex
+							flex-col
+							max-h-[90vh]
 						"
 					>
-						{/* Header Padronizado */}
+						{/* Header */}
 						<div className="flex items-center justify-between pb-3 border-b border-white/8">
 							<div className="flex items-center gap-2.5">
 								<div
-									className={`
-										p-2
-										rounded-2xl
-										${theme?.operatorBgActive ?? "bg-cyan-500/10"}
-										border
-										${theme?.operatorBorderActive ?? "border-cyan-500/20"}
-										${theme?.accentText ?? "text-cyan-400"}
-									`}
+									className={`p-2 rounded-2xl ${theme?.operatorBgActive ?? "bg-cyan-500/10"} ${theme?.accentText ?? "text-cyan-400"}`}
 								>
 									<Utensils size={18} />
 								</div>
 								<div>
-									<h2 className="text-base font-semibold text-white tracking-tight">
-										Rachar a Conta
-									</h2>
-									<p className="text-[11px] text-zinc-400">Divisão de conta com gorjeta</p>
+									<h3 className="text-sm sm:text-base font-bold text-white tracking-wide">
+										Divisor de Conta & Gorjeta
+									</h3>
+									<p className="text-[11px] text-zinc-400">
+										Divida o consumo do bar/restaurante por pessoa
+									</p>
 								</div>
 							</div>
 
 							<button
 								type="button"
 								onClick={onClose}
-								aria-label="Fechar divisão de conta"
-								className="p-1.5 rounded-2xl bg-white/4 hover:bg-white/10 text-zinc-400 hover:text-white border border-white/6 active:scale-95 transition-all outline-none focus-visible:ring-1 focus-visible:ring-cyan-400 cursor-pointer"
+								className="p-1.5 rounded-xl text-zinc-400 hover:text-white hover:bg-white/8 transition-colors cursor-pointer"
 							>
-								<X size={18} />
+								<X size={16} />
 							</button>
 						</div>
 
@@ -189,9 +189,9 @@ _Calculado via SmartCalc_`;
 									<span className="text-xl text-zinc-500 font-light">R$</span>
 									<input
 										type="text"
-										inputMode="decimal"
+										inputMode="numeric"
 										value={billAmount}
-										onChange={(e) => setBillAmount(e.target.value.replace(/[^0-9.,]/g, ""))}
+										onChange={(e) => setBillAmount(formatCurrencyInput(e.target.value))}
 										placeholder="0,00"
 										className="
 											w-full
@@ -208,6 +208,7 @@ _Calculado via SmartCalc_`;
 											transition-colors
 											tabular-nums
 										"
+										autoFocus
 									/>
 								</div>
 							</div>

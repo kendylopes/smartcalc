@@ -11,7 +11,7 @@ type Props = {
 };
 
 // Chave PIX padrão (pode ser configurada pelo criador)
-const PIX_KEY = "kennedy.dev.calc@gmail.com";
+const PIX_KEY = "kendylopes@gmail.com";
 
 export const PixDonationModal = memo(function PixDonationModal({ isOpen, onClose, theme }: Props) {
 	const [copied, setCopied] = useState(false);

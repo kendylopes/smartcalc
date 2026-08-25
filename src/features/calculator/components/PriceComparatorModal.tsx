@@ -3,7 +3,11 @@ import { ArrowRight, RotateCcw, Scale, Sparkles, Trophy, X } from "lucide-react"
 import { memo, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import type { ThemeConfig } from "../hooks/useThemes";
-import { formatNumberPtBR } from "../utils/format";
+import {
+	formatCurrencyInput,
+	formatNumberPtBR,
+	parseCurrencyToNumber,
+} from "../utils/format";
 
 type Props = {
 	isOpen: boolean;
@@ -80,12 +84,12 @@ export const PriceComparatorModal = memo(function PriceComparatorModal({
 
 	// Cálculos de comparação
 	const comparison = useMemo(() => {
-		const pA = Number(priceA.replace(",", ".")) || 0;
+		const pA = parseCurrencyToNumber(priceA);
 		const qA = Number(qtyA.replace(",", ".")) || 0;
 		const multA = UNIT_OPTIONS.find((u) => u.id === unitA)?.baseMultiplier || 1;
 		const totalBaseA = qA * multA;
 
-		const pB = Number(priceB.replace(",", ".")) || 0;
+		const pB = parseCurrencyToNumber(priceB);
 		const qB = Number(qtyB.replace(",", ".")) || 0;
 		const multB = UNIT_OPTIONS.find((u) => u.id === unitB)?.baseMultiplier || 1;
 		const totalBaseB = qB * multB;
@@ -261,10 +265,10 @@ export const PriceComparatorModal = memo(function PriceComparatorModal({
 										<span className="text-xs text-zinc-500">R$</span>
 										<input
 											type="text"
-											inputMode="decimal"
+											inputMode="numeric"
 											value={priceA}
-											onChange={(e) => setPriceA(e.target.value.replace(/[^0-9.,]/g, ""))}
-											placeholder="Ex: 3,50"
+											onChange={(e) => setPriceA(formatCurrencyInput(e.target.value))}
+											placeholder="0,00"
 											className="w-full bg-transparent text-sm font-semibold text-white outline-none tabular-nums"
 										/>
 									</div>
@@ -331,10 +335,10 @@ export const PriceComparatorModal = memo(function PriceComparatorModal({
 										<span className="text-xs text-zinc-500">R$</span>
 										<input
 											type="text"
-											inputMode="decimal"
+											inputMode="numeric"
 											value={priceB}
-											onChange={(e) => setPriceB(e.target.value.replace(/[^0-9.,]/g, ""))}
-											placeholder="Ex: 7,99"
+											onChange={(e) => setPriceB(formatCurrencyInput(e.target.value))}
+											placeholder="0,00"
 											className="w-full bg-transparent text-sm font-semibold text-white outline-none tabular-nums"
 										/>
 									</div>

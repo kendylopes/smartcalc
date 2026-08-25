@@ -12,7 +12,12 @@ import {
 import { memo, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import type { ThemeConfig } from "@/features/calculator/hooks/useThemes";
-import { formatNumberPtBR } from "@/features/calculator/utils/format";
+import {
+	formatCurrencyInput,
+	formatInitialPrice,
+	formatNumberPtBR,
+	parseCurrencyToNumber,
+} from "@/features/calculator/utils/format";
 import { calculateCompoundInterest, calculateInstallments } from "../logic/finance";
 
 type Props = {
@@ -40,23 +45,20 @@ export const FinanceModal = memo(function FinanceModal({
 	const [activeTab, setActiveTab] = useState<"installments" | "investments">("installments");
 
 	// Estado: Parcelamento
-	const [principal, setPrincipal] = useState(initialAmount || "");
+	const [principal, setPrincipal] = useState("");
 	const [installmentsCount, setInstallmentsCount] = useState(12);
 	const [monthlyInterestRate, setMonthlyInterestRate] = useState("1.99");
 
 	// Estado: Investimentos
-	const [initialDeposit, setInitialDeposit] = useState("1000");
-	const [monthlyDeposit, setMonthlyDeposit] = useState("300");
+	const [initialDeposit, setInitialDeposit] = useState("1.000,00");
+	const [monthlyDeposit, setMonthlyDeposit] = useState("300,00");
 	const [investmentRate, setInvestmentRate] = useState("1.0");
 	const [investmentRateType, setInvestmentRateType] = useState<"monthly" | "yearly">("monthly");
 	const [investmentPeriodMonths, setInvestmentPeriodMonths] = useState(24);
 
 	useEffect(() => {
 		if (isOpen) {
-			const clean =
-				initialAmount && initialAmount !== "0" && initialAmount !== "Error"
-					? initialAmount.replace(".", ",")
-					: "";
+			const clean = formatInitialPrice(initialAmount);
 			if (clean) setPrincipal(clean);
 		}
 	}, [isOpen, initialAmount]);
@@ -77,15 +79,15 @@ export const FinanceModal = memo(function FinanceModal({
 
 	// Resultado: Parcelamento
 	const installmentResult = useMemo(() => {
-		const p = Number(principal.replace(",", ".")) || 0;
+		const p = parseCurrencyToNumber(principal);
 		const rate = Number(monthlyInterestRate.replace(",", ".")) || 0;
 		return calculateInstallments(p, installmentsCount, rate);
 	}, [principal, installmentsCount, monthlyInterestRate]);
 
 	// Resultado: Investimentos
 	const investmentResult = useMemo(() => {
-		const init = Number(initialDeposit.replace(",", ".")) || 0;
-		const monthly = Number(monthlyDeposit.replace(",", ".")) || 0;
+		const init = parseCurrencyToNumber(initialDeposit);
+		const monthly = parseCurrencyToNumber(monthlyDeposit);
 		const rate = Number(investmentRate.replace(",", ".")) || 0;
 		return calculateCompoundInterest(
 			init,
@@ -229,9 +231,9 @@ export const FinanceModal = memo(function FinanceModal({
 										<span className="text-xl text-zinc-500 font-light">R$</span>
 										<input
 											type="text"
-											inputMode="decimal"
+											inputMode="numeric"
 											value={principal}
-											onChange={(e) => setPrincipal(e.target.value.replace(/[^0-9.,]/g, ""))}
+											onChange={(e) => setPrincipal(formatCurrencyInput(e.target.value))}
 											placeholder="0,00"
 											className="
 												w-full
@@ -356,10 +358,10 @@ export const FinanceModal = memo(function FinanceModal({
 										</span>
 										<input
 											type="text"
-											inputMode="decimal"
+											inputMode="numeric"
 											value={initialDeposit}
-											onChange={(e) => setInitialDeposit(e.target.value.replace(/[^0-9.,]/g, ""))}
-											placeholder="1000"
+											onChange={(e) => setInitialDeposit(formatCurrencyInput(e.target.value))}
+											placeholder="0,00"
 											className="w-full bg-transparent text-lg font-light text-white outline-none border-b border-white/15 focus:border-cyan-400 pb-0.5 tabular-nums"
 										/>
 									</div>
@@ -370,10 +372,10 @@ export const FinanceModal = memo(function FinanceModal({
 										</span>
 										<input
 											type="text"
-											inputMode="decimal"
+											inputMode="numeric"
 											value={monthlyDeposit}
-											onChange={(e) => setMonthlyDeposit(e.target.value.replace(/[^0-9.,]/g, ""))}
-											placeholder="300"
+											onChange={(e) => setMonthlyDeposit(formatCurrencyInput(e.target.value))}
+											placeholder="0,00"
 											className="w-full bg-transparent text-lg font-light text-white outline-none border-b border-white/15 focus:border-cyan-400 pb-0.5 tabular-nums"
 										/>
 									</div>
