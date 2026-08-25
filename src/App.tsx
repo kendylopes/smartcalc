@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { Delete, History, ShoppingBag, Sparkles } from "lucide-react";
+import { Delete, History, ShoppingBag } from "lucide-react";
 import { useCallback, useState } from "react";
 import { Toaster } from "@/components/ui/sonner";
 import {
@@ -244,22 +244,8 @@ export function App() {
 			{/* HERO SECTION: CALCULADORA AO VIVO */}
 			<main
 				id="calculadora"
-				className="w-full flex flex-col items-center justify-center pt-8 pb-14 px-2 sm:px-4 md:px-6"
+				className="w-full flex flex-col items-center justify-center py-6 sm:py-10 px-2 sm:px-4 md:px-6"
 			>
-				{/* Título Hero de Boas-Vindas */}
-				<div className="text-center max-w-2xl mx-auto mb-6 px-4 space-y-2">
-					<div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 text-xs font-semibold">
-						<Sparkles size={13} />
-						<span>A Calculadora mais Inteligente da Web</span>
-					</div>
-					<h1 className="text-2xl sm:text-4xl font-extrabold text-white font-display tracking-tight leading-tight">
-						Compras de Mercado, Divisão de Contas & Finanças
-					</h1>
-					<p className="text-xs sm:text-sm text-zinc-400">
-						Experimente a calculadora abaixo ao vivo ou utilize os atalhos rápidos do teclado.
-					</p>
-				</div>
-
 				{/* CONTAINER PRINCIPAL DA CALCULADORA */}
 				<div className="w-full max-w-7xl flex flex-col lg:flex-row items-center lg:items-stretch justify-center gap-4 sm:gap-6">
 					{/* MODO ESTÚDIO: PAINEL ESQUERDO DE FERRAMENTAS RÁPIDAS (DESKTOP) */}
@@ -324,8 +310,6 @@ export function App() {
 							onToggleStudioMode={toggleStudioMode}
 							showKeycaps={showKeycaps}
 							onToggleKeycaps={toggleKeycaps}
-							colorMode={colorMode}
-							onToggleColorMode={toggleColorMode}
 							isPwaInstallable={isInstallable}
 							onInstallPwa={installApp}
 							currentTheme={theme}

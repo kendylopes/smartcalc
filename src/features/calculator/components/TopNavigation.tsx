@@ -11,11 +11,9 @@ import {
 	Maximize,
 	Menu,
 	Minimize,
-	Moon,
 	Palette,
 	Scale,
 	Sparkles,
-	Sun,
 	SunMedium,
 	TrendingUp,
 	Utensils,
@@ -24,7 +22,7 @@ import {
 	X,
 } from "lucide-react";
 import { memo, useEffect, useRef, useState } from "react";
-import type { ColorMode, ThemeConfig, ThemeId } from "../hooks/useThemes";
+import type { ThemeConfig, ThemeId } from "../hooks/useThemes";
 
 type Props = {
 	isAdvanced: boolean;
@@ -46,8 +44,6 @@ type Props = {
 	onToggleStudioMode?: () => void;
 	showKeycaps?: boolean;
 	onToggleKeycaps?: () => void;
-	colorMode?: ColorMode;
-	onToggleColorMode?: () => void;
 	isPwaInstallable?: boolean;
 	onInstallPwa?: () => void;
 	currentTheme: ThemeConfig;
@@ -75,8 +71,6 @@ export const TopNavigation = memo(function TopNavigation({
 	onToggleStudioMode,
 	showKeycaps = false,
 	onToggleKeycaps,
-	colorMode = "dark",
-	onToggleColorMode,
 	onInstallPwa,
 	currentTheme,
 	allThemes,
@@ -125,41 +119,18 @@ export const TopNavigation = memo(function TopNavigation({
 			className="w-full flex items-center justify-between px-1 mb-3.5 select-none relative"
 			ref={menuRef}
 		>
-			{/* Lado Esquerdo: Logo 3D + SmartCalc */}
-			<div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/4 border border-white/8 backdrop-blur-md shadow-sm">
-				<img
-					src="/logo.png"
-					alt="Smart Calc"
-					className="w-4 h-4 rounded-md shadow-[0_0_8px_rgba(6,182,212,0.5)] object-cover"
-				/>
-				<span className="text-xs font-semibold tracking-wide text-zinc-100 font-display">
-					SmartCalc
-				</span>
+			{/* Lado Esquerdo: Identificação Sutil de Status */}
+			<div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/4 border border-white/6 backdrop-blur-md">
 				<div
-					className={`w-1.5 h-1.5 rounded-full ${currentTheme.dotColor} shadow-[0_0_6px_currentColor] animate-pulse ml-0.5`}
+					className={`w-1.5 h-1.5 rounded-full ${currentTheme.dotColor} shadow-[0_0_6px_currentColor] animate-pulse`}
 				/>
+				<span className="text-[11px] font-medium text-zinc-400 font-display">
+					{isAdvanced ? "Científica" : "Padrão"}
+				</span>
 			</div>
 
-			{/* Lado Direito: Ações Rápidas (Sol/Lua + Menu) */}
+			{/* Lado Direito: Ações Rápidas (Menu) */}
 			<div className="flex items-center gap-1.5">
-				{/* Alternância Rápida Dark / Light */}
-				{onToggleColorMode && (
-					<button
-						type="button"
-						onClick={onToggleColorMode}
-						aria-label="Alternar modo claro ou escuro"
-						title={
-							colorMode === "dark" ? "Ativar Modo Claro Neumórfico" : "Ativar Modo Escuro Cyber"
-						}
-						className="p-2 rounded-2xl border border-white/8 bg-white/4 hover:bg-white/8 text-zinc-300 hover:text-white transition-all cursor-pointer outline-none active:scale-95"
-					>
-						{colorMode === "dark" ? (
-							<Sun size={16} className="text-amber-400" />
-						) : (
-							<Moon size={16} className="text-cyan-400" />
-						)}
-					</button>
-				)}
 
 				{/* Botão Menu Hambúrguer */}
 				<motion.button
