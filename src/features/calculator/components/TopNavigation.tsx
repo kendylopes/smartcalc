@@ -1,4 +1,3 @@
-import { memo, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
 	ArrowLeftRight,
@@ -24,6 +23,7 @@ import {
 	VolumeX,
 	X,
 } from "lucide-react";
+import { memo, useEffect, useRef, useState } from "react";
 import type { ColorMode, ThemeConfig, ThemeId } from "../hooks/useThemes";
 
 type Props = {
@@ -121,7 +121,10 @@ export const TopNavigation = memo(function TopNavigation({
 	};
 
 	return (
-		<div className="w-full flex items-center justify-between px-1 mb-3.5 select-none relative" ref={menuRef}>
+		<div
+			className="w-full flex items-center justify-between px-1 mb-3.5 select-none relative"
+			ref={menuRef}
+		>
 			{/* Lado Esquerdo: Logo 3D + SmartCalc */}
 			<div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/4 border border-white/8 backdrop-blur-md shadow-sm">
 				<img
@@ -145,7 +148,9 @@ export const TopNavigation = memo(function TopNavigation({
 						type="button"
 						onClick={onToggleColorMode}
 						aria-label="Alternar modo claro ou escuro"
-						title={colorMode === "dark" ? "Ativar Modo Claro Neumórfico" : "Ativar Modo Escuro Cyber"}
+						title={
+							colorMode === "dark" ? "Ativar Modo Claro Neumórfico" : "Ativar Modo Escuro Cyber"
+						}
 						className="p-2 rounded-2xl border border-white/8 bg-white/4 hover:bg-white/8 text-zinc-300 hover:text-white transition-all cursor-pointer outline-none active:scale-95"
 					>
 						{colorMode === "dark" ? (
@@ -174,9 +179,10 @@ export const TopNavigation = memo(function TopNavigation({
 						focus-visible:ring-1
 						focus-visible:ring-cyan-400
 						cursor-pointer
-						${isOpen
-							? "bg-zinc-800 text-white border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.08)]"
-							: "bg-white/4 text-zinc-300 border-white/8 hover:text-white hover:bg-white/8"
+						${
+							isOpen
+								? "bg-zinc-800 text-white border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.08)]"
+								: "bg-white/4 text-zinc-300 border-white/8 hover:text-white hover:bg-white/8"
 						}
 					`}
 				>
@@ -320,14 +326,18 @@ export const TopNavigation = memo(function TopNavigation({
 										className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium text-zinc-200 hover:text-white hover:bg-white/8 transition-colors outline-none cursor-pointer"
 									>
 										<div className="flex items-center gap-2.5">
-											<Sparkles size={14} className={isAdvanced ? currentTheme.accentText : "text-zinc-400"} />
+											<Sparkles
+												size={14}
+												className={isAdvanced ? currentTheme.accentText : "text-zinc-400"}
+											/>
 											<span>Modo Científico</span>
 										</div>
 										<span
-											className={`text-[11px] px-2 py-0.5 rounded-full font-medium ${isAdvanced
+											className={`text-[11px] px-2 py-0.5 rounded-full font-medium ${
+												isAdvanced
 													? `${currentTheme.accentText} bg-white/10`
 													: "text-zinc-500 bg-white/4"
-												}`}
+											}`}
 										>
 											{isAdvanced ? "Ligado" : "Básico"}
 										</span>
@@ -349,14 +359,18 @@ export const TopNavigation = memo(function TopNavigation({
 											className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium text-zinc-200 hover:text-white hover:bg-white/8 transition-colors outline-none cursor-pointer"
 										>
 											<div className="flex items-center gap-2.5">
-												<LayoutDashboard size={14} className={isStudioMode ? currentTheme.accentText : "text-zinc-400"} />
+												<LayoutDashboard
+													size={14}
+													className={isStudioMode ? currentTheme.accentText : "text-zinc-400"}
+												/>
 												<span>Layout Estúdio Amplo</span>
 											</div>
 											<span
-												className={`text-[11px] px-2 py-0.5 rounded-full font-medium ${isStudioMode
+												className={`text-[11px] px-2 py-0.5 rounded-full font-medium ${
+													isStudioMode
 														? `${currentTheme.accentText} bg-white/10`
 														: "text-zinc-500 bg-white/4"
-													}`}
+												}`}
 											>
 												{isStudioMode ? "Ativo" : "Auto"}
 											</span>
@@ -371,14 +385,18 @@ export const TopNavigation = memo(function TopNavigation({
 											className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium text-zinc-200 hover:text-white hover:bg-white/8 transition-colors outline-none cursor-pointer"
 										>
 											<div className="flex items-center gap-2.5">
-												<Command size={14} className={showKeycaps ? currentTheme.accentText : "text-zinc-400"} />
+												<Command
+													size={14}
+													className={showKeycaps ? currentTheme.accentText : "text-zinc-400"}
+												/>
 												<span>Dicas de Teclas (Keycaps)</span>
 											</div>
 											<span
-												className={`text-[11px] px-2 py-0.5 rounded-full font-medium ${showKeycaps
+												className={`text-[11px] px-2 py-0.5 rounded-full font-medium ${
+													showKeycaps
 														? "text-cyan-300 bg-cyan-500/10 font-semibold"
 														: "text-zinc-500 bg-white/4"
-													}`}
+												}`}
 											>
 												{showKeycaps ? "Visíveis" : "Ocultas"}
 											</span>
@@ -393,14 +411,18 @@ export const TopNavigation = memo(function TopNavigation({
 											className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium text-zinc-200 hover:text-white hover:bg-white/8 transition-colors outline-none cursor-pointer"
 										>
 											<div className="flex items-center gap-2.5">
-												<LayoutDashboard size={14} className={isCompactMode ? currentTheme.accentText : "text-zinc-400"} />
+												<LayoutDashboard
+													size={14}
+													className={isCompactMode ? currentTheme.accentText : "text-zinc-400"}
+												/>
 												<span>Modo Compacto</span>
 											</div>
 											<span
-												className={`text-[11px] px-2 py-0.5 rounded-full font-medium ${isCompactMode
+												className={`text-[11px] px-2 py-0.5 rounded-full font-medium ${
+													isCompactMode
 														? `${currentTheme.accentText} bg-white/10`
 														: "text-zinc-500 bg-white/4"
-													}`}
+												}`}
 											>
 												{isCompactMode ? "Ativo" : "Normal"}
 											</span>
@@ -430,15 +452,18 @@ export const TopNavigation = memo(function TopNavigation({
 											<div className="flex items-center gap-2.5">
 												<SunMedium
 													size={14}
-													className={isWakeLockActive ? "text-amber-400 animate-spin-slow" : "text-zinc-400"}
+													className={
+														isWakeLockActive ? "text-amber-400 animate-spin-slow" : "text-zinc-400"
+													}
 												/>
 												<span>Tela Sempre Acesa</span>
 											</div>
 											<span
-												className={`text-[11px] px-2 py-0.5 rounded-full font-medium ${isWakeLockActive
+												className={`text-[11px] px-2 py-0.5 rounded-full font-medium ${
+													isWakeLockActive
 														? "text-amber-400 bg-amber-500/10 font-semibold"
 														: "text-zinc-500 bg-white/4"
-													}`}
+												}`}
 											>
 												{isWakeLockActive ? "Ativa" : "Padrão"}
 											</span>
@@ -460,10 +485,9 @@ export const TopNavigation = memo(function TopNavigation({
 											<span>Efeitos Sonoros</span>
 										</div>
 										<span
-											className={`text-[11px] px-2 py-0.5 rounded-full font-medium ${!isMuted
-													? "text-emerald-400 bg-emerald-500/10"
-													: "text-zinc-500 bg-white/4"
-												}`}
+											className={`text-[11px] px-2 py-0.5 rounded-full font-medium ${
+												!isMuted ? "text-emerald-400 bg-emerald-500/10" : "text-zinc-500 bg-white/4"
+											}`}
 										>
 											{!isMuted ? "Ligado" : "Mudo"}
 										</span>

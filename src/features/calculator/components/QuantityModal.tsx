@@ -1,6 +1,6 @@
-import { memo, useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, Minus, Plus, ShoppingBag, Tag, X } from "lucide-react";
+import { memo, useEffect, useState } from "react";
 import type { ThemeConfig } from "../hooks/useThemes";
 import { formatNumberPtBR } from "../utils/format";
 
@@ -253,9 +253,7 @@ export const QuantityModal = memo(function QuantityModal({
 									</div>
 
 									{/* Divisor Multiplicador */}
-									<span className="text-xl text-zinc-600 font-light select-none shrink-0">
-										×
-									</span>
+									<span className="text-xl text-zinc-600 font-light select-none shrink-0">×</span>
 
 									{/* Lado Direito: Stepper de Quantidade */}
 									<div className="flex items-center rounded-xl bg-zinc-800 border border-white/10 p-1 shrink-0">

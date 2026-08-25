@@ -15,7 +15,9 @@ body {
 	user-select: none;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
-	transition: background-color 0.25s ease, color 0.25s ease;
+	transition:
+		background-color 0.25s ease,
+		color 0.25s ease;
 }
 
 html.light body {
@@ -34,20 +36,26 @@ html.light body {
 /* Fundo com iluminação ambiente sutil */
 .bg-ambient {
 	background-color: #0b0d13;
-	background-image: 
+	background-image:
 		radial-gradient(at 0% 0%, rgba(34, 211, 238, 0.05) 0px, transparent 50%),
 		radial-gradient(at 100% 100%, rgba(192, 132, 252, 0.04) 0px, transparent 50%),
 		radial-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px);
-	background-size: 100% 100%, 100% 100%, 28px 28px;
+	background-size:
+		100% 100%,
+		100% 100%,
+		28px 28px;
 }
 
 html.light .bg-ambient {
 	background-color: #e6ebf4;
-	background-image: 
+	background-image:
 		radial-gradient(at 0% 0%, rgba(34, 211, 238, 0.08) 0px, transparent 50%),
 		radial-gradient(at 100% 100%, rgba(192, 132, 252, 0.06) 0px, transparent 50%),
 		radial-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 1px);
-	background-size: 100% 100%, 100% 100%, 28px 28px;
+	background-size:
+		100% 100%,
+		100% 100%,
+		28px 28px;
 }
 
 /* Custom Sleek Scrollbar */
@@ -86,7 +94,7 @@ html.light ::-webkit-scrollbar-thumb {
 .neu-chassis {
 	background: linear-gradient(155deg, #141822 0%, #0d1017 100%);
 	border: 1px solid rgba(255, 255, 255, 0.06);
-	box-shadow: 
+	box-shadow:
 		18px 18px 45px rgba(0, 0, 0, 0.85),
 		-10px -10px 30px rgba(255, 255, 255, 0.025),
 		inset 1px 1px 1.5px rgba(255, 255, 255, 0.08);
@@ -96,7 +104,7 @@ html.light ::-webkit-scrollbar-thumb {
 .neu-panel {
 	background: linear-gradient(155deg, #131720 0%, #0c0f15 100%);
 	border: 1px solid rgba(255, 255, 255, 0.05);
-	box-shadow: 
+	box-shadow:
 		14px 14px 35px rgba(0, 0, 0, 0.75),
 		-8px -8px 25px rgba(255, 255, 255, 0.02),
 		inset 1px 1px 1.5px rgba(255, 255, 255, 0.06);
@@ -106,7 +114,7 @@ html.light ::-webkit-scrollbar-thumb {
 .neu-display {
 	background: #06080d;
 	border: 1px solid rgba(255, 255, 255, 0.04);
-	box-shadow: 
+	box-shadow:
 		inset 5px 5px 14px rgba(0, 0, 0, 0.95),
 		inset -3px -3px 10px rgba(255, 255, 255, 0.025),
 		0 1px 1.5px rgba(255, 255, 255, 0.05);
@@ -116,7 +124,7 @@ html.light ::-webkit-scrollbar-thumb {
 .neu-btn-default {
 	background: linear-gradient(145deg, #1a202c 0%, #11151f 100%);
 	border: 1px solid rgba(255, 255, 255, 0.06);
-	box-shadow: 
+	box-shadow:
 		5px 5px 12px rgba(0, 0, 0, 0.7),
 		-3px -3px 9px rgba(255, 255, 255, 0.035),
 		inset 0 1px 1px rgba(255, 255, 255, 0.08);
@@ -124,7 +132,7 @@ html.light ::-webkit-scrollbar-thumb {
 
 .neu-btn-default:hover {
 	background: linear-gradient(145deg, #1e2533 0%, #131824 100%);
-	box-shadow: 
+	box-shadow:
 		6px 6px 14px rgba(0, 0, 0, 0.75),
 		-4px -4px 10px rgba(255, 255, 255, 0.05),
 		inset 0 1px 1px rgba(255, 255, 255, 0.12);
@@ -133,7 +141,7 @@ html.light ::-webkit-scrollbar-thumb {
 .neu-btn-pressed,
 .neu-btn-default:active {
 	background: linear-gradient(145deg, #0e121a 0%, #141822 100%) !important;
-	box-shadow: 
+	box-shadow:
 		inset 4px 4px 9px rgba(0, 0, 0, 0.9),
 		inset -2px -2px 6px rgba(255, 255, 255, 0.03) !important;
 	transform: translateY(1.5px);
@@ -143,7 +151,7 @@ html.light ::-webkit-scrollbar-thumb {
 .neu-btn-operator {
 	background: linear-gradient(145deg, #171c27 0%, #0f131c 100%);
 	border: 1px solid rgba(255, 255, 255, 0.06);
-	box-shadow: 
+	box-shadow:
 		5px 5px 12px rgba(0, 0, 0, 0.7),
 		-3px -3px 9px rgba(255, 255, 255, 0.03),
 		inset 0 1px 1px rgba(255, 255, 255, 0.06);
@@ -155,7 +163,7 @@ html.light ::-webkit-scrollbar-thumb {
 
 .neu-btn-operator-active {
 	background: linear-gradient(145deg, #0d1018 0%, #151a25 100%) !important;
-	box-shadow: 
+	box-shadow:
 		inset 4px 4px 9px rgba(0, 0, 0, 0.9),
 		inset -2px -2px 6px rgba(255, 255, 255, 0.03),
 		0 0 16px var(--theme-glow) !important;
@@ -166,7 +174,7 @@ html.light ::-webkit-scrollbar-thumb {
 .neu-btn-action {
 	background: linear-gradient(145deg, #181d28 0%, #10141d 100%);
 	border: 1px solid rgba(255, 255, 255, 0.06);
-	box-shadow: 
+	box-shadow:
 		5px 5px 12px rgba(0, 0, 0, 0.7),
 		-3px -3px 9px rgba(255, 255, 255, 0.03),
 		inset 0 1px 1px rgba(255, 255, 255, 0.06);
@@ -179,7 +187,7 @@ html.light ::-webkit-scrollbar-thumb {
 
 .neu-btn-action:active {
 	background: linear-gradient(145deg, #0f0c11 0%, #16121b 100%) !important;
-	box-shadow: 
+	box-shadow:
 		inset 4px 4px 9px rgba(0, 0, 0, 0.9),
 		inset -2px -2px 6px rgba(255, 255, 255, 0.03) !important;
 	transform: translateY(1.5px);
@@ -187,7 +195,7 @@ html.light ::-webkit-scrollbar-thumb {
 
 /* Botão de Igual */
 .neu-btn-equal {
-	box-shadow: 
+	box-shadow:
 		6px 6px 16px rgba(0, 0, 0, 0.8),
 		-3px -3px 10px rgba(255, 255, 255, 0.05),
 		0 0 25px var(--theme-glow),
@@ -195,7 +203,7 @@ html.light ::-webkit-scrollbar-thumb {
 }
 
 .neu-btn-equal:active {
-	box-shadow: 
+	box-shadow:
 		inset 4px 4px 9px rgba(0, 0, 0, 0.9),
 		inset -2px -2px 6px rgba(255, 255, 255, 0.05),
 		0 0 15px var(--theme-glow) !important;
@@ -206,7 +214,7 @@ html.light ::-webkit-scrollbar-thumb {
 .tech-modal {
 	background: linear-gradient(160deg, #131720 0%, #0c0f15 100%);
 	border: 1px solid rgba(255, 255, 255, 0.08);
-	box-shadow: 
+	box-shadow:
 		24px 24px 60px rgba(0, 0, 0, 0.95),
 		-12px -12px 35px rgba(255, 255, 255, 0.02),
 		inset 1px 1px 2px rgba(255, 255, 255, 0.08);
@@ -219,7 +227,7 @@ html.light ::-webkit-scrollbar-thumb {
 html.light .neu-chassis {
 	background: linear-gradient(155deg, #f2f6fc 0%, #e2e8f4 100%);
 	border: 1px solid rgba(255, 255, 255, 0.8);
-	box-shadow: 
+	box-shadow:
 		18px 18px 45px #cad4e4,
 		-14px -14px 35px #ffffff,
 		inset 1px 1px 2px rgba(255, 255, 255, 0.9);
@@ -228,7 +236,7 @@ html.light .neu-chassis {
 html.light .neu-panel {
 	background: linear-gradient(155deg, #f0f5fb 0%, #e0e7f3 100%);
 	border: 1px solid rgba(255, 255, 255, 0.7);
-	box-shadow: 
+	box-shadow:
 		14px 14px 35px #cad4e4,
 		-10px -10px 25px #ffffff,
 		inset 1px 1px 2px rgba(255, 255, 255, 0.8);
@@ -237,7 +245,7 @@ html.light .neu-panel {
 html.light .neu-display {
 	background: #dbe3f0;
 	border: 1px solid rgba(255, 255, 255, 0.4);
-	box-shadow: 
+	box-shadow:
 		inset 5px 5px 12px #bcc7d8,
 		inset -3px -3px 9px #ffffff,
 		0 1px 1.5px rgba(255, 255, 255, 0.8);
@@ -247,7 +255,7 @@ html.light .neu-display {
 html.light .neu-btn-default {
 	background: linear-gradient(145deg, #f6f9fe 0%, #e1e8f4 100%);
 	border: 1px solid rgba(255, 255, 255, 0.8);
-	box-shadow: 
+	box-shadow:
 		5px 5px 12px #c8d3e3,
 		-4px -4px 10px #ffffff,
 		inset 0 1px 1px rgba(255, 255, 255, 0.9);
@@ -256,7 +264,7 @@ html.light .neu-btn-default {
 
 html.light .neu-btn-default:hover {
 	background: linear-gradient(145deg, #ffffff 0%, #e5edf8 100%);
-	box-shadow: 
+	box-shadow:
 		6px 6px 14px #c2cee0,
 		-5px -5px 12px #ffffff;
 }
@@ -264,7 +272,7 @@ html.light .neu-btn-default:hover {
 html.light .neu-btn-pressed,
 html.light .neu-btn-default:active {
 	background: linear-gradient(145deg, #dce4f1 0%, #edf3fb 100%) !important;
-	box-shadow: 
+	box-shadow:
 		inset 4px 4px 9px #bcc8d9,
 		inset -2px -2px 6px #ffffff !important;
 	transform: translateY(1.5px);
@@ -273,14 +281,14 @@ html.light .neu-btn-default:active {
 html.light .neu-btn-operator {
 	background: linear-gradient(145deg, #eff4fb 0%, #dce4f2 100%);
 	border: 1px solid rgba(255, 255, 255, 0.7);
-	box-shadow: 
+	box-shadow:
 		5px 5px 12px #c8d3e3,
 		-4px -4px 10px #ffffff;
 }
 
 html.light .neu-btn-operator-active {
 	background: linear-gradient(145deg, #d8e2f0 0%, #edf3fc 100%) !important;
-	box-shadow: 
+	box-shadow:
 		inset 4px 4px 9px #bcc8d9,
 		inset -2px -2px 6px #ffffff,
 		0 0 16px var(--theme-glow) !important;
@@ -291,14 +299,14 @@ html.light .neu-btn-action {
 	background: linear-gradient(145deg, #fff0f0 0%, #fae2e2 100%);
 	border: 1px solid rgba(248, 113, 113, 0.3);
 	color: #ef4444 !important;
-	box-shadow: 
+	box-shadow:
 		5px 5px 12px #c8d3e3,
 		-4px -4px 10px #ffffff;
 }
 
 html.light .neu-btn-action:active {
 	background: linear-gradient(145deg, #f5d4d4 0%, #fae6e6 100%) !important;
-	box-shadow: 
+	box-shadow:
 		inset 4px 4px 9px #d8b2b2,
 		inset -2px -2px 6px #ffffff !important;
 	transform: translateY(1.5px);
@@ -307,7 +315,7 @@ html.light .neu-btn-action:active {
 html.light .tech-modal {
 	background: linear-gradient(160deg, #f0f5fc 0%, #dfe7f4 100%);
 	border: 1px solid rgba(255, 255, 255, 0.9);
-	box-shadow: 
+	box-shadow:
 		24px 24px 60px #bcc7d8,
 		-12px -12px 35px #ffffff,
 		inset 1px 1px 2px rgba(255, 255, 255, 0.9);

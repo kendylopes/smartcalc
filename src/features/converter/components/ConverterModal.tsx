@@ -1,4 +1,3 @@
-import { memo, useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
 	ArrowDownUp,
@@ -17,6 +16,7 @@ import {
 	Thermometer,
 	X,
 } from "lucide-react";
+import { memo, useEffect, useMemo, useState } from "react";
 import type { ThemeConfig } from "@/features/calculator/hooks/useThemes";
 import { formatNumberPtBR } from "@/features/calculator/utils/format";
 import {
@@ -60,7 +60,8 @@ export const ConverterModal = memo(function ConverterModal({
 	// Sincroniza o valor inicial ao abrir
 	useEffect(() => {
 		if (isOpen) {
-			const clean = initialValue && initialValue !== "0" && initialValue !== "Error" ? initialValue : "1";
+			const clean =
+				initialValue && initialValue !== "0" && initialValue !== "Error" ? initialValue : "1";
 			setInputValue(clean);
 			setCopied(false);
 		}

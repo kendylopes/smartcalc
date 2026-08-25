@@ -1,4 +1,3 @@
-import { memo } from "react";
 import {
 	ArrowRight,
 	PieChart,
@@ -9,6 +8,7 @@ import {
 	TrendingUp,
 	Users,
 } from "lucide-react";
+import { memo } from "react";
 import type { ThemeConfig } from "@/features/calculator/hooks/useThemes";
 
 type Props = {
@@ -111,7 +111,8 @@ export const FeaturesSection = memo(function FeaturesSection({
 					Muito mais que uma simples calculadora
 				</h2>
 				<p className="text-sm sm:text-base text-zinc-400 leading-relaxed">
-					Desenvolvida para resolver as contas do mundo real: do carrinho de supermercado às finanças pessoais e momentos com amigos.
+					Desenvolvida para resolver as contas do mundo real: do carrinho de supermercado às
+					finanças pessoais e momentos com amigos.
 				</p>
 			</div>
 
@@ -136,9 +137,7 @@ export const FeaturesSection = memo(function FeaturesSection({
 					>
 						<div className="space-y-4">
 							<div className="flex items-center justify-between">
-								<div className={`p-3 rounded-2xl border ${feat.color}`}>
-									{feat.icon}
-								</div>
+								<div className={`p-3 rounded-2xl border ${feat.color}`}>{feat.icon}</div>
 								<span className="text-[11px] font-semibold text-zinc-400 px-2.5 py-0.5 rounded-full bg-white/5 border border-white/8">
 									{feat.badge}
 								</span>
@@ -148,9 +147,7 @@ export const FeaturesSection = memo(function FeaturesSection({
 								<h3 className="text-base font-bold text-zinc-100 group-hover:text-white transition-colors">
 									{feat.title}
 								</h3>
-								<p className="text-xs text-zinc-400 leading-relaxed">
-									{feat.description}
-								</p>
+								<p className="text-xs text-zinc-400 leading-relaxed">{feat.description}</p>
 							</div>
 						</div>
 
@@ -182,7 +179,10 @@ export const FeaturesSection = memo(function FeaturesSection({
 								"
 							>
 								<span>{feat.actionLabel}</span>
-								<ArrowRight size={13} className="group-hover:translate-x-0.5 transition-transform" />
+								<ArrowRight
+									size={13}
+									className="group-hover:translate-x-0.5 transition-transform"
+								/>
 							</button>
 						</div>
 					</div>

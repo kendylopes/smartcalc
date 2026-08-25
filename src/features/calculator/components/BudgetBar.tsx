@@ -1,6 +1,6 @@
-import { memo, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { AlertCircle, Edit2, Plus, Target, Trash2, X } from "lucide-react";
+import { memo, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { formatNumberPtBR } from "../utils/format";
 
@@ -166,7 +166,8 @@ export const BudgetBar = memo(function BudgetBar({ currentTotal }: Props) {
 
 						<div className="flex items-center gap-1.5">
 							<span className="text-zinc-400 font-mono text-[10px]">
-								R$ {formatNumberPtBR(currentTotal.toFixed(2))} / R$ {formatNumberPtBR(String(budget))}
+								R$ {formatNumberPtBR(currentTotal.toFixed(2))} / R${" "}
+								{formatNumberPtBR(String(budget))}
 							</span>
 
 							<button
@@ -218,11 +219,7 @@ export const BudgetBar = memo(function BudgetBar({ currentTotal }: Props) {
 
 						<span
 							className={`font-mono font-medium ${
-								isOverBudget
-									? "text-red-400"
-									: isNearBudget
-										? "text-amber-400"
-										: "text-zinc-400"
+								isOverBudget ? "text-red-400" : isNearBudget ? "text-amber-400" : "text-zinc-400"
 							}`}
 						>
 							{((currentTotal / (budget || 1)) * 100).toFixed(0)}%

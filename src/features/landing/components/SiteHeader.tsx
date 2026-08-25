@@ -1,13 +1,6 @@
-import { memo, useState } from "react";
-import {
-	Coffee,
-	Download,
-	Menu,
-	Moon,
-	Sun,
-	X,
-} from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
+import { Coffee, Download, Menu, Moon, Sun, X } from "lucide-react";
+import { memo, useState } from "react";
 import type { ColorMode, ThemeConfig } from "@/features/calculator/hooks/useThemes";
 
 type Props = {
@@ -40,10 +33,7 @@ export const SiteHeader = memo(function SiteHeader({
 		<header className="sticky top-0 z-40 w-full border-b border-white/8 backdrop-blur-xl bg-[#0b0d13]/80 html.light:bg-[#e6ebf4]/80 transition-colors">
 			<div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
 				{/* Logo e Nome */}
-				<a
-					href="#calculadora"
-					className="flex items-center gap-2.5 group cursor-pointer"
-				>
+				<a href="#calculadora" className="flex items-center gap-2.5 group cursor-pointer">
 					<div className="relative">
 						<img
 							src="/logo.png"

@@ -1,9 +1,6 @@
-import { memo, useMemo } from "react";
 import { motion } from "framer-motion";
-import {
-	PieChart,
-	Sparkles,
-} from "lucide-react";
+import { PieChart, Sparkles } from "lucide-react";
+import { memo, useMemo } from "react";
 import type { ThemeConfig } from "../hooks/useThemes";
 import type { HistoryItem } from "../types";
 import { formatNumberPtBR } from "../utils/format";
@@ -217,7 +214,7 @@ export const ExpenseChart = memo(function ExpenseChart({ history }: Props) {
 			const cat = categorizeItem(item);
 			const current = map.get(cat.id) || { category: cat, amount: 0, count: 0 };
 			current.amount += val;
-			current.count += (item.quantity || 1);
+			current.count += item.quantity || 1;
 			map.set(cat.id, current);
 		}
 
@@ -243,7 +240,9 @@ export const ExpenseChart = memo(function ExpenseChart({ history }: Props) {
 				<div className="w-10 h-10 rounded-2xl bg-white/3 border border-white/6 flex items-center justify-center text-zinc-600 mb-2">
 					<PieChart size={18} />
 				</div>
-				<p className="text-zinc-500 text-xs font-light">Adicione itens para ver o gráfico de gastos</p>
+				<p className="text-zinc-500 text-xs font-light">
+					Adicione itens para ver o gráfico de gastos
+				</p>
 			</div>
 		);
 	}
@@ -281,7 +280,9 @@ export const ExpenseChart = memo(function ExpenseChart({ history }: Props) {
 					animate={{ opacity: 1, y: 0 }}
 					className="p-2.5 rounded-2xl bg-zinc-900/90 border border-white/8 flex items-center gap-2.5"
 				>
-					<div className={`p-2 rounded-xl border shrink-0 ${topCategory.category.bgClass} ${topCategory.category.borderClass}`}>
+					<div
+						className={`p-2 rounded-xl border shrink-0 ${topCategory.category.bgClass} ${topCategory.category.borderClass}`}
+					>
 						<span className="text-base">{topCategory.category.icon}</span>
 					</div>
 					<div className="min-w-0 flex-1">
@@ -309,9 +310,7 @@ export const ExpenseChart = memo(function ExpenseChart({ history }: Props) {
 								<span className="text-zinc-200 font-medium text-[11px] truncate">
 									{item.category.name}
 								</span>
-								<span className="text-[10px] text-zinc-500 font-mono">
-									({item.count} un)
-								</span>
+								<span className="text-[10px] text-zinc-500 font-mono">({item.count} un)</span>
 							</div>
 
 							<div className="flex items-center gap-1.5 text-right shrink-0">

@@ -1,10 +1,5 @@
+import { Coffee, Heart, MessageCircle, Share2 } from "lucide-react";
 import { memo } from "react";
-import {
-	Coffee,
-	Heart,
-	MessageCircle,
-	Share2,
-} from "lucide-react";
 import { toast } from "sonner";
 import type { ThemeConfig } from "@/features/calculator/hooks/useThemes";
 
@@ -36,18 +31,14 @@ export const SiteFooter = memo(function SiteFooter({ theme, onOpenPix }: Props) 
 					{/* Coluna 1: Sobre */}
 					<div className="space-y-3 md:col-span-2">
 						<div className="flex items-center gap-2">
-							<img
-								src="/logo.png"
-								alt="SmartCalc"
-								className="w-6 h-6 rounded-lg object-cover"
-							/>
+							<img src="/logo.png" alt="SmartCalc" className="w-6 h-6 rounded-lg object-cover" />
 							<span className="text-sm font-bold text-white font-display">
 								Smart<span className={theme.accentText}>Calc</span>
 							</span>
 						</div>
 						<p className="text-zinc-400 text-xs leading-relaxed max-w-sm">
-							A calculadora moderna e intuitiva para o cotidiano brasileiro.
-							Projetada para calcular compras, comparar produtos por kg/L, dividir comandas e planejar finanças.
+							A calculadora moderna e intuitiva para o cotidiano brasileiro. Projetada para calcular
+							compras, comparar produtos por kg/L, dividir comandas e planejar finanças.
 						</p>
 						<div className="flex items-center gap-2 pt-1">
 							<button
@@ -108,9 +99,7 @@ export const SiteFooter = memo(function SiteFooter({ theme, onOpenPix }: Props) 
 
 					{/* Coluna 3: Links & Apoio */}
 					<div className="space-y-2">
-						<h4 className="text-xs font-bold text-zinc-200 uppercase tracking-wider">
-							Comunidade
-						</h4>
+						<h4 className="text-xs font-bold text-zinc-200 uppercase tracking-wider">Comunidade</h4>
 						<ul className="space-y-1.5 text-xs">
 							<li>
 								<a href="#dicas" className="hover:text-white transition-colors">

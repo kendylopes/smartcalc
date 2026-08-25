@@ -1,12 +1,6 @@
-import { memo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import {
-	Database,
-	Download,
-	FileUp,
-	Upload,
-	X,
-} from "lucide-react";
+import { Database, Download, FileUp, Upload, X } from "lucide-react";
+import { memo, useRef, useState } from "react";
 import { toast } from "sonner";
 import type { ThemeConfig } from "../hooks/useThemes";
 
@@ -248,12 +242,11 @@ export const BackupModal = memo(function BackupModal({
 							<div className="p-3.5 rounded-2xl bg-white/4 border border-white/8 space-y-2">
 								<div className="flex items-center gap-2">
 									<Upload size={15} className="text-purple-400" />
-									<span className="text-xs font-semibold text-zinc-200">
-										Restaurar Backup
-									</span>
+									<span className="text-xs font-semibold text-zinc-200">Restaurar Backup</span>
 								</div>
 								<p className="text-[11px] text-zinc-400 leading-relaxed">
-									Selecione um arquivo `.json` gerado anteriormente para recuperar seus dados no app.
+									Selecione um arquivo `.json` gerado anteriormente para recuperar seus dados no
+									app.
 								</p>
 
 								<input

@@ -1,13 +1,5 @@
+import { Coins, Database, HelpCircle, Repeat, Scale, TrendingUp, Users } from "lucide-react";
 import { memo } from "react";
-import {
-	Coins,
-	Database,
-	HelpCircle,
-	Repeat,
-	Scale,
-	TrendingUp,
-	Users,
-} from "lucide-react";
 import type { ThemeConfig } from "../hooks/useThemes";
 
 type Props = {
@@ -122,9 +114,7 @@ export const QuickToolsPanel = memo(function QuickToolsPanel({
 							"
 						>
 							<div className="flex items-center gap-2.5 min-w-0">
-								<div className={`p-2 rounded-xl border shrink-0 ${tool.color}`}>
-									{tool.icon}
-								</div>
+								<div className={`p-2 rounded-xl border shrink-0 ${tool.color}`}>{tool.icon}</div>
 								<div className="min-w-0">
 									<h4 className="text-xs font-semibold text-zinc-200 group-hover:text-white truncate">
 										{tool.name}

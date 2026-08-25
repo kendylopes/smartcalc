@@ -1,6 +1,6 @@
-import { memo, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Keyboard, X } from "lucide-react";
+import { memo, useEffect } from "react";
 
 type Props = {
 	isOpen: boolean;
@@ -108,7 +108,9 @@ export const KeyboardShortcutsModal = memo(function KeyboardShortcutsModal({
 									<h2 className="text-base font-semibold text-white tracking-tight">
 										Atalhos de Teclado
 									</h2>
-									<p className="text-[11px] text-zinc-400">Navegue e calcule com máxima velocidade</p>
+									<p className="text-[11px] text-zinc-400">
+										Navegue e calcule com máxima velocidade
+									</p>
 								</div>
 							</div>
 

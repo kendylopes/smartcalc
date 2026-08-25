@@ -1,11 +1,5 @@
+import { HeartHandshake, Lock, ShieldCheck, Smartphone, WifiOff } from "lucide-react";
 import { memo } from "react";
-import {
-	HeartHandshake,
-	Lock,
-	ShieldCheck,
-	Smartphone,
-	WifiOff,
-} from "lucide-react";
 import type { ThemeConfig } from "@/features/calculator/hooks/useThemes";
 
 type Props = {
@@ -56,7 +50,8 @@ export const WhyUsSection = memo(function WhyUsSection({}: Props) {
 							Por que milhares de pessoas escolhem o SmartCalc?
 						</h2>
 						<p className="text-xs sm:text-sm text-zinc-400 leading-relaxed">
-							Uma plataforma desenhada com foco em agilidade, privacidade e utilidade para o dia a dia.
+							Uma plataforma desenhada com foco em agilidade, privacidade e utilidade para o dia a
+							dia.
 						</p>
 					</div>
 

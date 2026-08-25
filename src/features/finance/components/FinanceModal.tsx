@@ -1,4 +1,3 @@
-import { memo, useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
 	ArrowRight,
@@ -10,6 +9,7 @@ import {
 	TrendingUp,
 	X,
 } from "lucide-react";
+import { memo, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import type { ThemeConfig } from "@/features/calculator/hooks/useThemes";
 import { formatNumberPtBR } from "@/features/calculator/utils/format";
@@ -94,13 +94,7 @@ export const FinanceModal = memo(function FinanceModal({
 			investmentRateType,
 			investmentPeriodMonths,
 		);
-	}, [
-		initialDeposit,
-		monthlyDeposit,
-		investmentRate,
-		investmentRateType,
-		investmentPeriodMonths,
-	]);
+	}, [initialDeposit, monthlyDeposit, investmentRate, investmentRateType, investmentPeriodMonths]);
 
 	const handleTransfer = () => {
 		onPlayConfirm?.();
@@ -357,28 +351,28 @@ export const FinanceModal = memo(function FinanceModal({
 								{/* Depósito Inicial e Aporte Mensal */}
 								<div className="grid grid-cols-2 gap-2">
 									<div className="p-3 rounded-2xl bg-zinc-900/60 border border-white/8 space-y-1">
-										<span className="text-[11px] font-medium text-zinc-400">Valor Inicial (R$)</span>
+										<span className="text-[11px] font-medium text-zinc-400">
+											Valor Inicial (R$)
+										</span>
 										<input
 											type="text"
 											inputMode="decimal"
 											value={initialDeposit}
-											onChange={(e) =>
-												setInitialDeposit(e.target.value.replace(/[^0-9.,]/g, ""))
-											}
+											onChange={(e) => setInitialDeposit(e.target.value.replace(/[^0-9.,]/g, ""))}
 											placeholder="1000"
 											className="w-full bg-transparent text-lg font-light text-white outline-none border-b border-white/15 focus:border-cyan-400 pb-0.5 tabular-nums"
 										/>
 									</div>
 
 									<div className="p-3 rounded-2xl bg-zinc-900/60 border border-white/8 space-y-1">
-										<span className="text-[11px] font-medium text-zinc-400">Aporte Mensal (R$)</span>
+										<span className="text-[11px] font-medium text-zinc-400">
+											Aporte Mensal (R$)
+										</span>
 										<input
 											type="text"
 											inputMode="decimal"
 											value={monthlyDeposit}
-											onChange={(e) =>
-												setMonthlyDeposit(e.target.value.replace(/[^0-9.,]/g, ""))
-											}
+											onChange={(e) => setMonthlyDeposit(e.target.value.replace(/[^0-9.,]/g, ""))}
 											placeholder="300"
 											className="w-full bg-transparent text-lg font-light text-white outline-none border-b border-white/15 focus:border-cyan-400 pb-0.5 tabular-nums"
 										/>
@@ -420,9 +414,7 @@ export const FinanceModal = memo(function FinanceModal({
 											type="text"
 											inputMode="decimal"
 											value={investmentRate}
-											onChange={(e) =>
-												setInvestmentRate(e.target.value.replace(/[^0-9.,]/g, ""))
-											}
+											onChange={(e) => setInvestmentRate(e.target.value.replace(/[^0-9.,]/g, ""))}
 											placeholder="1.0"
 											className="w-full bg-transparent text-xl font-light text-white outline-none border-b border-white/15 focus:border-cyan-400 pb-0.5 tabular-nums"
 										/>

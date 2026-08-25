@@ -1,4 +1,3 @@
-import { memo, useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
 	BookOpen,
@@ -12,6 +11,7 @@ import {
 	Utensils,
 	X,
 } from "lucide-react";
+import { memo, useEffect, useState } from "react";
 import type { ThemeConfig } from "../hooks/useThemes";
 
 type Props = {
@@ -64,7 +64,8 @@ const HELP_SECTIONS: HelpSection[] = [
 		title: "Comparador de Embalagens (kg / Litro)",
 		icon: Scale,
 		color: "text-cyan-400 bg-cyan-500/10 border-cyan-500/20",
-		summary: "Descubra qual tamanho de produto é mais vantajoso por quilo ou litro e evite pegadinhas.",
+		summary:
+			"Descubra qual tamanho de produto é mais vantajoso por quilo ou litro e evite pegadinhas.",
 		steps: [
 			{
 				title: "1. Abrir o Comparador",
@@ -90,7 +91,8 @@ const HELP_SECTIONS: HelpSection[] = [
 		title: "Meta de Gastos & Limite de Orçamento",
 		icon: Target,
 		color: "text-amber-400 bg-amber-500/10 border-amber-500/20",
-		summary: "Defina um teto de dinheiro para a compra e acompanhe a barra de progresso em tempo real.",
+		summary:
+			"Defina um teto de dinheiro para a compra e acompanhe a barra de progresso em tempo real.",
 		steps: [
 			{
 				title: "1. Definir Meta",
@@ -108,7 +110,8 @@ const HELP_SECTIONS: HelpSection[] = [
 		title: "Rachar Conta & Gorjeta",
 		icon: Utensils,
 		color: "text-purple-400 bg-purple-500/10 border-purple-500/20",
-		summary: "Divida contas de bares e restaurantes com taxa de serviço e envie nos grupos de WhatsApp.",
+		summary:
+			"Divida contas de bares e restaurantes com taxa de serviço e envie nos grupos de WhatsApp.",
 		steps: [
 			{
 				title: "1. Abrir Divisor",
@@ -129,7 +132,8 @@ const HELP_SECTIONS: HelpSection[] = [
 		title: "Simulador Financeiro & Juros",
 		icon: TrendingUp,
 		color: "text-blue-400 bg-blue-500/10 border-blue-500/20",
-		summary: "Calcule o valor exato de parcelas pela Tabela Price e simule patrimônio com juros compostos.",
+		summary:
+			"Calcule o valor exato de parcelas pela Tabela Price e simule patrimônio com juros compostos.",
 		steps: [
 			{
 				title: "Aba 1 (Parcelamento)",
@@ -282,9 +286,7 @@ export const HelpModal = memo(function HelpModal({ isOpen, onClose, theme }: Pro
 															</span>
 														)}
 													</div>
-													<p className="text-[10px] text-zinc-400 truncate mt-0.5">
-														{sec.summary}
-													</p>
+													<p className="text-[10px] text-zinc-400 truncate mt-0.5">{sec.summary}</p>
 												</div>
 											</div>
 

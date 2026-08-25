@@ -32,7 +32,8 @@ export const THEMES: Record<ThemeId, ThemeConfig> = {
 		operatorText: "text-cyan-400",
 		operatorBgActive: "bg-cyan-950/60",
 		operatorBorderActive: "border-cyan-400/60",
-		equalBg: "bg-cyan-400 text-black font-semibold shadow-[0_0_20px_rgba(34,211,238,0.35)] hover:bg-cyan-300",
+		equalBg:
+			"bg-cyan-400 text-black font-semibold shadow-[0_0_20px_rgba(34,211,238,0.35)] hover:bg-cyan-300",
 		ring: "focus-visible:ring-cyan-400",
 		cursorColor: "text-cyan-400",
 		cssVars: {
@@ -54,7 +55,8 @@ export const THEMES: Record<ThemeId, ThemeConfig> = {
 		operatorText: "text-purple-400",
 		operatorBgActive: "bg-purple-950/60",
 		operatorBorderActive: "border-purple-400/60",
-		equalBg: "bg-purple-500 text-white font-semibold shadow-[0_0_20px_rgba(168,85,247,0.35)] hover:bg-purple-400",
+		equalBg:
+			"bg-purple-500 text-white font-semibold shadow-[0_0_20px_rgba(168,85,247,0.35)] hover:bg-purple-400",
 		ring: "focus-visible:ring-purple-400",
 		cursorColor: "text-purple-400",
 		cssVars: {
@@ -76,7 +78,8 @@ export const THEMES: Record<ThemeId, ThemeConfig> = {
 		operatorText: "text-emerald-400",
 		operatorBgActive: "bg-emerald-950/60",
 		operatorBorderActive: "border-emerald-400/60",
-		equalBg: "bg-emerald-400 text-black font-semibold shadow-[0_0_20px_rgba(52,211,153,0.35)] hover:bg-emerald-300",
+		equalBg:
+			"bg-emerald-400 text-black font-semibold shadow-[0_0_20px_rgba(52,211,153,0.35)] hover:bg-emerald-300",
 		ring: "focus-visible:ring-emerald-400",
 		cursorColor: "text-emerald-400",
 		cssVars: {
@@ -98,7 +101,8 @@ export const THEMES: Record<ThemeId, ThemeConfig> = {
 		operatorText: "text-rose-400",
 		operatorBgActive: "bg-rose-950/60",
 		operatorBorderActive: "border-rose-400/60",
-		equalBg: "bg-rose-500 text-white font-semibold shadow-[0_0_20px_rgba(244,63,94,0.35)] hover:bg-rose-400",
+		equalBg:
+			"bg-rose-500 text-white font-semibold shadow-[0_0_20px_rgba(244,63,94,0.35)] hover:bg-rose-400",
 		ring: "focus-visible:ring-rose-400",
 		cursorColor: "text-rose-400",
 		cssVars: {
@@ -120,7 +124,8 @@ export const THEMES: Record<ThemeId, ThemeConfig> = {
 		operatorText: "text-amber-400",
 		operatorBgActive: "bg-amber-950/60",
 		operatorBorderActive: "border-amber-400/60",
-		equalBg: "bg-amber-400 text-black font-semibold shadow-[0_0_20px_rgba(251,191,36,0.35)] hover:bg-amber-300",
+		equalBg:
+			"bg-amber-400 text-black font-semibold shadow-[0_0_20px_rgba(251,191,36,0.35)] hover:bg-amber-300",
 		ring: "focus-visible:ring-amber-400",
 		cursorColor: "text-amber-400",
 		cssVars: {

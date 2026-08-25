@@ -1,6 +1,6 @@
-import { memo, useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Download, Sparkles, X } from "lucide-react";
+import { memo, useEffect, useState } from "react";
 
 type Props = {
 	isInstallable: boolean;

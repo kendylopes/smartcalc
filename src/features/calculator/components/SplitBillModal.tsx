@@ -1,4 +1,3 @@
-import { memo, useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
 	ArrowRight,
@@ -12,6 +11,7 @@ import {
 	Utensils,
 	X,
 } from "lucide-react";
+import { memo, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import type { ThemeConfig } from "../hooks/useThemes";
 import { formatNumberPtBR } from "../utils/format";
@@ -107,7 +107,9 @@ _Calculado via SmartCalc_`;
 	const handleTransfer = () => {
 		onPlayConfirm?.();
 		onTransferToCalculator(String(calculation.perPerson));
-		toast.success(`R$ ${formatNumberPtBR(String(calculation.perPerson))} transferido para a calculadora!`);
+		toast.success(
+			`R$ ${formatNumberPtBR(String(calculation.perPerson))} transferido para a calculadora!`,
+		);
 		onClose();
 	};
 

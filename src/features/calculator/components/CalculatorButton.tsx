@@ -1,5 +1,5 @@
-import { memo, type ReactNode } from "react";
 import { motion } from "framer-motion";
+import { memo, type ReactNode } from "react";
 import type { ThemeConfig } from "../hooks/useThemes";
 
 type Props = {
@@ -37,7 +37,7 @@ const KEYCAP_MAP: Record<string, string> = {
 	"9": "9",
 	"√": "r",
 	"x²": "s",
-	"π": "p",
+	π: "p",
 	"(": "(",
 	")": ")",
 };
@@ -189,10 +189,7 @@ export const CalculatorButton = memo(function CalculatorButton({
 				transition-all
 				duration-100
 				${getNeuClasses()}
-				${disabled
-					? "opacity-35 cursor-not-allowed"
-					: "cursor-pointer"
-				}
+				${disabled ? "opacity-35 cursor-not-allowed" : "cursor-pointer"}
 			`}
 		>
 			{/* Legenda visual do atalho de teclado (Keycap Pro) */}

@@ -1,12 +1,6 @@
-import { memo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import {
-	Check,
-	Coffee,
-	Copy,
-	Heart,
-	X,
-} from "lucide-react";
+import { Check, Coffee, Copy, Heart, X } from "lucide-react";
+import { memo, useState } from "react";
 import { toast } from "sonner";
 import type { ThemeConfig } from "@/features/calculator/hooks/useThemes";
 
@@ -19,11 +13,7 @@ type Props = {
 // Chave PIX padrão (pode ser configurada pelo criador)
 const PIX_KEY = "kennedy.dev.calc@gmail.com";
 
-export const PixDonationModal = memo(function PixDonationModal({
-	isOpen,
-	onClose,
-	theme,
-}: Props) {
+export const PixDonationModal = memo(function PixDonationModal({ isOpen, onClose, theme }: Props) {
 	const [copied, setCopied] = useState(false);
 
 	const handleCopyPix = () => {
@@ -100,16 +90,17 @@ export const PixDonationModal = memo(function PixDonationModal({
 									<Heart size={24} className="animate-pulse" />
 								</div>
 								<p className="text-xs text-zinc-300 leading-relaxed">
-									O <strong>SmartCalc</strong> é um projeto independente, 100% gratuito e sem anúncios invasivos.
-									Sua contribuição de qualquer valor (R$ 2, R$ 5 ou R$ 10) ajuda a manter os servidores ativos e novas atualizações constantes!
+									O <strong>SmartCalc</strong> é um projeto independente, 100% gratuito e sem
+									anúncios invasivos. Sua contribuição de qualquer valor (R$ 2, R$ 5 ou R$ 10) ajuda
+									a manter os servidores ativos e novas atualizações constantes!
 								</p>
 							</div>
 
 							{/* Campo Chave PIX */}
 							<div className="space-y-1.5 text-left">
-								<label className="text-[11px] font-semibold text-zinc-400">
+								<span className="block text-[11px] font-semibold text-zinc-400">
 									Chave PIX (E-mail):
-								</label>
+								</span>
 								<div className="flex items-center gap-2 p-2 rounded-xl bg-black/40 border border-white/10 font-mono text-xs text-cyan-300">
 									<span className="truncate flex-1 px-1">{PIX_KEY}</span>
 									<button

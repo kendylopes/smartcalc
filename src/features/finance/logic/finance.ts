@@ -71,9 +71,7 @@ export function calculateCompoundInterest(
 
 	// Taxa mensal equivalente
 	const monthlyRate =
-		rateType === "monthly"
-			? ratePercent / 100
-			: (1 + ratePercent / 100) ** (1 / 12) - 1;
+		rateType === "monthly" ? ratePercent / 100 : (1 + ratePercent / 100) ** (1 / 12) - 1;
 
 	let balance = initialDeposit;
 	let totalInvested = initialDeposit;

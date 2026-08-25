@@ -1,4 +1,3 @@
-import { memo, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
 	Check,
@@ -15,6 +14,7 @@ import {
 	Trash2,
 	X,
 } from "lucide-react";
+import { memo, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import type { ThemeConfig } from "../hooks/useThemes";
 import type { HistoryItem } from "../types";

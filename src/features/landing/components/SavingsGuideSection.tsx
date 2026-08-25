@@ -1,13 +1,6 @@
-import { memo, useState } from "react";
-import {
-	ChevronDown,
-	Lightbulb,
-	Percent,
-	Scale,
-	ShoppingBag,
-	TrendingUp,
-} from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
+import { ChevronDown, Lightbulb, Percent, Scale, ShoppingBag, TrendingUp } from "lucide-react";
+import { memo, useState } from "react";
 
 export const SavingsGuideSection = memo(function SavingsGuideSection() {
 	const [activeAccordion, setActiveAccordion] = useState<number | null>(0);
@@ -16,8 +9,7 @@ export const SavingsGuideSection = memo(function SavingsGuideSection() {
 		{
 			id: 0,
 			title: "Como saber se a embalagem maior realmente compensa no supermercado?",
-			summary:
-				"Nem sempre o tamanho 'econômico' ou 'família' é mais barato por unidade de medida.",
+			summary: "Nem sempre o tamanho 'econômico' ou 'família' é mais barato por unidade de medida.",
 			content: `Muitas vezes as marcas cobram proporcionalmente mais caro em embalagens grandes aproveitando a falsa sensação de economia. Para não cair nessa pegadinha:
 1. Sempre divida o preço pelo peso em gramas ou volume em ml.
 2. Multiplique por 1000 para encontrar o custo por 1kg ou 1 litro.
@@ -27,8 +19,7 @@ export const SavingsGuideSection = memo(function SavingsGuideSection() {
 		{
 			id: 1,
 			title: "Como manter o controle do carrinho de compras e não estourar o orçamento?",
-			summary:
-				"Dicas práticas para somar os produtos antes de chegar ao caixa.",
+			summary: "Dicas práticas para somar os produtos antes de chegar ao caixa.",
 			content: `Definir um teto de gastos antes de entrar no mercado evita compras por impulso:
 1. Use a tecla 'Q' (Quantidade) para registrar produtos pesáveis ou múltiplos (ex: 3x R$ 4,50).
 2. Defina uma 'Meta de Gastos' na barra de orçamento do SmartCalc. A barra muda de cor para amarelo aos 80% e vermelho caso você ultrapasse.
@@ -38,8 +29,7 @@ export const SavingsGuideSection = memo(function SavingsGuideSection() {
 		{
 			id: 2,
 			title: "Como calcular juros de parcelamento e saber o custo real da compra?",
-			summary:
-				"Aprenda a identificar a taxa embutida em compras 'a prazo'.",
+			summary: "Aprenda a identificar a taxa embutida em compras 'a prazo'.",
 			content: `Muitas lojas anunciam 'parcelas que cabem no bolso', mas a soma final pode ultrapassar 30% do valor à vista:
 1. Multiplique o número de parcelas pelo valor mensal e compare com o preço à vista.
 2. Utilize o 'Simulador de Finanças' do SmartCalc para calcular a taxa de juros exata da operação.
@@ -49,8 +39,7 @@ export const SavingsGuideSection = memo(function SavingsGuideSection() {
 		{
 			id: 3,
 			title: "Como dividir a conta do restaurante com taxa de serviço sem complicação?",
-			summary:
-				"Evite discussões na hora de pagar a comanda do grupo.",
+			summary: "Evite discussões na hora de pagar a comanda do grupo.",
 			content: `Rachar a comanda pode ser confuso quando há taxa de serviço ou gorjeta:
 1. Digite o total da comanda no visor da calculadora.
 2. Abra o 'Divisor de Contas' (atalho D), ajuste a quantidade de pessoas e a porcentagem da gorjeta (10%, 12% ou 0%).
@@ -71,7 +60,8 @@ export const SavingsGuideSection = memo(function SavingsGuideSection() {
 					Dicas de Consumo Inteligente para o seu Dia a Dia
 				</h2>
 				<p className="text-xs sm:text-sm text-zinc-400 leading-relaxed">
-					Entenda a matemática prática do cotidiano e aprenda a economizar centenas de reais todos os meses.
+					Entenda a matemática prática do cotidiano e aprenda a economizar centenas de reais todos
+					os meses.
 				</p>
 			</div>
 
@@ -97,9 +87,7 @@ export const SavingsGuideSection = memo(function SavingsGuideSection() {
 										<h3 className="text-sm sm:text-base font-bold text-zinc-100 truncate sm:whitespace-normal">
 											{art.title}
 										</h3>
-										<p className="text-xs text-zinc-400 mt-0.5 hidden sm:block">
-											{art.summary}
-										</p>
+										<p className="text-xs text-zinc-400 mt-0.5 hidden sm:block">{art.summary}</p>
 									</div>
 								</div>
 

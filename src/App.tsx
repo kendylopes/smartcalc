@@ -1,7 +1,7 @@
-import { useCallback, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Delete, History, ShoppingBag, Sparkles } from "lucide-react";
-
+import { useCallback, useState } from "react";
+import { Toaster } from "@/components/ui/sonner";
 import {
 	BackupModal,
 	CalculatorButton,
@@ -34,7 +34,6 @@ import {
 	WhyUsSection,
 } from "@/features/landing";
 import { PwaInstallBanner, usePwaInstall, useWakeLock } from "@/features/pwa";
-import { Toaster } from "@/components/ui/sonner";
 
 export function App() {
 	const [showHistory, setShowHistory] = useState(false);
@@ -243,7 +242,10 @@ export function App() {
 			/>
 
 			{/* HERO SECTION: CALCULADORA AO VIVO */}
-			<main id="calculadora" className="w-full flex flex-col items-center justify-center pt-8 pb-14 px-2 sm:px-4 md:px-6">
+			<main
+				id="calculadora"
+				className="w-full flex flex-col items-center justify-center pt-8 pb-14 px-2 sm:px-4 md:px-6"
+			>
 				{/* Título Hero de Boas-Vindas */}
 				<div className="text-center max-w-2xl mx-auto mb-6 px-4 space-y-2">
 					<div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 text-xs font-semibold">
@@ -592,25 +594,13 @@ export function App() {
 			/>
 
 			{/* Central de Ajuda & Guia de Uso */}
-			<HelpModal
-				isOpen={isHelpOpen}
-				onClose={() => setIsHelpOpen(false)}
-				theme={theme}
-			/>
+			<HelpModal isOpen={isHelpOpen} onClose={() => setIsHelpOpen(false)} theme={theme} />
 
 			{/* Modal de Backup & Restauração JSON */}
-			<BackupModal
-				isOpen={isBackupOpen}
-				onClose={() => setIsBackupOpen(false)}
-				theme={theme}
-			/>
+			<BackupModal isOpen={isBackupOpen} onClose={() => setIsBackupOpen(false)} theme={theme} />
 
 			{/* Modal de Apoio PIX */}
-			<PixDonationModal
-				isOpen={isPixOpen}
-				onClose={() => setIsPixOpen(false)}
-				theme={theme}
-			/>
+			<PixDonationModal isOpen={isPixOpen} onClose={() => setIsPixOpen(false)} theme={theme} />
 
 			{/* Notificações Toast do shadcn/ui */}
 			<Toaster />

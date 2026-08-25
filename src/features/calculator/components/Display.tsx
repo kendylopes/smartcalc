@@ -1,6 +1,6 @@
-import { memo, useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Check, Copy } from "lucide-react";
+import { memo, useEffect, useMemo, useRef, useState } from "react";
 import { formatDisplay, formatNumberPtBR, tokenizeDisplay } from "../utils/format";
 
 type Props = {

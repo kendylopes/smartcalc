@@ -1,13 +1,6 @@
-import { memo, useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import {
-	ArrowRight,
-	RotateCcw,
-	Scale,
-	Sparkles,
-	Trophy,
-	X,
-} from "lucide-react";
+import { ArrowRight, RotateCcw, Scale, Sparkles, Trophy, X } from "lucide-react";
+import { memo, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import type { ThemeConfig } from "../hooks/useThemes";
 import { formatNumberPtBR } from "../utils/format";
@@ -76,17 +69,9 @@ export const PriceComparatorModal = memo(function PriceComparatorModal({
 	const handleUnitAChange = (newUnit: UnitType) => {
 		setUnitA(newUnit);
 		// Se a unidade de B for incompatível, ajusta automaticamente
-		if (
-			(newUnit === "g" || newUnit === "kg") &&
-			unitB !== "g" &&
-			unitB !== "kg"
-		) {
+		if ((newUnit === "g" || newUnit === "kg") && unitB !== "g" && unitB !== "kg") {
 			setUnitB("g");
-		} else if (
-			(newUnit === "ml" || newUnit === "l") &&
-			unitB !== "ml" &&
-			unitB !== "l"
-		) {
+		} else if ((newUnit === "ml" || newUnit === "l") && unitB !== "ml" && unitB !== "l") {
 			setUnitB("ml");
 		} else if (newUnit === "un") {
 			setUnitB("un");
@@ -119,11 +104,7 @@ export const PriceComparatorModal = memo(function PriceComparatorModal({
 		const displayPriceB = costPerBaseB * multiplierForDisplay;
 
 		const displayUnit =
-			unitA === "g" || unitA === "kg"
-				? "kg"
-				: unitA === "ml" || unitA === "l"
-					? "L"
-					: "un";
+			unitA === "g" || unitA === "kg" ? "kg" : unitA === "ml" || unitA === "l" ? "L" : "un";
 
 		let winner: "A" | "B" | "equal" = "equal";
 		let savingsPercent = 0;
@@ -150,9 +131,12 @@ export const PriceComparatorModal = memo(function PriceComparatorModal({
 		if (!comparison) return;
 		onPlayConfirm?.();
 		onTransferToCalculator(String(comparison.winningPrice));
-		toast.success(`Preço vencedor R$ ${formatNumberPtBR(String(comparison.winningPrice))} transferido!`, {
-			description: `Opção ${comparison.winner} (${comparison.savingsPercent}% mais econômica)`,
-		});
+		toast.success(
+			`Preço vencedor R$ ${formatNumberPtBR(String(comparison.winningPrice))} transferido!`,
+			{
+				description: `Opção ${comparison.winner} (${comparison.savingsPercent}% mais econômica)`,
+			},
+		);
 		onClose();
 	};
 
@@ -263,7 +247,8 @@ export const PriceComparatorModal = memo(function PriceComparatorModal({
 									</span>
 									{comparison ? (
 										<span className="font-mono text-[11px] text-zinc-300">
-											R$ {formatNumberPtBR(comparison.displayPriceA.toFixed(2))} / {comparison.displayUnit}
+											R$ {formatNumberPtBR(comparison.displayPriceA.toFixed(2))} /{" "}
+											{comparison.displayUnit}
 										</span>
 									) : (
 										<span className="text-[10px] text-zinc-500">digite preço e peso</span>
@@ -332,7 +317,8 @@ export const PriceComparatorModal = memo(function PriceComparatorModal({
 									</span>
 									{comparison ? (
 										<span className="font-mono text-[11px] text-zinc-300">
-											R$ {formatNumberPtBR(comparison.displayPriceB.toFixed(2))} / {comparison.displayUnit}
+											R$ {formatNumberPtBR(comparison.displayPriceB.toFixed(2))} /{" "}
+											{comparison.displayUnit}
 										</span>
 									) : (
 										<span className="text-[10px] text-zinc-500">digite preço e peso</span>
