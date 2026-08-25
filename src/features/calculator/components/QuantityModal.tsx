@@ -2,7 +2,12 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, Minus, Plus, ShoppingBag, Tag, X } from "lucide-react";
 import { memo, useEffect, useState } from "react";
 import type { ThemeConfig } from "../hooks/useThemes";
-import { formatNumberPtBR } from "../utils/format";
+import {
+	formatCurrencyInput,
+	formatInitialPrice,
+	formatNumberPtBR,
+	parseCurrencyToNumber,
+} from "../utils/format";
 
 type Props = {
 	isOpen: boolean;
@@ -47,10 +52,7 @@ export const QuantityModal = memo(function QuantityModal({
 	// Sincroniza o preço unitário inicial e quantidade quando o modal abre
 	useEffect(() => {
 		if (isOpen) {
-			const cleanPrice =
-				initialUnitPrice && initialUnitPrice !== "0" && initialUnitPrice !== "Error"
-					? initialUnitPrice.replace(".", ",")
-					: "";
+			const cleanPrice = formatInitialPrice(initialUnitPrice);
 			setUnitPrice(cleanPrice);
 			setQuantity(2);
 			setProductName(initialProductName || "");
@@ -75,7 +77,7 @@ export const QuantityModal = memo(function QuantityModal({
 	});
 
 	// Normaliza valores numéricos para cálculo
-	const numericUnitPrice = Number(unitPrice.replace(",", ".")) || 0;
+	const numericUnitPrice = parseCurrencyToNumber(unitPrice);
 	const subtotal = Math.round(numericUnitPrice * quantity * 100) / 100;
 
 	const handleIncrement = () => {
@@ -236,9 +238,9 @@ export const QuantityModal = memo(function QuantityModal({
 										<input
 											id="unit-price-input"
 											type="text"
-											inputMode="decimal"
+											inputMode="numeric"
 											value={unitPrice}
-											onChange={(e) => setUnitPrice(e.target.value.replace(/[^0-9.,]/g, ""))}
+											onChange={(e) => setUnitPrice(formatCurrencyInput(e.target.value))}
 											placeholder="0,00"
 											className="
 												w-full

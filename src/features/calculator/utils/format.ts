@@ -156,3 +156,43 @@ export function formatDisplay(expression: string): string {
 		})
 		.join("");
 }
+
+/**
+ * Aplica máscara de moeda brasileira em tempo real a partir da digitação numérica
+ * Ex: "5" -> "0,05" | "450" -> "4,50" | "125000" -> "1.250,00"
+ */
+export function formatCurrencyInput(rawValue: string): string {
+	const digits = rawValue.replace(/\D/g, "");
+	if (!digits) return "";
+	const num = Number.parseInt(digits, 10) / 100;
+	return num.toLocaleString("pt-BR", {
+		minimumFractionDigits: 2,
+		maximumFractionDigits: 2,
+	});
+}
+
+/**
+ * Converte valor formatado em moeda para número float seguro
+ * Ex: "1.250,50" -> 1250.50
+ */
+export function parseCurrencyToNumber(formattedValue: string): number {
+	if (!formattedValue) return 0;
+	const clean = formattedValue.replace(/\./g, "").replace(",", ".");
+	const num = Number.parseFloat(clean);
+	return Number.isNaN(num) ? 0 : num;
+}
+
+/**
+ * Formata um preço numérico inicial para exibição monetária no padrão pt-BR
+ * Ex: "4.5" -> "4,50" | "10" -> "10,00"
+ */
+export function formatInitialPrice(initialPrice?: string): string {
+	if (!initialPrice || initialPrice === "0" || initialPrice === "Error") return "";
+	const num = Number.parseFloat(initialPrice.replace(",", "."));
+	if (Number.isNaN(num) || num <= 0) return "";
+	return num.toLocaleString("pt-BR", {
+		minimumFractionDigits: 2,
+		maximumFractionDigits: 2,
+	});
+}
+

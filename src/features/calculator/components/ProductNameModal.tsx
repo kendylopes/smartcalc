@@ -2,7 +2,12 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, Check, Minus, Plus, Search, ShoppingBag, X } from "lucide-react";
 import { memo, useEffect, useMemo, useState } from "react";
 import type { ThemeConfig } from "../hooks/useThemes";
-import { formatNumberPtBR } from "../utils/format";
+import {
+	formatCurrencyInput,
+	formatInitialPrice,
+	formatNumberPtBR,
+	parseCurrencyToNumber,
+} from "../utils/format";
 
 export type ProductPreset = {
 	name: string;
@@ -30,33 +35,33 @@ export const COMMON_PRODUCTS: ProductPreset[] = [
 	{ name: "Ovos", icon: "🥚", category: "Mercearia" },
 	{ name: "Iogurte", icon: "🍶", category: "Laticínios" },
 
-	// Açougue
+	// Carnes e Proteínas
 	{ name: "Carne Bovina", icon: "🥩", category: "Açougue" },
 	{ name: "Frango", icon: "🍗", category: "Açougue" },
+	{ name: "Peixe", icon: "🐟", category: "Peixaria" },
 	{ name: "Linguiça", icon: "🌭", category: "Açougue" },
-	{ name: "Peixe", icon: "🐟", category: "Açougue" },
 
-	// Hortifrúti
-	{ name: "Banana", icon: "🍌", category: "Hortifrúti" },
-	{ name: "Maçã", icon: "🍎", category: "Hortifrúti" },
-	{ name: "Tomate", icon: "🍅", category: "Hortifrúti" },
-	{ name: "Batata", icon: "🥔", category: "Hortifrúti" },
-	{ name: "Cebola", icon: "🧅", category: "Hortifrúti" },
-	{ name: "Alface", icon: "🥬", category: "Hortifrúti" },
+	// Hortifruti
+	{ name: "Banana", icon: "🍌", category: "Hortifruti" },
+	{ name: "Maçã", icon: "🍎", category: "Hortifruti" },
+	{ name: "Tomate", icon: "🍅", category: "Hortifruti" },
+	{ name: "Batata", icon: "🥔", category: "Hortifruti" },
+	{ name: "Cebola", icon: "🧅", category: "Hortifruti" },
+	{ name: "Alface", icon: "🥬", category: "Hortifruti" },
 
 	// Bebidas
-	{ name: "Refrigerante", icon: "🥤", category: "Bebidas" },
+	{ name: "Água Mineral", icon: "💧", category: "Bebidas" },
 	{ name: "Suco", icon: "🧃", category: "Bebidas" },
-	{ name: "Água", icon: "💧", category: "Bebidas" },
+	{ name: "Refrigerante", icon: "🥤", category: "Bebidas" },
 	{ name: "Cerveja", icon: "🍺", category: "Bebidas" },
 
 	// Limpeza e Higiene
-	{ name: "Detergente", icon: "🧴", category: "Limpeza" },
-	{ name: "Sabão em Pó", icon: "🧼", category: "Limpeza" },
-	{ name: "Amaciante", icon: "🧺", category: "Limpeza" },
+	{ name: "Detergente", icon: "🧼", category: "Limpeza" },
+	{ name: "Sabão em Pó", icon: "🧺", category: "Limpeza" },
+	{ name: "Amaciante", icon: "🧴", category: "Limpeza" },
 	{ name: "Papel Higiênico", icon: "🧻", category: "Higiene" },
-	{ name: "Shampoo", icon: "🚿", category: "Higiene" },
-	{ name: "Pasta de Dente", icon: "🪥", category: "Higiene" },
+	{ name: "Sabonete", icon: "🫧", category: "Higiene" },
+	{ name: "Creme Dental", icon: "🪥", category: "Higiene" },
 ];
 
 type Props = {
@@ -85,10 +90,7 @@ export const ProductNameModal = memo(function ProductNameModal({
 
 	useEffect(() => {
 		if (isOpen) {
-			const cleanPrice =
-				initialUnitPrice && initialUnitPrice !== "0" && initialUnitPrice !== "Error"
-					? initialUnitPrice.replace(".", ",")
-					: "";
+			const cleanPrice = formatInitialPrice(initialUnitPrice);
 			setUnitPrice(cleanPrice);
 			setQuantity(1);
 			setProductName("");
@@ -114,7 +116,7 @@ export const ProductNameModal = memo(function ProductNameModal({
 	});
 
 	// Normaliza valores numéricos para cálculo
-	const numericUnitPrice = Number(unitPrice.replace(",", ".")) || 0;
+	const numericUnitPrice = parseCurrencyToNumber(unitPrice);
 	const subtotal = Math.round(numericUnitPrice * quantity * 100) / 100;
 
 	const categories = useMemo(() => {
@@ -342,9 +344,9 @@ export const ProductNameModal = memo(function ProductNameModal({
 										<span className="absolute left-3 text-xs text-zinc-400 font-mono">R$</span>
 										<input
 											type="text"
-											inputMode="decimal"
+											inputMode="numeric"
 											value={unitPrice}
-											onChange={(e) => setUnitPrice(e.target.value)}
+											onChange={(e) => setUnitPrice(formatCurrencyInput(e.target.value))}
 											placeholder="0,00"
 											className="
 												w-full

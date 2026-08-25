@@ -117,18 +117,17 @@ export const Display = memo(function Display({
 									onToggleHistory();
 								}}
 								title={isHistoryOpen ? "Ocultar Histórico" : "Abrir Histórico"}
+								aria-label="Abrir ou ocultar histórico de cálculos"
 								className={`
 									flex
 									items-center
-									gap-1.5
-									px-2.5
-									py-1
+									gap-1
+									p-1.5
 									rounded-full
 									border
 									transition-all
 									cursor-pointer
 									active:scale-95
-									text-[11px]
 									${
 										isHistoryOpen
 											? "bg-cyan-500/20 text-cyan-300 border-cyan-500/40 shadow-[0_0_10px_rgba(6,182,212,0.25)]"
@@ -136,12 +135,9 @@ export const Display = memo(function Display({
 									}
 								`}
 							>
-								<History size={13} className={isHistoryOpen ? "text-cyan-400" : "text-zinc-400"} />
-								<span className="font-mono text-[10px] uppercase tracking-wider font-semibold">
-									Histórico
-								</span>
+								<History size={14} className={isHistoryOpen ? "text-cyan-400" : "text-zinc-400"} />
 								{historyCount > 0 && (
-									<span className="px-1.5 py-0.2 rounded-full font-mono text-[10px] bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/30">
+									<span className="px-1.5 py-0.2 rounded-full font-mono text-[9px] bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/30">
 										{historyCount}
 									</span>
 								)}

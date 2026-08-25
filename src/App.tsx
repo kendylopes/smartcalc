@@ -350,15 +350,15 @@ export function App() {
 									triggerHaptic("click");
 									setIsProductNameModalOpen(true);
 								}}
-								title="Adicionar item com nome, preço e quantidade ao cálculo (Atalho: Q)"
+								title="Adicionar item com preço e quantidade ao cálculo (Atalho: Q)"
 								className="
 									w-full
 									flex
 									items-center
-									justify-between
-									gap-2.5
-									px-3.5
-									py-2
+									justify-center
+									gap-2
+									py-2.5
+									px-4
 									rounded-2xl
 									bg-white/4
 									hover:bg-white/8
@@ -377,22 +377,14 @@ export function App() {
 									group
 								"
 							>
-								<div className="flex items-center gap-2 min-w-0">
-									<div
-										className={`p-1 rounded-lg ${theme.operatorBgActive || "bg-cyan-500/10"} ${theme.accentText}`}
-									>
-										<ShoppingBag size={14} />
-									</div>
-									<span className="font-semibold tracking-wide truncate">
-										Item & Quantidade
-									</span>
-									<span className="hidden sm:inline-block text-[11px] text-zinc-400 font-normal truncate">
-										• Adicionar ao carrinho
-									</span>
+								<div
+									className={`p-1 rounded-lg ${theme.operatorBgActive || "bg-cyan-500/10"} ${theme.accentText}`}
+								>
+									<ShoppingBag size={14} />
 								</div>
-								<kbd className="px-1.5 py-0.5 rounded-lg bg-white/6 border border-white/10 text-[10px] font-mono text-zinc-400 group-hover:text-zinc-200 shrink-0">
-									Q
-								</kbd>
+								<span className="font-semibold tracking-wide">
+									Item & Quantidade
+								</span>
 							</button>
 						</div>
 

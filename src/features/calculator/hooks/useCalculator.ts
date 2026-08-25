@@ -351,7 +351,7 @@ export const useCalculator = () => {
 		(unitPriceStr: string, quantity: number, productName?: string) => {
 			if (!unitPriceStr || quantity <= 0) return;
 
-			const cleanPrice = unitPriceStr.replace(",", ".");
+			const cleanPrice = unitPriceStr.replace(/\./g, "").replace(",", ".");
 			const priceNum = Number(cleanPrice);
 			if (Number.isNaN(priceNum)) return;
 
