@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { Delete, ShoppingBag, Tag } from "lucide-react";
+import { Delete, ShoppingBag } from "lucide-react";
 import { useCallback, useState } from "react";
 import { Toaster } from "@/components/ui/sonner";
 import {
@@ -151,7 +151,7 @@ export function App() {
 	}, [playDelete, triggerHaptic, deleteLast]);
 
 	const handleOpenQuantity = useCallback(() => {
-		setIsQuantityModalOpen(true);
+		setIsProductNameModalOpen(true);
 	}, []);
 
 	const handleOpenComparator = useCallback(() => {
@@ -341,9 +341,8 @@ export function App() {
 							isHistoryOpen={showHistory || isStudioMode}
 						/>
 
-						{/* BARRA DE AÇÕES RÁPIDAS SUPERIOR */}
-						<div className="flex items-center justify-between gap-2 my-2.5 px-0.5">
-							{/* Botão 1: Nome do produto */}
+						{/* BARRA DE AÇÃO RÁPIDA: ITEM & QUANTIDADE (MERCADO) */}
+						<div className="my-2.5 px-0.5">
 							<button
 								type="button"
 								onClick={() => {
@@ -351,14 +350,14 @@ export function App() {
 									triggerHaptic("click");
 									setIsProductNameModalOpen(true);
 								}}
-								title="Adicionar produto com nome, preço e quantidade"
+								title="Adicionar item com nome, preço e quantidade ao cálculo (Atalho: Q)"
 								className="
-									flex-1
+									w-full
 									flex
 									items-center
-									justify-center
-									gap-1.5
-									px-3
+									justify-between
+									gap-2.5
+									px-3.5
 									py-2
 									rounded-2xl
 									bg-white/4
@@ -366,59 +365,34 @@ export function App() {
 									border
 									border-white/8
 									hover:border-white/15
-									text-zinc-300
+									text-zinc-200
 									hover:text-white
 									text-xs
 									font-medium
 									transition-all
 									duration-150
-									active:scale-95
+									active:scale-[0.98]
 									outline-none
 									cursor-pointer
-									min-w-0
+									group
 								"
 							>
-								<Tag size={13} className={theme.accentText} />
-								<span className="truncate">Nome do produto</span>
-							</button>
-
-							{/* Botão 2: Quantidade de produto */}
-							<button
-								type="button"
-								onClick={() => {
-									playClick();
-									triggerHaptic("click");
-									setIsProductNameModalOpen(true);
-								}}
-								title="Adicionar quantidade e calcular produto (Q)"
-								className="
-									flex-1
-									flex
-									items-center
-									justify-center
-									gap-1.5
-									px-3
-									py-2
-									rounded-2xl
-									bg-white/4
-									hover:bg-white/8
-									border
-									border-white/8
-									hover:border-white/15
-									text-zinc-300
-									hover:text-white
-									text-xs
-									font-medium
-									transition-all
-									duration-150
-									active:scale-95
-									outline-none
-									cursor-pointer
-									min-w-0
-								"
-							>
-								<ShoppingBag size={13} className={theme.accentText} />
-								<span className="truncate">Quantidade de produto</span>
+								<div className="flex items-center gap-2 min-w-0">
+									<div
+										className={`p-1 rounded-lg ${theme.operatorBgActive || "bg-cyan-500/10"} ${theme.accentText}`}
+									>
+										<ShoppingBag size={14} />
+									</div>
+									<span className="font-semibold tracking-wide truncate">
+										Item & Quantidade
+									</span>
+									<span className="hidden sm:inline-block text-[11px] text-zinc-400 font-normal truncate">
+										• Adicionar ao carrinho
+									</span>
+								</div>
+								<kbd className="px-1.5 py-0.5 rounded-lg bg-white/6 border border-white/10 text-[10px] font-mono text-zinc-400 group-hover:text-zinc-200 shrink-0">
+									Q
+								</kbd>
 							</button>
 						</div>
 
