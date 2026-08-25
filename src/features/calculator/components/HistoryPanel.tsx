@@ -88,26 +88,26 @@ export const HistoryPanel = memo(function HistoryPanel({
 			const numRes = Number(item.result) || 0;
 			totalSum += numRes;
 
-			if (item.productName) {
-				const qtyInfo =
-					item.quantity && item.unitPrice
-						? ` (${item.quantity}x R$ ${formatNumberPtBR(String(item.unitPrice))})`
-						: "";
-				return `${idx + 1}. *${item.productName}*${qtyInfo} = R$ ${formatNumberPtBR(item.result)}`;
+			const name = item.productName || "Sem nome";
+			if (item.unitPrice || item.quantity) {
+				const unit = formatNumberPtBR(String(item.unitPrice || item.result));
+				const qty = item.quantity || 1;
+				const res = formatNumberPtBR(item.result);
+				return `${idx + 1}. *${name}*: R$ ${unit} × qtd ${qty} = R$ ${res} +`;
 			}
-			return `${idx + 1}. ${formatDisplay(item.expression)} = R$ ${formatNumberPtBR(item.result)}`;
+			return `${idx + 1}. ${formatDisplay(item.expression)} = R$ ${formatNumberPtBR(item.result)} +`;
 		});
 
-		const msg = `🛒 *Cupom de Compras — SmartCalc*
+		const msg = `🛒 *CUPOM DE COMPRAS — SMARTCALC*
 ━━━━━━━━━━━━━━━━━━━━
 ${lines.join("\n")}
 ━━━━━━━━━━━━━━━━━━━━
-💰 *Total Acumulado:* R$ ${formatNumberPtBR(totalSum.toFixed(2))} (${history.length} itens)
+💰 *Total = R$ ${formatNumberPtBR(totalSum.toFixed(2))}* (${history.length} itens)
 _Calculado via SmartCalc_`;
 
 		navigator.clipboard.writeText(msg);
 		toast.success("Cupom copiado! Pronto para colar no WhatsApp.", {
-			description: `${history.length} itens acumulados • R$ ${formatNumberPtBR(totalSum.toFixed(2))}`,
+			description: `${history.length} itens acumulados • Total = R$ ${formatNumberPtBR(totalSum.toFixed(2))}`,
 		});
 	};
 
@@ -415,17 +415,22 @@ _Calculado via SmartCalc_`;
 									aria-label={`Usar resultado ${item.result}`}
 									className="text-left outline-none focus-visible:ring-1 focus-visible:ring-cyan-400 rounded-xl p-0.5 cursor-pointer"
 								>
-									{item.productName && item.quantity && item.unitPrice ? (
-										<p className="text-[11px] text-zinc-400 font-mono truncate max-w-full">
-											{item.quantity} un × R$ {formatNumberPtBR(String(item.unitPrice))}
+									{item.productName || item.unitPrice ? (
+										<p className="text-xs text-zinc-300 font-mono truncate max-w-full">
+											<span className="font-bold text-zinc-100">
+												{item.productName || "Sem nome"}
+											</span>
+											: R$ {formatNumberPtBR(String(item.unitPrice || item.result))} × qtd{" "}
+											{item.quantity || 1}
 										</p>
 									) : (
 										<p className="text-[11px] text-zinc-400 font-mono truncate max-w-full">
 											{formatDisplay(item.expression)}
 										</p>
 									)}
-									<p className="text-white text-sm sm:text-base font-light tracking-tight truncate max-w-full mt-0.5">
-										= R$ {formatNumberPtBR(item.result)}
+									<p className="text-white text-sm sm:text-base font-semibold tracking-tight truncate max-w-full mt-0.5 flex items-center gap-1">
+										<span>= R$ {formatNumberPtBR(item.result)}</span>
+										<span className="text-xs text-cyan-400 font-mono font-bold">+</span>
 									</p>
 								</button>
 
@@ -493,6 +498,29 @@ _Calculado via SmartCalc_`;
 							</motion.div>
 						))}
 					</AnimatePresence>
+				</div>
+			)}
+
+			{/* Rodapé com Total Acumulado */}
+			{history.length > 0 && activeTab === "list" && (
+				<div className="pt-2 mt-auto border-t border-white/8 flex items-center justify-between px-2 bg-white/2 rounded-xl py-1.5 shrink-0">
+					<div className="flex items-center gap-1.5">
+						<ShoppingBag size={13} className={theme?.accentText ?? "text-cyan-400"} />
+						<span className="text-[11px] uppercase font-mono text-zinc-300 font-semibold">
+							Total
+						</span>
+						<span className="text-[10px] text-zinc-500 font-mono">
+							({history.length} {history.length === 1 ? "item" : "itens"})
+						</span>
+					</div>
+					<div className="text-right">
+						<span className="text-sm sm:text-base font-extrabold text-cyan-300 font-mono">
+							= R${" "}
+							{formatNumberPtBR(
+								history.reduce((acc, curr) => acc + (Number(curr.result) || 0), 0).toFixed(2),
+							)}
+						</span>
+					</div>
 				</div>
 			)}
 		</div>

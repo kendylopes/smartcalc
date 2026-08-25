@@ -62,7 +62,6 @@ export function App() {
 	const [isBackupOpen, setIsBackupOpen] = useState(false);
 	const [isPixOpen, setIsPixOpen] = useState(false);
 	const [isProductNameModalOpen, setIsProductNameModalOpen] = useState(false);
-	const [activeProductName, setActiveProductName] = useState("");
 	const [isQuantityModalOpen, setIsQuantityModalOpen] = useState(false);
 	const [isComparatorOpen, setIsComparatorOpen] = useState(false);
 	const [isConverterOpen, setIsConverterOpen] = useState(false);
@@ -340,7 +339,6 @@ export function App() {
 							}}
 							historyCount={history.length}
 							isHistoryOpen={showHistory || isStudioMode}
-							activeProductName={activeProductName}
 						/>
 
 						{/* BARRA DE AÇÕES RÁPIDAS SUPERIOR */}
@@ -353,7 +351,7 @@ export function App() {
 									triggerHaptic("click");
 									setIsProductNameModalOpen(true);
 								}}
-								title="Escolher ou digitar nome do produto"
+								title="Adicionar produto com nome, preço e quantidade"
 								className="
 									flex-1
 									flex
@@ -380,13 +378,8 @@ export function App() {
 									min-w-0
 								"
 							>
-								<Tag
-									size={13}
-									className={activeProductName ? "text-amber-400" : theme.accentText}
-								/>
-								<span className="truncate">
-									{activeProductName ? activeProductName : "Nome do produto"}
-								</span>
+								<Tag size={13} className={theme.accentText} />
+								<span className="truncate">Nome do produto</span>
 							</button>
 
 							{/* Botão 2: Quantidade de produto */}
@@ -395,7 +388,7 @@ export function App() {
 								onClick={() => {
 									playClick();
 									triggerHaptic("click");
-									setIsQuantityModalOpen(true);
+									setIsProductNameModalOpen(true);
 								}}
 								title="Adicionar quantidade e calcular produto (Q)"
 								className="
@@ -540,28 +533,26 @@ export function App() {
 			{/* Modal de Atalhos de Teclado */}
 			<KeyboardShortcutsModal isOpen={isShortcutsOpen} onClose={() => setIsShortcutsOpen(false)} />
 
-			{/* Modal de Escolha do Nome do Produto com Lista Inteligente */}
+			{/* Modal de Escolha do Nome do Produto, Preço e Quantidade (Supermercado) */}
 			<ProductNameModal
 				isOpen={isProductNameModalOpen}
-				currentProductName={activeProductName}
+				initialUnitPrice={getLastNumber() || ""}
 				onClose={() => setIsProductNameModalOpen(false)}
-				onSelectProduct={(name) => {
-					setActiveProductName(name);
+				onConfirm={(unitPrice, qty, productName) => {
+					applyQuantity(unitPrice, qty, productName);
 				}}
 				theme={theme}
 				onPlayClick={playClick}
 				onPlayConfirm={playResult}
 			/>
 
-			{/* Subtela / Modal de Quantidade & Produto de Supermercado */}
+			{/* Subtela / Modal de Quantidade Rápida */}
 			<QuantityModal
 				isOpen={isQuantityModalOpen}
 				initialUnitPrice={getLastNumber() || ""}
-				initialProductName={activeProductName}
 				onClose={() => setIsQuantityModalOpen(false)}
 				onConfirm={(unitPrice, qty, productName) => {
-					applyQuantity(unitPrice, qty, productName || activeProductName);
-					setActiveProductName("");
+					applyQuantity(unitPrice, qty, productName);
 				}}
 				theme={theme}
 				onPlayClick={playClick}

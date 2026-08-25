@@ -374,22 +374,22 @@ export const useCalculator = () => {
 				}
 			}
 
-			// Se tiver nome do produto, registra o item individual no histórico de compras
-			if (productName) {
-				setHistory((prev) => [
-					{
-						id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()),
-						expression: `${priceNum} * ${quantity}`,
-						result: String(itemSubtotal),
-						productName,
-						quantity,
-						unitPrice: priceNum,
-						tag: "🛒 Supermercado",
-						timestamp: Date.now(),
-					},
-					...prev,
-				]);
-			}
+			const finalProductName = productName ? productName.trim() : "Sem nome";
+
+			// Registra o item individual no histórico de compras
+			setHistory((prev) => [
+				{
+					id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()),
+					expression: `${priceNum} * ${quantity}`,
+					result: String(itemSubtotal),
+					productName: finalProductName,
+					quantity,
+					unitPrice: priceNum,
+					tag: "🛒 Supermercado",
+					timestamp: Date.now(),
+				},
+				...prev,
+			]);
 
 			setValue(nextVal);
 			setIsResult(false);

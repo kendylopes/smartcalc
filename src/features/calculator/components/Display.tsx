@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { Check, Copy, History, Tag } from "lucide-react";
+import { Check, Copy, History } from "lucide-react";
 import { memo, useEffect, useMemo, useRef, useState } from "react";
 import { formatDisplay, formatNumberPtBR, tokenizeDisplay } from "../utils/format";
 
@@ -14,7 +14,6 @@ type Props = {
 	onToggleHistory?: () => void;
 	historyCount?: number;
 	isHistoryOpen?: boolean;
-	activeProductName?: string;
 };
 
 export const Display = memo(function Display({
@@ -28,7 +27,6 @@ export const Display = memo(function Display({
 	onToggleHistory,
 	historyCount = 0,
 	isHistoryOpen = false,
-	activeProductName = "",
 }: Props) {
 	const [copied, setCopied] = useState(false);
 	const scrollRef = useRef<HTMLDivElement>(null);
@@ -107,9 +105,9 @@ export const Display = memo(function Display({
 				{/* Borda interna técnica de alta precisão */}
 				<div className="absolute inset-px rounded-[calc(1.8rem-1px)] border border-white/5 pointer-events-none" />
 
-				{/* Top bar do display: Botão de Histórico + Nome do Produto Ativo + Indicador de Copiar */}
+				{/* Top bar do display: Botão de Histórico + Indicador de Copiar */}
 				<div className="w-full flex items-center justify-between z-10">
-					{/* Canto Esquerdo: Ícone de Histórico e Produto Ativo */}
+					{/* Canto Esquerdo: Ícone de Histórico */}
 					<div className="flex items-center gap-2">
 						{onToggleHistory && (
 							<button
@@ -148,18 +146,6 @@ export const Display = memo(function Display({
 									</span>
 								)}
 							</button>
-						)}
-
-						{/* Tag de Produto Ativo se houver */}
-						{activeProductName && (
-							<motion.div
-								initial={{ opacity: 0, scale: 0.9 }}
-								animate={{ opacity: 1, scale: 1 }}
-								className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-300 text-[11px] font-medium"
-							>
-								<Tag size={11} />
-								<span className="truncate max-w-28 font-semibold">{activeProductName}</span>
-							</motion.div>
 						)}
 					</div>
 
