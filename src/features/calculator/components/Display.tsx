@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { Check, Copy, History } from "lucide-react";
+import { Check, Copy, History, Mic } from "lucide-react";
 import { memo, useEffect, useMemo, useRef, useState } from "react";
 import { formatDisplay, formatNumberPtBR, tokenizeDisplay } from "../utils/format";
 
@@ -14,6 +14,9 @@ type Props = {
 	onToggleHistory?: () => void;
 	historyCount?: number;
 	isHistoryOpen?: boolean;
+	onToggleVoice?: () => void;
+	isListeningVoice?: boolean;
+	voiceTranscript?: string;
 };
 
 export const Display = memo(function Display({
@@ -27,6 +30,9 @@ export const Display = memo(function Display({
 	onToggleHistory,
 	historyCount = 0,
 	isHistoryOpen = false,
+	onToggleVoice,
+	isListeningVoice = false,
+	voiceTranscript = "",
 }: Props) {
 	const [copied, setCopied] = useState(false);
 	const scrollRef = useRef<HTMLDivElement>(null);
@@ -107,8 +113,8 @@ export const Display = memo(function Display({
 
 				{/* Top bar do display: Botão de Histórico + Indicador de Copiar */}
 				<div className="w-full flex items-center justify-between z-10">
-					{/* Canto Esquerdo: Ícone de Histórico */}
-					<div className="flex items-center gap-2">
+					{/* Canto Esquerdo: Ícone de Histórico & Microfone de Voz */}
+					<div className="flex items-center gap-1.5">
 						{onToggleHistory && (
 							<button
 								type="button"
@@ -140,6 +146,44 @@ export const Display = memo(function Display({
 									<span className="px-1.5 py-0.2 rounded-full font-mono text-[9px] bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/30">
 										{historyCount}
 									</span>
+								)}
+							</button>
+						)}
+
+						{onToggleVoice && (
+							<button
+								type="button"
+								onClick={(e) => {
+									e.stopPropagation();
+									onToggleVoice();
+								}}
+								title={isListeningVoice ? "Parar de ouvir" : "Falar para somar (Ditar cálculo ou produto)"}
+								aria-label="Falar para somar"
+								className={`
+									flex
+									items-center
+									gap-1
+									px-2
+									py-1
+									rounded-full
+									border
+									transition-all
+									cursor-pointer
+									active:scale-95
+									${
+										isListeningVoice
+											? "bg-red-500/25 text-red-300 border-red-500/50 shadow-[0_0_12px_rgba(239,68,68,0.35)] animate-pulse"
+											: "bg-white/4 text-zinc-400 border-white/8 hover:text-white hover:bg-white/8 hover:border-white/15"
+									}
+								`}
+							>
+								<Mic size={13} className={isListeningVoice ? "text-red-400 animate-bounce" : "text-zinc-400"} />
+								{isListeningVoice ? (
+									<span className="text-[10px] font-semibold text-red-300 font-mono max-w-32 truncate">
+										{voiceTranscript || "Ouvindo..."}
+									</span>
+								) : (
+									<span className="text-[10px] font-mono text-zinc-400">Voz</span>
 								)}
 							</button>
 						)}

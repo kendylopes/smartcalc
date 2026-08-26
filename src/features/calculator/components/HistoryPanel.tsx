@@ -8,6 +8,7 @@ import {
 	FileText,
 	ListOrdered,
 	PieChart,
+	Receipt,
 	Share2,
 	ShoppingBag,
 	Tag,
@@ -29,6 +30,7 @@ type Props = {
 	onUpdateTag?: (id: string, tag?: string) => void;
 	onClearAll?: () => void;
 	onClose?: () => void;
+	onOpenReceiptImage?: () => void;
 	theme?: ThemeConfig;
 };
 
@@ -48,6 +50,7 @@ export const HistoryPanel = memo(function HistoryPanel({
 	onUpdateTag,
 	onClearAll,
 	onClose,
+	onOpenReceiptImage,
 	theme,
 }: Props) {
 	const [activeTab, setActiveTab] = useState<"list" | "chart">("list");
@@ -215,6 +218,17 @@ _Calculado via SmartCalc_`;
 											transition={{ duration: 0.12 }}
 											className="absolute right-0 top-7 z-50 w-52 p-1.5 rounded-2xl bg-zinc-900 border border-white/15 tech-modal shadow-[0_16px_40px_rgba(0,0,0,0.9)] space-y-1"
 										>
+											<button
+												type="button"
+												onClick={() => {
+													setShowExportMenu(false);
+													onOpenReceiptImage?.();
+												}}
+												className="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-xs text-zinc-200 hover:text-white hover:bg-white/10 transition-colors cursor-pointer text-left font-medium"
+											>
+												<Receipt size={13} className="text-cyan-400" />
+												<span>Cupom em Imagem (.png)</span>
+											</button>
 											<button
 												type="button"
 												onClick={handleExportWhatsAppMarket}
@@ -503,7 +517,7 @@ _Calculado via SmartCalc_`;
 
 			{/* Rodapé com Total Acumulado */}
 			{history.length > 0 && activeTab === "list" && (
-				<div className="pt-2 mt-auto border-t border-white/8 flex items-center justify-between px-2 bg-white/2 rounded-xl py-1.5 shrink-0">
+				<div className="pt-2 mt-auto border-t border-white/8 flex items-center justify-between px-2 bg-white/2 rounded-xl py-1.5 shrink-0 gap-2">
 					<div className="flex items-center gap-1.5">
 						<ShoppingBag size={13} className={theme?.accentText ?? "text-cyan-400"} />
 						<span className="text-[11px] uppercase font-mono text-zinc-300 font-semibold">
@@ -513,7 +527,18 @@ _Calculado via SmartCalc_`;
 							({history.length} {history.length === 1 ? "item" : "itens"})
 						</span>
 					</div>
-					<div className="text-right">
+					<div className="flex items-center gap-2">
+						{onOpenReceiptImage && (
+							<button
+								type="button"
+								onClick={onOpenReceiptImage}
+								title="Gerar Cupom em Imagem PNG"
+								className="flex items-center gap-1 px-2 py-0.5 rounded-lg bg-cyan-500/15 hover:bg-cyan-500/25 text-cyan-300 border border-cyan-500/30 text-[10px] font-semibold transition-all cursor-pointer active:scale-95"
+							>
+								<Receipt size={11} />
+								<span>Cupom</span>
+							</button>
+						)}
 						<span className="text-sm sm:text-base font-extrabold text-cyan-300 font-mono">
 							= R${" "}
 							{formatNumberPtBR(

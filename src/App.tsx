@@ -13,6 +13,7 @@ import {
 	ProductNameModal,
 	QuantityModal,
 	QuickToolsPanel,
+	ReceiptImageModal,
 	SplitBillModal,
 	TopNavigation,
 } from "@/features/calculator/components";
@@ -23,6 +24,7 @@ import {
 	useKeyboard,
 	useSoundFeedback,
 	useThemes,
+	useVoiceInput,
 } from "@/features/calculator/hooks";
 import { ConverterModal } from "@/features/converter";
 import { FinanceModal } from "@/features/finance";
@@ -67,10 +69,11 @@ export function App() {
 	const [isConverterOpen, setIsConverterOpen] = useState(false);
 	const [isSplitBillOpen, setIsSplitBillOpen] = useState(false);
 	const [isFinanceOpen, setIsFinanceOpen] = useState(false);
+	const [isReceiptImageOpen, setIsReceiptImageOpen] = useState(false);
 	const [activeKey, setActiveKey] = useState<string | null>(null);
 
 	const { theme, allThemes, setTheme, colorMode, toggleColorMode } = useThemes();
-	const { isMuted, toggleMute, playClick, playOperator, playResult, playDelete } =
+	const { isMuted, toggleMute, playClick, playOperator, playResult, playDelete, playScannerBeep } =
 		useSoundFeedback();
 	const { triggerHaptic } = useHapticFeedback(true);
 	const { isInstallable, installApp } = usePwaInstall();
@@ -178,7 +181,7 @@ export function App() {
 		setIsBackupOpen(true);
 	}, []);
 
-	// Hook de Teclado Global
+	// Atalhos Globais de Teclado
 	useKeyboard({
 		input: handleKeyboardInput,
 		calculate: handleKeyboardCalculate,
@@ -202,6 +205,26 @@ export function App() {
 			input(p === "." ? "." : p);
 		}
 	};
+
+	// Reconhecimento de Voz Inteligente ("Falar para Somar")
+	const {
+		isListening: isListeningVoice,
+		transcript: voiceTranscript,
+		toggleListening: toggleVoice,
+	} = useVoiceInput({
+		onProductRecognized: (productName, unitPrice, quantity) => {
+			applyQuantity(unitPrice, quantity, productName);
+		},
+		onMathRecognized: (expression) => {
+			handleTransferFromModal(expression);
+			calculate();
+		},
+		onPriceRecognized: (price) => {
+			handleTransferFromModal(price);
+		},
+		onPlaySuccess: playScannerBeep,
+		onPlayError: playDelete,
+	});
 
 	const handleClick = (btn: string) => {
 		if (btn === "C") {
@@ -339,6 +362,9 @@ export function App() {
 							}}
 							historyCount={history.length}
 							isHistoryOpen={showHistory || isStudioMode}
+							onToggleVoice={toggleVoice}
+							isListeningVoice={isListeningVoice}
+							voiceTranscript={voiceTranscript}
 						/>
 
 						{/* BARRA DE AÇÃO RÁPIDA: ITEM & QUANTIDADE (MERCADO) */}
@@ -360,21 +386,19 @@ export function App() {
 									py-2.5
 									px-4
 									rounded-2xl
-									bg-white/4
-									hover:bg-white/8
+									bg-white/5
+									hover:bg-white/10
 									border
-									border-white/8
-									hover:border-white/15
-									text-zinc-200
-									hover:text-white
+									border-white/10
+									hover:border-cyan-500/40
+									text-white
 									text-xs
 									font-medium
 									transition-all
-									duration-150
-									active:scale-[0.98]
-									outline-none
 									cursor-pointer
-									group
+									active:scale-98
+									shadow-sm
+									neu-convex
 								"
 							>
 								<div
@@ -453,6 +477,7 @@ export function App() {
 									history={history}
 									theme={theme}
 									onClose={() => setShowHistory(false)}
+									onOpenReceiptImage={() => setIsReceiptImageOpen(true)}
 									onSelect={(res) => {
 										playClick();
 										triggerHaptic("click");
@@ -509,7 +534,7 @@ export function App() {
 				}}
 				theme={theme}
 				onPlayClick={playClick}
-				onPlayConfirm={playResult}
+				onPlayConfirm={playScannerBeep}
 			/>
 
 			{/* Subtela / Modal de Quantidade Rápida */}
@@ -522,7 +547,7 @@ export function App() {
 				}}
 				theme={theme}
 				onPlayClick={playClick}
-				onPlayConfirm={playResult}
+				onPlayConfirm={playScannerBeep}
 			/>
 
 			{/* Modal de Comparador de Preços e Embalagens (kg/L) */}
@@ -565,6 +590,15 @@ export function App() {
 				theme={theme}
 				onPlayClick={playClick}
 				onPlayConfirm={playResult}
+			/>
+
+			{/* Modal de Cupom Fiscal Digital em Imagem PNG */}
+			<ReceiptImageModal
+				isOpen={isReceiptImageOpen}
+				onClose={() => setIsReceiptImageOpen(false)}
+				history={history}
+				theme={theme}
+				onPlayClick={playClick}
 			/>
 
 			{/* Central de Ajuda & Guia de Uso */}

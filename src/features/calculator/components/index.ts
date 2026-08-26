@@ -10,5 +10,6 @@ export * from "./PriceComparatorModal";
 export * from "./ProductNameModal";
 export * from "./QuantityModal";
 export * from "./QuickToolsPanel";
+export * from "./ReceiptImageModal";
 export * from "./SplitBillModal";
 export * from "./TopNavigation";

@@ -1,7 +1,8 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowRight, Check, Minus, Plus, Search, ShoppingBag, X } from "lucide-react";
+import { ArrowRight, Check, Mic, Minus, Plus, Search, ShoppingBag, X } from "lucide-react";
 import { memo, useEffect, useMemo, useState } from "react";
 import type { ThemeConfig } from "../hooks/useThemes";
+import { useVoiceInput } from "../hooks/useVoiceInput";
 import {
 	formatCurrencyInput,
 	formatInitialPrice,
@@ -115,6 +116,21 @@ export const ProductNameModal = memo(function ProductNameModal({
 		return () => window.removeEventListener("keydown", handleKeyDown);
 	});
 
+	// Voz inteligente no modal de produto
+	const { isListening: isListeningVoice, toggleListening: toggleVoice } = useVoiceInput({
+		onProductRecognized: (name, price, qty) => {
+			setProductName(name);
+			setUnitPrice(price);
+			setQuantity(qty);
+			onPlayClick?.();
+		},
+		onPriceRecognized: (price) => {
+			setUnitPrice(price);
+			onPlayClick?.();
+		},
+		onPlaySuccess: onPlayClick,
+	});
+
 	// Normaliza valores numéricos para cálculo
 	const numericUnitPrice = parseCurrencyToNumber(unitPrice);
 	const subtotal = Math.round(numericUnitPrice * quantity * 100) / 100;
@@ -181,22 +197,23 @@ export const ProductNameModal = memo(function ProductNameModal({
 							border
 							border-white/10
 							tech-modal
-							p-4.5 sm:p-6
+							p-4 sm:p-5
 							shadow-[0_24px_70px_rgba(0,0,0,0.85)]
-							space-y-4
-							max-h-[92vh]
 							flex
 							flex-col
+							max-h-[90vh]
 						"
 					>
 						{/* Header */}
-						<div className="flex items-center justify-between pb-3 border-b border-white/8 shrink-0">
+						<div className="flex items-center justify-between pb-3 border-b border-white/8">
 							<div className="flex items-center gap-2.5">
-								<div className="p-2 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400">
+								<div
+									className={`p-2 rounded-2xl ${theme?.operatorBgActive ?? "bg-cyan-500/10"} ${theme?.accentText ?? "text-cyan-400"}`}
+								>
 									<ShoppingBag size={18} />
 								</div>
 								<div>
-									<h2 className="text-sm font-bold text-white tracking-wide">
+									<h2 className="text-sm sm:text-base font-bold text-white tracking-wide">
 										Adicionar Item de Supermercado
 									</h2>
 									<p className="text-[11px] text-zinc-400">
@@ -216,44 +233,76 @@ export const ProductNameModal = memo(function ProductNameModal({
 
 						{/* Conteúdo rolável */}
 						<div className="space-y-3.5 overflow-y-auto pr-1 flex-1 scrollbar-thin scrollbar-thumb-white/10">
-							{/* 1. Nome do Produto (Input com busca) */}
+							{/* 1. Nome do Produto (Input com busca + Botão de Voz) */}
 							<div className="space-y-1.5">
-								<span className="block text-[11px] font-semibold text-zinc-400">
-									1. Nome do Produto (opcional):
-								</span>
-								<div className="relative flex items-center">
-									<Search size={14} className="absolute left-3 text-zinc-400 pointer-events-none" />
-									<input
-										type="text"
-										value={productName}
-										onChange={(e) => setProductName(e.target.value)}
-										placeholder="Ex: Arroz, Feijão, Leite (ou deixe vazio para 'Sem nome')"
-										className="
-											w-full
-											pl-8.5
-											pr-8
-											py-2.5
-											rounded-2xl
-											bg-black/40
-											border
-											border-white/10
-											focus:border-cyan-400
-											text-xs
-											text-white
-											placeholder:text-zinc-500
-											outline-none
-											transition-colors
-										"
-									/>
-									{productName && (
-										<button
-											type="button"
-											onClick={() => setProductName("")}
-											className="absolute right-2.5 p-1 text-zinc-400 hover:text-white cursor-pointer"
-										>
-											<X size={13} />
-										</button>
+								<div className="flex items-center justify-between text-[11px] font-semibold text-zinc-400">
+									<span>1. Nome do Produto (opcional):</span>
+									{isListeningVoice && (
+										<span className="text-[10px] text-red-300 font-mono animate-pulse">
+											🎤 Fale: "2 leites a 4,50"
+										</span>
 									)}
+								</div>
+								<div className="flex items-center gap-1.5">
+									<div className="relative flex items-center flex-1">
+										<Search size={14} className="absolute left-3 text-zinc-400 pointer-events-none" />
+										<input
+											type="text"
+											value={productName}
+											onChange={(e) => setProductName(e.target.value)}
+											placeholder="Ex: Arroz, Feijão, Leite..."
+											className="
+												w-full
+												pl-8.5
+												pr-8
+												py-2.5
+												rounded-2xl
+												bg-black/40
+												border
+												border-white/10
+												focus:border-cyan-400
+												text-xs
+												text-white
+												placeholder:text-zinc-500
+												outline-none
+												transition-colors
+											"
+										/>
+										{productName && (
+											<button
+												type="button"
+												onClick={() => setProductName("")}
+												className="absolute right-2.5 p-1 text-zinc-400 hover:text-white cursor-pointer"
+											>
+												<X size={13} />
+											</button>
+										)}
+									</div>
+
+									<button
+										type="button"
+										onClick={toggleVoice}
+										title={isListeningVoice ? "Parar de ouvir" : "Falar item por voz (ex: '2 leites a 4,50')"}
+										className={`
+											p-2.5
+											rounded-2xl
+											border
+											transition-all
+											cursor-pointer
+											shrink-0
+											flex
+											items-center
+											justify-center
+											active:scale-95
+											${
+												isListeningVoice
+													? "bg-red-500/25 text-red-300 border-red-500/50 shadow-[0_0_10px_rgba(239,68,68,0.35)] animate-pulse"
+													: "bg-white/5 text-zinc-400 border-white/10 hover:text-white hover:bg-white/10"
+											}
+										`}
+									>
+										<Mic size={15} className={isListeningVoice ? "text-red-400 animate-bounce" : ""} />
+									</button>
 								</div>
 							</div>
 

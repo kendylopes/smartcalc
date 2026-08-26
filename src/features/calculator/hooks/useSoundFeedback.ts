@@ -177,6 +177,48 @@ export function useSoundFeedback() {
 		}
 	}, [isMuted, getAudioContext]);
 
+	// Efeito sonoro satisfatório de Scanner de Código de Barras / Caixa Registradora para itens
+	const playScannerBeep = useCallback(() => {
+		triggerHaptic(25);
+		if (isMuted) return;
+		try {
+			const ctx = getAudioContext();
+			if (!ctx) return;
+
+			const now = ctx.currentTime;
+
+			// Tom 1: Beep de scanner de alta frequência
+			const osc1 = ctx.createOscillator();
+			const gain1 = ctx.createGain();
+			osc1.type = "sine";
+			osc1.frequency.setValueAtTime(2200, now);
+			osc1.frequency.setValueAtTime(2800, now + 0.04);
+
+			gain1.gain.setValueAtTime(0.08, now);
+			gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.09);
+
+			osc1.connect(gain1);
+			gain1.connect(ctx.destination);
+			osc1.start(now);
+			osc1.stop(now + 0.1);
+
+			// Tom 2: Chime harmônico de caixa registradora sutil
+			const osc2 = ctx.createOscillator();
+			const gain2 = ctx.createGain();
+			osc2.type = "triangle";
+			osc2.frequency.setValueAtTime(1046.5, now + 0.03); // C6
+			gain2.gain.setValueAtTime(0.04, now + 0.03);
+			gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+
+			osc2.connect(gain2);
+			gain2.connect(ctx.destination);
+			osc2.start(now + 0.03);
+			osc2.stop(now + 0.25);
+		} catch {
+			// Ignora
+		}
+	}, [isMuted, getAudioContext]);
+
 	return {
 		isMuted,
 		toggleMute,
@@ -184,6 +226,7 @@ export function useSoundFeedback() {
 		playOperator,
 		playResult,
 		playDelete,
+		playScannerBeep,
 		triggerHaptic,
 	};
 }
