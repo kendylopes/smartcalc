@@ -5,7 +5,9 @@ import { Toaster } from "@/components/ui/sonner";
 import {
 	BackupModal,
 	CalculatorButton,
+	DiscountProfitModal,
 	Display,
+	FuelCalculatorModal,
 	HelpModal,
 	HistoryPanel,
 	KeyboardShortcutsModal,
@@ -69,6 +71,8 @@ export function App() {
 	const [isConverterOpen, setIsConverterOpen] = useState(false);
 	const [isSplitBillOpen, setIsSplitBillOpen] = useState(false);
 	const [isFinanceOpen, setIsFinanceOpen] = useState(false);
+	const [isFuelOpen, setIsFuelOpen] = useState(false);
+	const [isDiscountOpen, setIsDiscountOpen] = useState(false);
 	const [isReceiptImageOpen, setIsReceiptImageOpen] = useState(false);
 	const [activeKey, setActiveKey] = useState<string | null>(null);
 
@@ -175,6 +179,14 @@ export function App() {
 
 	const handleOpenFinance = useCallback(() => {
 		setIsFinanceOpen(true);
+	}, []);
+
+	const handleOpenFuel = useCallback(() => {
+		setIsFuelOpen(true);
+	}, []);
+
+	const handleOpenDiscount = useCallback(() => {
+		setIsDiscountOpen(true);
 	}, []);
 
 	const handleOpenBackup = useCallback(() => {
@@ -288,6 +300,8 @@ export function App() {
 								onOpenSplitBill={handleOpenSplitBill}
 								onOpenFinance={handleOpenFinance}
 								onOpenConverter={handleOpenConverter}
+								onOpenFuel={handleOpenFuel}
+								onOpenDiscount={handleOpenDiscount}
 								onOpenHelp={handleOpenHelp}
 								onOpenBackup={handleOpenBackup}
 								onPlayClick={playClick}
@@ -509,6 +523,8 @@ export function App() {
 				onOpenFinance={handleOpenFinance}
 				onOpenConverter={handleOpenConverter}
 				onOpenQuantity={handleOpenQuantity}
+				onOpenFuel={handleOpenFuel}
+				onOpenDiscount={handleOpenDiscount}
 			/>
 
 			<SavingsGuideSection />
@@ -554,6 +570,27 @@ export function App() {
 			<PriceComparatorModal
 				isOpen={isComparatorOpen}
 				onClose={() => setIsComparatorOpen(false)}
+				onTransferToCalculator={handleTransferFromModal}
+				theme={theme}
+				onPlayClick={playClick}
+				onPlayConfirm={playResult}
+			/>
+
+			{/* Modal de Calculadora Flex (Etanol vs Gasolina) */}
+			<FuelCalculatorModal
+				isOpen={isFuelOpen}
+				onClose={() => setIsFuelOpen(false)}
+				onTransferToCalculator={handleTransferFromModal}
+				theme={theme}
+				onPlayClick={playClick}
+				onPlayConfirm={playResult}
+			/>
+
+			{/* Modal de Calculadora de Descontos e Margem de Lucro */}
+			<DiscountProfitModal
+				isOpen={isDiscountOpen}
+				initialAmount={getLastNumber() || ""}
+				onClose={() => setIsDiscountOpen(false)}
 				onTransferToCalculator={handleTransferFromModal}
 				theme={theme}
 				onPlayClick={playClick}

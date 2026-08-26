@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export type ThemeId = "cyan" | "violet" | "emerald" | "rose" | "amber";
+export type ThemeId = "cyan" | "violet" | "emerald" | "rose" | "amber" | "oled" | "gold";
 export type ColorMode = "dark" | "light";
 
 export type ThemeConfig = {
@@ -134,6 +134,52 @@ export const THEMES: Record<ThemeId, ThemeConfig> = {
 			"--theme-accent": "#fde68a",
 			"--theme-border": "rgba(251, 191, 36, 0.35)",
 			"--theme-bg-subtle": "rgba(251, 191, 36, 0.08)",
+		},
+	},
+	oled: {
+		id: "oled",
+		name: "OLED Titânio",
+		hex: "#f4f4f5",
+		glowColor: "rgba(255, 255, 255, 0.2)",
+		dotColor: "bg-zinc-200",
+		accentText: "text-zinc-100",
+		accentBorder: "border-white/40",
+		operatorText: "text-white",
+		operatorBgActive: "bg-zinc-800",
+		operatorBorderActive: "border-white/50",
+		equalBg:
+			"bg-white text-black font-semibold shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:bg-zinc-200",
+		ring: "focus-visible:ring-white",
+		cursorColor: "text-white",
+		cssVars: {
+			"--theme-color": "#f4f4f5",
+			"--theme-glow": "rgba(255, 255, 255, 0.2)",
+			"--theme-accent": "#ffffff",
+			"--theme-border": "rgba(255, 255, 255, 0.4)",
+			"--theme-bg-subtle": "rgba(255, 255, 255, 0.06)",
+		},
+	},
+	gold: {
+		id: "gold",
+		name: "Gold Luxury",
+		hex: "#eab308",
+		glowColor: "rgba(234, 179, 8, 0.25)",
+		dotColor: "bg-yellow-400",
+		accentText: "text-yellow-400",
+		accentBorder: "border-yellow-400/40",
+		operatorText: "text-yellow-400",
+		operatorBgActive: "bg-yellow-950/60",
+		operatorBorderActive: "border-yellow-400/60",
+		equalBg:
+			"bg-yellow-400 text-black font-semibold shadow-[0_0_20px_rgba(234,179,8,0.35)] hover:bg-yellow-300",
+		ring: "focus-visible:ring-yellow-400",
+		cursorColor: "text-yellow-400",
+		cssVars: {
+			"--theme-color": "#eab308",
+			"--theme-glow": "rgba(234, 179, 8, 0.25)",
+			"--theme-accent": "#fef08a",
+			"--theme-border": "rgba(234, 179, 8, 0.35)",
+			"--theme-bg-subtle": "rgba(234, 179, 8, 0.08)",
 		},
 	},
 };

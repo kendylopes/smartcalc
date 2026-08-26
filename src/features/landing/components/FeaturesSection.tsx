@@ -1,10 +1,12 @@
 import {
 	ArrowRight,
+	Fuel,
 	PieChart,
 	Repeat,
 	Scale,
 	ShoppingBag,
 	Sparkles,
+	Tag,
 	TrendingUp,
 	Users,
 } from "lucide-react";
@@ -18,6 +20,8 @@ type Props = {
 	onOpenFinance: () => void;
 	onOpenConverter: () => void;
 	onOpenQuantity: () => void;
+	onOpenFuel?: () => void;
+	onOpenDiscount?: () => void;
 };
 
 export const FeaturesSection = memo(function FeaturesSection({
@@ -26,6 +30,8 @@ export const FeaturesSection = memo(function FeaturesSection({
 	onOpenFinance,
 	onOpenConverter,
 	onOpenQuantity,
+	onOpenFuel,
+	onOpenDiscount,
 }: Props) {
 	const features = [
 		{
@@ -40,13 +46,35 @@ export const FeaturesSection = memo(function FeaturesSection({
 			actionLabel: "Calcular Compras",
 		},
 		{
+			id: "fuel",
+			title: "Calculadora Flex (Etanol vs Gasolina)",
+			description:
+				"Descubra instantaneamente qual combustível compensa no posto pela regra dos 70% ou pelo consumo real do seu veículo em km/l.",
+			icon: <Fuel size={22} />,
+			badge: "Economia no Posto",
+			color: "text-emerald-400 bg-emerald-500/10 border-emerald-500/20",
+			action: onOpenFuel || onOpenComparator,
+			actionLabel: "Calcular Combustível",
+		},
+		{
+			id: "discount",
+			title: "Calculadora de Desconto & Margem",
+			description:
+				"Calcule descontos com % OFF e total economizado, ou defina preços de venda e margens de lucro comercial (markup).",
+			icon: <Tag size={22} />,
+			badge: "Comércio & Ofertas",
+			color: "text-amber-400 bg-amber-500/10 border-amber-500/20",
+			action: onOpenDiscount || onOpenFinance,
+			actionLabel: "Calcular Desconto",
+		},
+		{
 			id: "comparator",
 			title: "Comparador de Embalagens (kg / L / un)",
 			description:
 				"Descubra se o pacote de 500g ou 1kg compensa mais. O SmartCalc calcula o valor por quilo e mostra a porcentagem exata de economia.",
 			icon: <Scale size={22} />,
 			badge: "Economia Real",
-			color: "text-amber-400 bg-amber-500/10 border-amber-500/20",
+			color: "text-purple-400 bg-purple-500/10 border-purple-500/20",
 			action: onOpenComparator,
 			actionLabel: "Comparar Preços",
 		},
@@ -57,7 +85,7 @@ export const FeaturesSection = memo(function FeaturesSection({
 				"Divida o consumo do restaurante, barzinho ou churrasco entre amigos com taxa de serviço configurável (0% a 25%) e mensagem pronta.",
 			icon: <Users size={22} />,
 			badge: "Sem Confusão",
-			color: "text-emerald-400 bg-emerald-500/10 border-emerald-500/20",
+			color: "text-teal-400 bg-teal-500/10 border-teal-500/20",
 			action: onOpenSplitBill,
 			actionLabel: "Dividir Conta",
 		},
@@ -68,7 +96,7 @@ export const FeaturesSection = memo(function FeaturesSection({
 				"Calcule o valor real das parcelas com taxa de juros ou simule rendimentos de investimentos e poupança a juros compostos.",
 			icon: <TrendingUp size={22} />,
 			badge: "Planejamento",
-			color: "text-purple-400 bg-purple-500/10 border-purple-500/20",
+			color: "text-rose-400 bg-rose-500/10 border-rose-500/20",
 			action: onOpenFinance,
 			actionLabel: "Simular Finanças",
 		},
@@ -90,7 +118,7 @@ export const FeaturesSection = memo(function FeaturesSection({
 				"Classificação inteligente automática dos seus gastos em 7 categorias (Açougue, Hortifrúti, Mercearia, Limpeza, etc.) com gráfico visual.",
 			icon: <PieChart size={22} />,
 			badge: "Análise Visual",
-			color: "text-rose-400 bg-rose-500/10 border-rose-500/20",
+			color: "text-yellow-400 bg-yellow-500/10 border-yellow-500/20",
 			action: () => {
 				const el = document.getElementById("calculadora");
 				el?.scrollIntoView({ behavior: "smooth" });

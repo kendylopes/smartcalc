@@ -1,4 +1,4 @@
-import { Coins, Database, HelpCircle, Repeat, Scale, TrendingUp, Users } from "lucide-react";
+import { Coins, Database, Fuel, HelpCircle, Repeat, Scale, Tag, TrendingUp, Users } from "lucide-react";
 import { memo } from "react";
 import type { ThemeConfig } from "../hooks/useThemes";
 
@@ -7,6 +7,8 @@ type Props = {
 	onOpenSplitBill: () => void;
 	onOpenFinance: () => void;
 	onOpenConverter: () => void;
+	onOpenFuel?: () => void;
+	onOpenDiscount?: () => void;
 	onOpenHelp: () => void;
 	onOpenBackup: () => void;
 	theme?: ThemeConfig;
@@ -18,6 +20,8 @@ export const QuickToolsPanel = memo(function QuickToolsPanel({
 	onOpenSplitBill,
 	onOpenFinance,
 	onOpenConverter,
+	onOpenFuel,
+	onOpenDiscount,
 	onOpenHelp,
 	onOpenBackup,
 	theme,
@@ -34,13 +38,31 @@ export const QuickToolsPanel = memo(function QuickToolsPanel({
 			color: "text-amber-400 bg-amber-500/10 border-amber-500/20",
 		},
 		{
+			id: "fuel",
+			name: "Etanol vs Gasolina",
+			desc: "Qual combustível compensa?",
+			icon: <Fuel size={16} />,
+			shortcut: "G",
+			action: onOpenFuel || onOpenComparator,
+			color: "text-emerald-400 bg-emerald-500/10 border-emerald-500/20",
+		},
+		{
+			id: "discount",
+			name: "Desconto & Margem",
+			desc: "Preço % OFF e lucro markup",
+			icon: <Tag size={16} />,
+			shortcut: "M",
+			action: onOpenDiscount || onOpenFinance,
+			color: "text-cyan-400 bg-cyan-500/10 border-cyan-500/20",
+		},
+		{
 			id: "split",
 			name: "Divisor de Conta",
 			desc: "Dividir consumo & taxa de 10%",
 			icon: <Users size={16} />,
 			shortcut: "D",
 			action: onOpenSplitBill,
-			color: "text-emerald-400 bg-emerald-500/10 border-emerald-500/20",
+			color: "text-teal-400 bg-teal-500/10 border-teal-500/20",
 		},
 		{
 			id: "finance",
