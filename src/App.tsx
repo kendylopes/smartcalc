@@ -273,6 +273,7 @@ export function App() {
 				colorMode={colorMode}
 				onToggleColorMode={toggleColorMode}
 				onOpenPix={() => setIsPixOpen(true)}
+				onOpenShortcuts={() => setIsShortcutsOpen(true)}
 				isPwaInstallable={isInstallable}
 				onInstallPwa={installApp}
 				theme={theme}
