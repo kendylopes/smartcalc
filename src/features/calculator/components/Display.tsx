@@ -159,7 +159,11 @@ export const Display = memo(function Display({
 									e.stopPropagation();
 									onToggleVoice();
 								}}
-								title={isListeningVoice ? "Parar de ouvir" : "Falar para somar (Ditar cálculo ou produto)"}
+								title={
+									isListeningVoice
+										? "Parar de ouvir"
+										: "Falar para somar (Ditar cálculo ou produto)"
+								}
 								aria-label="Falar para somar"
 								className={`
 									flex
@@ -179,7 +183,10 @@ export const Display = memo(function Display({
 									}
 								`}
 							>
-								<Mic size={13} className={isListeningVoice ? "text-red-400 animate-bounce" : "text-zinc-400"} />
+								<Mic
+									size={13}
+									className={isListeningVoice ? "text-red-400 animate-bounce" : "text-zinc-400"}
+								/>
 								{isListeningVoice ? (
 									<span className="text-[10px] font-semibold text-red-300 font-mono max-w-32 truncate">
 										{voiceTranscript || "Ouvindo..."}

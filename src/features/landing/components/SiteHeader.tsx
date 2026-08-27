@@ -33,7 +33,10 @@ export const SiteHeader = memo(function SiteHeader({
 		<header className="sticky top-0 z-50 w-full border-b border-white/[0.06] backdrop-blur-2xl bg-[#0b0d13]/80 html.light:bg-[#e6ebf4]/85 transition-colors">
 			<div className="max-w-7xl mx-auto px-4 sm:px-6 h-15 sm:h-16 flex items-center justify-between">
 				{/* 1. Logo & Nome da Marca */}
-				<a href="#calculadora" className="flex items-center gap-2.5 group cursor-pointer select-none">
+				<a
+					href="#calculadora"
+					className="flex items-center gap-2.5 group cursor-pointer select-none"
+				>
 					<img
 						src="/logo.png"
 						alt="SmartCalc Logo"

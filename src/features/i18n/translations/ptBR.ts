@@ -65,6 +65,7 @@ export const ptBR: TranslationDictionary = {
 	spendingDistribution: "Distribuição dos Gastos",
 	topItemsRanking: "Top Itens mais Caros",
 	noAnalyticsData: "Sem dados para análise",
-	noAnalyticsDataDesc: "Faça cálculos ou adicione itens com quantidades para ver estatísticas detalhadas.",
+	noAnalyticsDataDesc:
+		"Faça cálculos ou adicione itens com quantidades para ver estatísticas detalhadas.",
 	exportSummary: "Copiar Resumo Financeiro",
 };

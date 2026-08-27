@@ -147,43 +147,73 @@ export const PrivacyPolicyModal = memo(function PrivacyPolicyModal({
 							{activeTab === "privacy" ? (
 								<div className="space-y-4 leading-relaxed">
 									<div>
-										<h3 className="text-sm font-bold text-white mb-1">1. Visão Geral e Compromisso</h3>
+										<h3 className="text-sm font-bold text-white mb-1">
+											1. Visão Geral e Compromisso
+										</h3>
 										<p className="text-zinc-400">
-											O <strong>SmartCalc</strong> respeita a sua privacidade e está comprometido em proteger
-											seus dados pessoais em total conformidade com a Lei Geral de Proteção de Dados (LGPD — Lei nº 13.709/2018).
+											O <strong>SmartCalc</strong> respeita a sua privacidade e está comprometido em
+											proteger seus dados pessoais em total conformidade com a Lei Geral de Proteção
+											de Dados (LGPD — Lei nº 13.709/2018).
 										</p>
 									</div>
 
 									<div>
-										<h3 className="text-sm font-bold text-white mb-1">2. Dados Pessoais & Armazenamento Local</h3>
+										<h3 className="text-sm font-bold text-white mb-1">
+											2. Dados Pessoais & Armazenamento Local
+										</h3>
 										<p className="text-zinc-400">
-											O SmartCalc funciona como uma aplicação estática e PWA. Todos os seus cálculos, listas de
-											supermercado, histórico e preferências de temas são armazenados <strong>estritamente no seu próprio navegador
-											(via localStorage)</strong>. Nós não coletamos, enviamos nem armazenamos os seus cálculos em servidores remotos.
+											O SmartCalc funciona como uma aplicação estática e PWA. Todos os seus
+											cálculos, listas de supermercado, histórico e preferências de temas são
+											armazenados{" "}
+											<strong>estritamente no seu próprio navegador (via localStorage)</strong>. Nós
+											não coletamos, enviamos nem armazenamos os seus cálculos em servidores
+											remotos.
 										</p>
 									</div>
 
 									<div>
-										<h3 className="text-sm font-bold text-white mb-1">3. Cookies e Tecnologias de Terceiros</h3>
+										<h3 className="text-sm font-bold text-white mb-1">
+											3. Cookies e Tecnologias de Terceiros
+										</h3>
 										<p className="text-zinc-400">
-											Podemos utilizar serviços de terceiros, como o <strong>Google AdSense</strong> e ferramentas de métricas, que podem utilizar cookies (como o cookie DoubleClick / DART) para exibir anúncios relevantes com base nas suas visitas a este e a outros sites na internet.
+											Podemos utilizar serviços de terceiros, como o <strong>Google AdSense</strong>{" "}
+											e ferramentas de métricas, que podem utilizar cookies (como o cookie
+											DoubleClick / DART) para exibir anúncios relevantes com base nas suas visitas
+											a este e a outros sites na internet.
 										</p>
 										<p className="text-zinc-400 mt-1">
-											Você pode desativar a personalização de anúncios do Google a qualquer momento acessando as <a href="https://adssettings.google.com" target="_blank" rel="noreferrer" className="text-cyan-400 underline">Configurações de Anúncios do Google</a>.
+											Você pode desativar a personalização de anúncios do Google a qualquer momento
+											acessando as{" "}
+											<a
+												href="https://adssettings.google.com"
+												target="_blank"
+												rel="noreferrer"
+												className="text-cyan-400 underline"
+											>
+												Configurações de Anúncios do Google
+											</a>
+											.
 										</p>
 									</div>
 
 									<div>
-										<h3 className="text-sm font-bold text-white mb-1">4. Direitos do Titular (LGPD)</h3>
+										<h3 className="text-sm font-bold text-white mb-1">
+											4. Direitos do Titular (LGPD)
+										</h3>
 										<p className="text-zinc-400">
-											Você possui o direito de apagar todos os seus dados a qualquer momento simplesmente limpando os dados do navegador ou utilizando o botão "Limpar Histórico" no aplicativo.
+											Você possui o direito de apagar todos os seus dados a qualquer momento
+											simplesmente limpando os dados do navegador ou utilizando o botão "Limpar
+											Histórico" no aplicativo.
 										</p>
 									</div>
 
 									<div>
-										<h3 className="text-sm font-bold text-white mb-1">5. Alterações nesta Política</h3>
+										<h3 className="text-sm font-bold text-white mb-1">
+											5. Alterações nesta Política
+										</h3>
 										<p className="text-zinc-400">
-											Esta política pode ser atualizada periodicamente para refletir melhorias no app ou novas exigências regulatórias.
+											Esta política pode ser atualizada periodicamente para refletir melhorias no
+											app ou novas exigências regulatórias.
 										</p>
 									</div>
 								</div>
@@ -192,28 +222,39 @@ export const PrivacyPolicyModal = memo(function PrivacyPolicyModal({
 									<div>
 										<h3 className="text-sm font-bold text-white mb-1">1. Aceitação dos Termos</h3>
 										<p className="text-zinc-400">
-											Ao acessar e utilizar o <strong>SmartCalc</strong>, você concorda com estes Termos de Uso e com todas as leis e regulamentos aplicáveis.
+											Ao acessar e utilizar o <strong>SmartCalc</strong>, você concorda com estes
+											Termos de Uso e com todas as leis e regulamentos aplicáveis.
 										</p>
 									</div>
 
 									<div>
 										<h3 className="text-sm font-bold text-white mb-1">2. Natureza da Ferramenta</h3>
 										<p className="text-zinc-400">
-											O SmartCalc é uma ferramenta gratuita desenvolvida para fins de conveniência, produtividade e estimativas rápidas em compras, divisões de conta e planejamento financeiro pessoal.
+											O SmartCalc é uma ferramenta gratuita desenvolvida para fins de conveniência,
+											produtividade e estimativas rápidas em compras, divisões de conta e
+											planejamento financeiro pessoal.
 										</p>
 									</div>
 
 									<div>
-										<h3 className="text-sm font-bold text-white mb-1">3. Isenção de Responsabilidade Financeira</h3>
+										<h3 className="text-sm font-bold text-white mb-1">
+											3. Isenção de Responsabilidade Financeira
+										</h3>
 										<p className="text-zinc-400">
-											Os cálculos de juros compostos, parcelamento (Tabela Price) e comparações de produtos são fornecidos como estimativas indicativas. Decisões de investimento e transações bancárias devem sempre ser validadas junto às suas instituições financeiras.
+											Os cálculos de juros compostos, parcelamento (Tabela Price) e comparações de
+											produtos são fornecidos como estimativas indicativas. Decisões de investimento
+											e transações bancárias devem sempre ser validadas junto às suas instituições
+											financeiras.
 										</p>
 									</div>
 
 									<div>
-										<h3 className="text-sm font-bold text-white mb-1">4. Propriedade Intelectual</h3>
+										<h3 className="text-sm font-bold text-white mb-1">
+											4. Propriedade Intelectual
+										</h3>
 										<p className="text-zinc-400">
-											Todo o design, interface, código-fonte e elementos visuais pertencem ao projeto SmartCalc, distribuído sob termos de código aberto aplicáveis.
+											Todo o design, interface, código-fonte e elementos visuais pertencem ao
+											projeto SmartCalc, distribuído sob termos de código aberto aplicáveis.
 										</p>
 									</div>
 								</div>

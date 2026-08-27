@@ -233,9 +233,7 @@ export const TopNavigation = memo(function TopNavigation({
 											<h3 className="text-sm font-semibold text-white tracking-wide">
 												{t.menuTitle}
 											</h3>
-											<p className="text-[11px] text-zinc-400">
-												{t.menuSubtitle}
-											</p>
+											<p className="text-[11px] text-zinc-400">{t.menuSubtitle}</p>
 										</div>
 									</div>
 									<button
@@ -683,7 +681,9 @@ export const TopNavigation = memo(function TopNavigation({
 													>
 														<span className="text-base mb-0.5">{l.flag}</span>
 														<span className="text-[11px] truncate">{l.name}</span>
-														<span className="text-[9px] text-zinc-500 font-mono">({l.currencySymbol})</span>
+														<span className="text-[9px] text-zinc-500 font-mono">
+															({l.currencySymbol})
+														</span>
 													</button>
 												);
 											})}

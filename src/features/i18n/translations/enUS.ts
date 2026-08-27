@@ -65,6 +65,7 @@ export const enUS: TranslationDictionary = {
 	spendingDistribution: "Spending Distribution",
 	topItemsRanking: "Top Expensive Items",
 	noAnalyticsData: "No data to analyze",
-	noAnalyticsDataDesc: "Make calculations or add items to your cart to view rich interactive analytics.",
+	noAnalyticsDataDesc:
+		"Make calculations or add items to your cart to view rich interactive analytics.",
 	exportSummary: "Copy Financial Summary",
 };

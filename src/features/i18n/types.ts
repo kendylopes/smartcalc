@@ -14,7 +14,7 @@ export type LanguageInfo = {
 export type TranslationDictionary = {
 	appName: string;
 	appTagline: string;
-	
+
 	// Menu & Top Navigation
 	menuTitle: string;
 	menuSubtitle: string;
@@ -22,7 +22,7 @@ export type TranslationDictionary = {
 	visualAndSettings: string;
 	themesSection: string;
 	languageSection: string;
-	
+
 	// Tools names
 	comparePackages: string;
 	currencyConverter: string;
@@ -42,7 +42,7 @@ export type TranslationDictionary = {
 	backupRestore: string;
 	installApp: string;
 	helpAndGuide: string;
-	
+
 	// Actions & Status
 	active: string;
 	inactive: string;
@@ -59,7 +59,7 @@ export type TranslationDictionary = {
 	confirm: string;
 	clear: string;
 	delete: string;
-	
+
 	// Calculator UI
 	marketQuickAdd: string;
 	marketQuickAddDesc: string;
@@ -70,7 +70,7 @@ export type TranslationDictionary = {
 	historyEmpty: string;
 	digitalReceipt: string;
 	viewAnalytics: string;
-	
+
 	// Analytics Modal
 	analyticsTitle: string;
 	analyticsSubtitle: string;

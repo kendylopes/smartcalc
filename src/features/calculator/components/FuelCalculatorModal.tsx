@@ -3,11 +3,7 @@ import { ArrowRight, Fuel, Gauge, X } from "lucide-react";
 import { memo, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import type { ThemeConfig } from "../hooks/useThemes";
-import {
-	formatCurrencyInput,
-	formatNumberPtBR,
-	parseCurrencyToNumber,
-} from "../utils/format";
+import { formatCurrencyInput, formatNumberPtBR, parseCurrencyToNumber } from "../utils/format";
 
 type Props = {
 	isOpen: boolean;
@@ -70,8 +66,10 @@ export const FuelCalculatorModal = memo(function FuelCalculatorModal({
 		const totalEthanol = pe * tank;
 		const totalGasoline = pg * tank;
 
-		const costPerKmEthanol = pe / (isCustomConsumption ? Number(ethanolKmL.replace(",", ".")) || 8.5 : 8.5);
-		const costPerKmGasoline = pg / (isCustomConsumption ? Number(gasolineKmL.replace(",", ".")) || 12 : 12);
+		const costPerKmEthanol =
+			pe / (isCustomConsumption ? Number(ethanolKmL.replace(",", ".")) || 8.5 : 8.5);
+		const costPerKmGasoline =
+			pg / (isCustomConsumption ? Number(gasolineKmL.replace(",", ".")) || 12 : 12);
 
 		const savingsPerKm = Math.abs(costPerKmGasoline - costPerKmEthanol);
 		const savings500km = Math.round(savingsPerKm * 500 * 100) / 100;
@@ -195,8 +193,8 @@ export const FuelCalculatorModal = memo(function FuelCalculatorModal({
 										</h3>
 										<p className="text-[11px] text-zinc-300">
 											Relação de preço:{" "}
-											<strong className="text-white font-mono">{result.ratioPercent}%</strong> (limite:{" "}
-											{result.thresholdPercent}%)
+											<strong className="text-white font-mono">{result.ratioPercent}%</strong>{" "}
+											(limite: {result.thresholdPercent}%)
 										</p>
 									</div>
 
@@ -287,7 +285,9 @@ export const FuelCalculatorModal = memo(function FuelCalculatorModal({
 											/>
 										</div>
 										<div>
-											<span className="text-[10px] text-zinc-400 block mb-0.5">Gasolina (km/l):</span>
+											<span className="text-[10px] text-zinc-400 block mb-0.5">
+												Gasolina (km/l):
+											</span>
 											<input
 												type="text"
 												inputMode="decimal"

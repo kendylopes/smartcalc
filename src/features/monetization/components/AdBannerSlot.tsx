@@ -1,5 +1,6 @@
 import { ExternalLink, Zap } from "lucide-react";
-import React, { memo, useEffect, useRef } from "react";
+import type React from "react";
+import { memo, useEffect, useRef } from "react";
 
 type AdFormat = "horizontal" | "rectangle" | "auto";
 
@@ -43,7 +44,7 @@ export const AdBannerSlot = memo(function AdBannerSlot({
 	useEffect(() => {
 		if (type === "adsense" || (type === "auto" && isAdSenseConfigured)) {
 			try {
-				// @ts-ignore
+				// @ts-expect-error
 				(window.adsbygoogle = window.adsbygoogle || []).push({});
 			} catch (e) {
 				console.error("AdSense render error:", e);
@@ -115,9 +116,7 @@ export const AdBannerSlot = memo(function AdBannerSlot({
 						<h4 className="text-sm font-bold text-white tracking-tight group-hover:text-cyan-300 transition-colors">
 							{partnerData.title}
 						</h4>
-						<p className="text-xs text-zinc-400 leading-relaxed max-w-xl">
-							{partnerData.desc}
-						</p>
+						<p className="text-xs text-zinc-400 leading-relaxed max-w-xl">{partnerData.desc}</p>
 					</div>
 				</div>
 

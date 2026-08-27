@@ -44,7 +44,8 @@ const HELP_SECTIONS: HelpSection[] = [
 		icon: ScanBarcode,
 		color: "text-emerald-400 bg-emerald-500/10 border-emerald-500/20",
 		badge: "Novo",
-		summary: "Aponte a câmera do celular para o código de barras das embalagens para adicionar produtos instantaneamente.",
+		summary:
+			"Aponte a câmera do celular para o código de barras das embalagens para adicionar produtos instantaneamente.",
 		steps: [
 			{
 				title: "1. Abrir o Scanner",
@@ -444,8 +445,8 @@ export const HelpModal = memo(function HelpModal({ isOpen, onClose, theme }: Pro
 													className="px-3.5 pb-3.5 pt-1 border-t border-white/6 space-y-2.5"
 												>
 													<div className="space-y-2">
-														{sec.steps.map((step, idx) => (
-															<div key={idx} className="text-xs space-y-0.5">
+														{sec.steps.map((step) => (
+															<div key={step.title} className="text-xs space-y-0.5">
 																<p className="font-semibold text-zinc-200 text-[11px]">
 																	{step.title}
 																</p>

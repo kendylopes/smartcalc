@@ -3,11 +3,7 @@ import { ArrowRight, RotateCcw, Scale, Sparkles, Trophy, X } from "lucide-react"
 import { memo, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import type { ThemeConfig } from "../hooks/useThemes";
-import {
-	formatCurrencyInput,
-	formatNumberPtBR,
-	parseCurrencyToNumber,
-} from "../utils/format";
+import { formatCurrencyInput, formatNumberPtBR, parseCurrencyToNumber } from "../utils/format";
 
 type Props = {
 	isOpen: boolean;

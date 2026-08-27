@@ -90,7 +90,10 @@ export function parseSpokenNumber(text: string): number | null {
 }
 
 function parseWordSequence(text: string): number | null {
-	const words = text.toLowerCase().split(/\s+/).filter((w) => w && w !== "e");
+	const words = text
+		.toLowerCase()
+		.split(/\s+/)
+		.filter((w) => w && w !== "e");
 	if (words.length === 0) return null;
 
 	let total = 0;
@@ -221,7 +224,7 @@ export function parseVoiceCommand(transcript: string): VoiceParseResult | null {
 
 	// Limpa caracteres estranhos deixando só números e operadores matemáticos
 	const cleanMath = mathExp.replace(/[^0-9+\-*/.%() ]/g, "").trim();
-	if (/^[0-9]+(\.[0-9]+)?\s*[\+\-\*\/]\s*[0-9]+/.test(cleanMath)) {
+	if (/^[0-9]+(\.[0-9]+)?\s*[+\-*/]\s*[0-9]+/.test(cleanMath)) {
 		return {
 			type: "math",
 			expression: cleanMath.replace(/\s+/g, ""),

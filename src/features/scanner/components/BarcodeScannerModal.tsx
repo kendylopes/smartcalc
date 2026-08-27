@@ -11,27 +11,83 @@ import {
 	SwitchCamera,
 	X,
 } from "lucide-react";
-import React, { memo, useCallback, useEffect, useRef, useState } from "react";
+import type React from "react";
+import { memo, useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import type { ThemeConfig } from "@/features/calculator/hooks/useThemes";
 import { useI18n } from "@/features/i18n";
 
 // Base de dados local com códigos EAN comuns do mercado brasileiro para identificação instantânea offline
-const COMMON_EAN_DATABASE: Record<string, { name: string; defaultPrice: string; category: string }> = {
-	"7891000100103": { name: "🥛 Leite Condensado Moça 395g", defaultPrice: "6.99", category: "Laticínios" },
-	"7891000053508": { name: "☕ Café Nescafé Tradicional 100g", defaultPrice: "14.90", category: "Mercearia" },
-	"7891055300053": { name: "🍚 Arroz Branco Tipo 1 (5kg)", defaultPrice: "28.90", category: "Grãos" },
-	"7891055300060": { name: "🫘 Feijão Carioca Tipo 1 (1kg)", defaultPrice: "8.49", category: "Grãos" },
-	"7894900011517": { name: "🥤 Coca-Cola Original 2 Litros", defaultPrice: "9.99", category: "Bebidas" },
-	"7891150000000": { name: "🥛 Leite Integral Longa Vida 1L", defaultPrice: "4.89", category: "Laticínios" },
-	"7891025111111": { name: "🧼 Detergente Líquido 500ml", defaultPrice: "2.49", category: "Limpeza" },
-	"7898000000000": { name: "🍞 Pão de Forma Tradicional 500g", defaultPrice: "7.90", category: "Padaria" },
+const COMMON_EAN_DATABASE: Record<
+	string,
+	{ name: string; defaultPrice: string; category: string }
+> = {
+	"7891000100103": {
+		name: "🥛 Leite Condensado Moça 395g",
+		defaultPrice: "6.99",
+		category: "Laticínios",
+	},
+	"7891000053508": {
+		name: "☕ Café Nescafé Tradicional 100g",
+		defaultPrice: "14.90",
+		category: "Mercearia",
+	},
+	"7891055300053": {
+		name: "🍚 Arroz Branco Tipo 1 (5kg)",
+		defaultPrice: "28.90",
+		category: "Grãos",
+	},
+	"7891055300060": {
+		name: "🫘 Feijão Carioca Tipo 1 (1kg)",
+		defaultPrice: "8.49",
+		category: "Grãos",
+	},
+	"7894900011517": {
+		name: "🥤 Coca-Cola Original 2 Litros",
+		defaultPrice: "9.99",
+		category: "Bebidas",
+	},
+	"7891150000000": {
+		name: "🥛 Leite Integral Longa Vida 1L",
+		defaultPrice: "4.89",
+		category: "Laticínios",
+	},
+	"7891025111111": {
+		name: "🧼 Detergente Líquido 500ml",
+		defaultPrice: "2.49",
+		category: "Limpeza",
+	},
+	"7898000000000": {
+		name: "🍞 Pão de Forma Tradicional 500g",
+		defaultPrice: "7.90",
+		category: "Padaria",
+	},
 	"7891000245678": { name: "🍝 Macarrão Espaguete 500g", defaultPrice: "4.20", category: "Massas" },
-	"7891000333333": { name: "🥫 Molho de Tomate Tradicional 340g", defaultPrice: "2.89", category: "Mercearia" },
-	"7891000444444": { name: "🧻 Papel Higiênico 12 Rolos", defaultPrice: "18.90", category: "Higiene" },
-	"7891000555555": { name: "🥩 Contra Filé Bovino (kg)", defaultPrice: "42.90", category: "Açougue" },
-	"7891000666666": { name: "🧀 Queijo Mussarela Fatiado 200g", defaultPrice: "9.50", category: "Frios" },
-	"7891000777777": { name: "🥚 Ovos Brancos Grandes (12 un)", defaultPrice: "11.90", category: "Ovos" },
+	"7891000333333": {
+		name: "🥫 Molho de Tomate Tradicional 340g",
+		defaultPrice: "2.89",
+		category: "Mercearia",
+	},
+	"7891000444444": {
+		name: "🧻 Papel Higiênico 12 Rolos",
+		defaultPrice: "18.90",
+		category: "Higiene",
+	},
+	"7891000555555": {
+		name: "🥩 Contra Filé Bovino (kg)",
+		defaultPrice: "42.90",
+		category: "Açougue",
+	},
+	"7891000666666": {
+		name: "🧀 Queijo Mussarela Fatiado 200g",
+		defaultPrice: "9.50",
+		category: "Frios",
+	},
+	"7891000777777": {
+		name: "🥚 Ovos Brancos Grandes (12 un)",
+		defaultPrice: "11.90",
+		category: "Ovos",
+	},
 };
 
 type Props = {
@@ -103,9 +159,9 @@ export const BarcodeScannerModal = memo(function BarcodeScannerModal({
 
 			// Verifica suporte a Lanterna / Torch
 			const track = mediaStream.getVideoTracks()[0];
-			// @ts-ignore
-			const capabilities = track.getCapabilities?.();
-			// @ts-ignore
+			const capabilities = (
+				track as unknown as { getCapabilities?: () => { torch?: boolean } }
+			)?.getCapabilities?.();
 			if (capabilities?.torch) {
 				setHasTorchSupport(true);
 			} else {
@@ -134,8 +190,10 @@ export const BarcodeScannerModal = memo(function BarcodeScannerModal({
 		const track = stream.getVideoTracks()[0];
 		try {
 			const nextState = !isTorchOn;
-			// @ts-ignore
-			await track.applyConstraints({ advanced: [{ torch: nextState }] });
+			const trackWithConstraints = track as unknown as {
+				applyConstraints: (constraints: { advanced?: Array<{ torch?: boolean }> }) => Promise<void>;
+			};
+			await trackWithConstraints.applyConstraints({ advanced: [{ torch: nextState }] });
 			setIsTorchOn(nextState);
 			onPlayClick?.();
 		} catch (e) {
@@ -185,7 +243,7 @@ export const BarcodeScannerModal = memo(function BarcodeScannerModal({
 		if (!isOpen || !stream || detectedBarcode) return;
 
 		let animationFrameId: number;
-		// @ts-ignore
+		// @ts-expect-error
 		const BarcodeDetectorClass = window.BarcodeDetector;
 
 		if (BarcodeDetectorClass) {
@@ -371,7 +429,8 @@ export const BarcodeScannerModal = memo(function BarcodeScannerModal({
 												Câmera não disponível ou permissão negada
 											</p>
 											<p className="text-[11px] text-zinc-500">
-												Permita o acesso à câmera nas configurações do navegador ou use o botão de simulação abaixo.
+												Permita o acesso à câmera nas configurações do navegador ou use o botão de
+												simulação abaixo.
 											</p>
 										</div>
 									) : (
@@ -458,17 +517,19 @@ export const BarcodeScannerModal = memo(function BarcodeScannerModal({
 										</form>
 									) : (
 										<div className="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto custom-scrollbar p-1 bg-zinc-950/40 rounded-xl border border-white/6">
-											{Object.entries(COMMON_EAN_DATABASE).slice(0, 6).map(([ean, item]) => (
-												<button
-													key={ean}
-													type="button"
-													onClick={() => handleQuickSampleBarcode(ean)}
-													className="px-2.5 py-1 rounded-lg bg-white/4 hover:bg-white/10 border border-white/8 text-[10px] text-zinc-300 hover:text-white transition-all cursor-pointer truncate max-w-40"
-													title={item.name}
-												>
-													{item.name}
-												</button>
-											))}
+											{Object.entries(COMMON_EAN_DATABASE)
+												.slice(0, 6)
+												.map(([ean, item]) => (
+													<button
+														key={ean}
+														type="button"
+														onClick={() => handleQuickSampleBarcode(ean)}
+														className="px-2.5 py-1 rounded-lg bg-white/4 hover:bg-white/10 border border-white/8 text-[10px] text-zinc-300 hover:text-white transition-all cursor-pointer truncate max-w-40"
+														title={item.name}
+													>
+														{item.name}
+													</button>
+												))}
 										</div>
 									)}
 								</div>
@@ -582,9 +643,7 @@ export const BarcodeScannerModal = memo(function BarcodeScannerModal({
 									"
 								>
 									<ShoppingBag size={18} />
-									<span>
-										Adicionar ao Carrinho ({formatMoney(totalItemValue)})
-									</span>
+									<span>Adicionar ao Carrinho ({formatMoney(totalItemValue)})</span>
 								</button>
 							</div>
 						)}

@@ -10,7 +10,8 @@ import {
 	TrendingUp,
 	X,
 } from "lucide-react";
-import React, { useMemo, useState } from "react";
+import type React from "react";
+import { useMemo, useState } from "react";
 import type { ThemeConfig } from "@/features/calculator/hooks/useThemes";
 import type { HistoryItem } from "@/features/calculator/types/history";
 import { useI18n } from "@/features/i18n";
@@ -95,10 +96,15 @@ export const SpendingDashboardModal: React.FC<Props> = ({
 			`💰 *Total Gasto:* ${formatMoney(stats.total)}`,
 			`📈 *Média por Operação:* ${formatMoney(stats.average)}`,
 			`📦 *Total de Itens:* ${stats.count}`,
-			stats.highest > 0 ? `⭐ *Maior Despesa:* ${stats.highestName} (${formatMoney(stats.highest)})` : "",
+			stats.highest > 0
+				? `⭐ *Maior Despesa:* ${stats.highestName} (${formatMoney(stats.highest)})`
+				: "",
 			"",
 			`🏆 *Maiores Gastos:*`,
-			...stats.topItems.map((item, idx) => `${idx + 1}. ${item.name}: ${formatMoney(item.total)} (${item.percent.toFixed(1)}%)`),
+			...stats.topItems.map(
+				(item, idx) =>
+					`${idx + 1}. ${item.name}: ${formatMoney(item.total)} (${item.percent.toFixed(1)}%)`,
+			),
 		].filter(Boolean);
 
 		navigator.clipboard.writeText(lines.join("\n"));
@@ -168,9 +174,7 @@ export const SpendingDashboardModal: React.FC<Props> = ({
 									<PieChart size={32} />
 								</div>
 								<h4 className="text-sm font-semibold text-zinc-300">{t.noAnalyticsData}</h4>
-								<p className="text-xs text-zinc-500 max-w-xs mt-1">
-									{t.noAnalyticsDataDesc}
-								</p>
+								<p className="text-xs text-zinc-500 max-w-xs mt-1">{t.noAnalyticsDataDesc}</p>
 							</div>
 						) : (
 							<>
@@ -282,7 +286,9 @@ export const SpendingDashboardModal: React.FC<Props> = ({
 										{isCopied ? (
 											<>
 												<Check size={14} className="text-emerald-400" />
-												<span className="text-emerald-400">Resumo Copiado para a Área de Transferência!</span>
+												<span className="text-emerald-400">
+													Resumo Copiado para a Área de Transferência!
+												</span>
 											</>
 										) : (
 											<>

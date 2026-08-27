@@ -1,23 +1,12 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { Delete, ShoppingBag } from "lucide-react";
-import { useCallback, useState } from "react";
+import { lazy, Suspense, useCallback, useState } from "react";
 import { Toaster } from "@/components/ui/sonner";
-import { SpendingDashboardModal } from "@/features/analytics";
 import {
-	BackupModal,
 	CalculatorButton,
-	DiscountProfitModal,
 	Display,
-	FuelCalculatorModal,
-	HelpModal,
 	HistoryPanel,
-	KeyboardShortcutsModal,
-	PriceComparatorModal,
-	ProductNameModal,
-	QuantityModal,
 	QuickToolsPanel,
-	ReceiptImageModal,
-	SplitBillModal,
 	TopNavigation,
 } from "@/features/calculator/components";
 import { BASIC_BUTTONS, SCIENTIFIC_FUNCTIONS } from "@/features/calculator/constants";
@@ -29,20 +18,111 @@ import {
 	useThemes,
 	useVoiceInput,
 } from "@/features/calculator/hooks";
-import { ConverterModal } from "@/features/converter";
-import { FinanceModal } from "@/features/finance";
-import {
-	FeaturesSection,
-	PixDonationModal,
-	SavingsGuideSection,
-	SiteFooter,
-	SiteHeader,
-	WhyUsSection,
-} from "@/features/landing";
-import { PrivacyPolicyModal } from "@/features/legal";
+import { SiteHeader } from "@/features/landing";
 import { AdBannerSlot } from "@/features/monetization";
 import { PwaInstallBanner, usePwaInstall, useWakeLock } from "@/features/pwa";
-import { BarcodeScannerModal } from "@/features/scanner";
+
+// Lazy loading sob demanda de modais e seções pesadas para otimização do bundle
+const SpendingDashboardModal = lazy(() =>
+	import("@/features/analytics/components/SpendingDashboardModal").then((m) => ({
+		default: m.SpendingDashboardModal,
+	})),
+);
+const BarcodeScannerModal = lazy(() =>
+	import("@/features/scanner/components/BarcodeScannerModal").then((m) => ({
+		default: m.BarcodeScannerModal,
+	})),
+);
+const ConverterModal = lazy(() =>
+	import("@/features/converter/components/ConverterModal").then((m) => ({
+		default: m.ConverterModal,
+	})),
+);
+const FinanceModal = lazy(() =>
+	import("@/features/finance/components/FinanceModal").then((m) => ({
+		default: m.FinanceModal,
+	})),
+);
+const PrivacyPolicyModal = lazy(() =>
+	import("@/features/legal/components/PrivacyPolicyModal").then((m) => ({
+		default: m.PrivacyPolicyModal,
+	})),
+);
+const BackupModal = lazy(() =>
+	import("@/features/calculator/components/BackupModal").then((m) => ({
+		default: m.BackupModal,
+	})),
+);
+const DiscountProfitModal = lazy(() =>
+	import("@/features/calculator/components/DiscountProfitModal").then((m) => ({
+		default: m.DiscountProfitModal,
+	})),
+);
+const FuelCalculatorModal = lazy(() =>
+	import("@/features/calculator/components/FuelCalculatorModal").then((m) => ({
+		default: m.FuelCalculatorModal,
+	})),
+);
+const HelpModal = lazy(() =>
+	import("@/features/calculator/components/HelpModal").then((m) => ({
+		default: m.HelpModal,
+	})),
+);
+const KeyboardShortcutsModal = lazy(() =>
+	import("@/features/calculator/components/KeyboardShortcutsModal").then((m) => ({
+		default: m.KeyboardShortcutsModal,
+	})),
+);
+const PriceComparatorModal = lazy(() =>
+	import("@/features/calculator/components/PriceComparatorModal").then((m) => ({
+		default: m.PriceComparatorModal,
+	})),
+);
+const ProductNameModal = lazy(() =>
+	import("@/features/calculator/components/ProductNameModal").then((m) => ({
+		default: m.ProductNameModal,
+	})),
+);
+const QuantityModal = lazy(() =>
+	import("@/features/calculator/components/QuantityModal").then((m) => ({
+		default: m.QuantityModal,
+	})),
+);
+const ReceiptImageModal = lazy(() =>
+	import("@/features/calculator/components/ReceiptImageModal").then((m) => ({
+		default: m.ReceiptImageModal,
+	})),
+);
+const SplitBillModal = lazy(() =>
+	import("@/features/calculator/components/SplitBillModal").then((m) => ({
+		default: m.SplitBillModal,
+	})),
+);
+const PixDonationModal = lazy(() =>
+	import("@/features/landing/components/PixDonationModal").then((m) => ({
+		default: m.PixDonationModal,
+	})),
+);
+const FeaturesSection = lazy(() =>
+	import("@/features/landing/components/FeaturesSection").then((m) => ({
+		default: m.FeaturesSection,
+	})),
+);
+const SavingsGuideSection = lazy(() =>
+	import("@/features/landing/components/SavingsGuideSection").then((m) => ({
+		default: m.SavingsGuideSection,
+	})),
+);
+const WhyUsSection = lazy(() =>
+	import("@/features/landing/components/WhyUsSection").then((m) => ({
+		default: m.WhyUsSection,
+	})),
+);
+const SiteFooter = lazy(() =>
+	import("@/features/landing/components/SiteFooter").then((m) => ({
+		default: m.SiteFooter,
+	})),
+);
 
 export function App() {
 	const [showHistory, setShowHistory] = useState(false);
@@ -455,9 +535,7 @@ export function App() {
 								>
 									<ShoppingBag size={14} />
 								</div>
-								<span className="font-semibold tracking-wide">
-									Item & Quantidade
-								</span>
+								<span className="font-semibold tracking-wide">Item & Quantidade</span>
 							</button>
 						</div>
 
@@ -556,169 +634,189 @@ export function App() {
 				</div>
 			</main>
 
-			{/* SEÇÕES INSTITUCIONAIS DO PORTAL WEB */}
-			<FeaturesSection
-				theme={theme}
-				onOpenComparator={handleOpenComparator}
-				onOpenSplitBill={handleOpenSplitBill}
-				onOpenFinance={handleOpenFinance}
-				onOpenConverter={handleOpenConverter}
-				onOpenQuantity={handleOpenQuantity}
-				onOpenFuel={handleOpenFuel}
-				onOpenDiscount={handleOpenDiscount}
-			/>
-
-			<SavingsGuideSection />
-
-			<WhyUsSection theme={theme} />
-
-			{/* FOOTER INSTITUCIONAL */}
-			<SiteFooter 
-				theme={theme} 
-				onOpenPix={() => setIsPixOpen(true)} 
-				onOpenPrivacy={handleOpenPrivacy}
-				onOpenTerms={handleOpenTerms}
-			/>
+			{/* SEÇÕES INSTITUCIONAIS DO PORTAL WEB (CARREGADAS SOB DEMANDA) */}
+			<Suspense fallback={null}>
+				<FeaturesSection
+					theme={theme}
+					onOpenComparator={handleOpenComparator}
+					onOpenSplitBill={handleOpenSplitBill}
+					onOpenFinance={handleOpenFinance}
+					onOpenConverter={handleOpenConverter}
+					onOpenQuantity={handleOpenQuantity}
+					onOpenFuel={handleOpenFuel}
+					onOpenDiscount={handleOpenDiscount}
+				/>
+				<SavingsGuideSection />
+				<WhyUsSection theme={theme} />
+				<SiteFooter
+					theme={theme}
+					onOpenPix={() => setIsPixOpen(true)}
+					onOpenPrivacy={handleOpenPrivacy}
+					onOpenTerms={handleOpenTerms}
+				/>
+			</Suspense>
 
 			{/* Banner discreto de instalação PWA */}
 			<PwaInstallBanner isInstallable={isInstallable} onInstall={installApp} />
 
-			{/* Modal de Atalhos de Teclado */}
-			<KeyboardShortcutsModal isOpen={isShortcutsOpen} onClose={() => setIsShortcutsOpen(false)} />
+			{/* MODAIS CARREGADOS SOB DEMANDA (LAZY) */}
+			<Suspense fallback={null}>
+				{isShortcutsOpen && (
+					<KeyboardShortcutsModal
+						isOpen={isShortcutsOpen}
+						onClose={() => setIsShortcutsOpen(false)}
+					/>
+				)}
 
-			{/* Modal de Escolha do Nome do Produto, Preço e Quantidade (Supermercado) */}
-			<ProductNameModal
-				isOpen={isProductNameModalOpen}
-				initialUnitPrice={getLastNumber() || ""}
-				onClose={() => setIsProductNameModalOpen(false)}
-				onConfirm={(unitPrice, qty, productName) => {
-					applyQuantity(unitPrice, qty, productName);
-				}}
-				theme={theme}
-				onPlayClick={playClick}
-				onPlayConfirm={playScannerBeep}
-			/>
+				{isProductNameModalOpen && (
+					<ProductNameModal
+						isOpen={isProductNameModalOpen}
+						initialUnitPrice={getLastNumber() || ""}
+						onClose={() => setIsProductNameModalOpen(false)}
+						onConfirm={(unitPrice, qty, productName) => {
+							applyQuantity(unitPrice, qty, productName);
+						}}
+						theme={theme}
+						onPlayClick={playClick}
+						onPlayConfirm={playScannerBeep}
+					/>
+				)}
 
-			{/* Subtela / Modal de Quantidade Rápida */}
-			<QuantityModal
-				isOpen={isQuantityModalOpen}
-				initialUnitPrice={getLastNumber() || ""}
-				onClose={() => setIsQuantityModalOpen(false)}
-				onConfirm={(unitPrice, qty, productName) => {
-					applyQuantity(unitPrice, qty, productName);
-				}}
-				theme={theme}
-				onPlayClick={playClick}
-				onPlayConfirm={playScannerBeep}
-			/>
+				{isQuantityModalOpen && (
+					<QuantityModal
+						isOpen={isQuantityModalOpen}
+						initialUnitPrice={getLastNumber() || ""}
+						onClose={() => setIsQuantityModalOpen(false)}
+						onConfirm={(unitPrice, qty, productName) => {
+							applyQuantity(unitPrice, qty, productName);
+						}}
+						theme={theme}
+						onPlayClick={playClick}
+						onPlayConfirm={playScannerBeep}
+					/>
+				)}
 
-			{/* Modal de Comparador de Preços e Embalagens (kg/L) */}
-			<PriceComparatorModal
-				isOpen={isComparatorOpen}
-				onClose={() => setIsComparatorOpen(false)}
-				onTransferToCalculator={handleTransferFromModal}
-				theme={theme}
-				onPlayClick={playClick}
-				onPlayConfirm={playResult}
-			/>
+				{isComparatorOpen && (
+					<PriceComparatorModal
+						isOpen={isComparatorOpen}
+						onClose={() => setIsComparatorOpen(false)}
+						onTransferToCalculator={handleTransferFromModal}
+						theme={theme}
+						onPlayClick={playClick}
+						onPlayConfirm={playResult}
+					/>
+				)}
 
-			{/* Modal de Calculadora Flex (Etanol vs Gasolina) */}
-			<FuelCalculatorModal
-				isOpen={isFuelOpen}
-				onClose={() => setIsFuelOpen(false)}
-				onTransferToCalculator={handleTransferFromModal}
-				theme={theme}
-				onPlayClick={playClick}
-				onPlayConfirm={playResult}
-			/>
+				{isFuelOpen && (
+					<FuelCalculatorModal
+						isOpen={isFuelOpen}
+						onClose={() => setIsFuelOpen(false)}
+						onTransferToCalculator={handleTransferFromModal}
+						theme={theme}
+						onPlayClick={playClick}
+						onPlayConfirm={playResult}
+					/>
+				)}
 
-			{/* Modal de Calculadora de Descontos e Margem de Lucro */}
-			<DiscountProfitModal
-				isOpen={isDiscountOpen}
-				initialAmount={getLastNumber() || ""}
-				onClose={() => setIsDiscountOpen(false)}
-				onTransferToCalculator={handleTransferFromModal}
-				theme={theme}
-				onPlayClick={playClick}
-				onPlayConfirm={playResult}
-			/>
+				{isDiscountOpen && (
+					<DiscountProfitModal
+						isOpen={isDiscountOpen}
+						initialAmount={getLastNumber() || ""}
+						onClose={() => setIsDiscountOpen(false)}
+						onTransferToCalculator={handleTransferFromModal}
+						theme={theme}
+						onPlayClick={playClick}
+						onPlayConfirm={playResult}
+					/>
+				)}
 
-			{/* Modal de Conversor de Moedas e Unidades */}
-			<ConverterModal
-				isOpen={isConverterOpen}
-				initialValue={getLastNumber() || "1"}
-				onClose={() => setIsConverterOpen(false)}
-				onTransferToCalculator={handleTransferFromModal}
-				theme={theme}
-				onPlayClick={playClick}
-			/>
+				{isConverterOpen && (
+					<ConverterModal
+						isOpen={isConverterOpen}
+						initialValue={getLastNumber() || "1"}
+						onClose={() => setIsConverterOpen(false)}
+						onTransferToCalculator={handleTransferFromModal}
+						theme={theme}
+						onPlayClick={playClick}
+					/>
+				)}
 
-			{/* Modal de Divisão de Contas / Gorjeta (WhatsApp) */}
-			<SplitBillModal
-				isOpen={isSplitBillOpen}
-				initialAmount={getLastNumber() || ""}
-				onClose={() => setIsSplitBillOpen(false)}
-				onTransferToCalculator={handleTransferFromModal}
-				theme={theme}
-				onPlayClick={playClick}
-				onPlayConfirm={playResult}
-			/>
+				{isSplitBillOpen && (
+					<SplitBillModal
+						isOpen={isSplitBillOpen}
+						initialAmount={getLastNumber() || ""}
+						onClose={() => setIsSplitBillOpen(false)}
+						onTransferToCalculator={handleTransferFromModal}
+						theme={theme}
+						onPlayClick={playClick}
+						onPlayConfirm={playResult}
+					/>
+				)}
 
-			{/* Modal de Simulador Financeiro (Parcelamento & Juros Compostos) */}
-			<FinanceModal
-				isOpen={isFinanceOpen}
-				initialAmount={getLastNumber() || ""}
-				onClose={() => setIsFinanceOpen(false)}
-				onTransferToCalculator={handleTransferFromModal}
-				theme={theme}
-				onPlayClick={playClick}
-				onPlayConfirm={playResult}
-			/>
+				{isFinanceOpen && (
+					<FinanceModal
+						isOpen={isFinanceOpen}
+						initialAmount={getLastNumber() || ""}
+						onClose={() => setIsFinanceOpen(false)}
+						onTransferToCalculator={handleTransferFromModal}
+						theme={theme}
+						onPlayClick={playClick}
+						onPlayConfirm={playResult}
+					/>
+				)}
 
-			{/* Modal de Cupom Fiscal Digital em Imagem PNG */}
-			<ReceiptImageModal
-				isOpen={isReceiptImageOpen}
-				onClose={() => setIsReceiptImageOpen(false)}
-				history={history}
-				theme={theme}
-				onPlayClick={playClick}
-			/>
+				{isReceiptImageOpen && (
+					<ReceiptImageModal
+						isOpen={isReceiptImageOpen}
+						onClose={() => setIsReceiptImageOpen(false)}
+						history={history}
+						theme={theme}
+						onPlayClick={playClick}
+					/>
+				)}
 
-			{/* Modal de Dashboard e Gráficos de Gastos */}
-			<SpendingDashboardModal
-				isOpen={isAnalyticsOpen}
-				onClose={() => setIsAnalyticsOpen(false)}
-				history={history}
-				theme={theme}
-				onPlayClick={playClick}
-			/>
+				{isAnalyticsOpen && (
+					<SpendingDashboardModal
+						isOpen={isAnalyticsOpen}
+						onClose={() => setIsAnalyticsOpen(false)}
+						history={history}
+						theme={theme}
+						onPlayClick={playClick}
+					/>
+				)}
 
-			{/* Central de Ajuda & Guia de Uso */}
-			<HelpModal isOpen={isHelpOpen} onClose={() => setIsHelpOpen(false)} theme={theme} />
+				{isHelpOpen && (
+					<HelpModal isOpen={isHelpOpen} onClose={() => setIsHelpOpen(false)} theme={theme} />
+				)}
 
-			{/* Modal de Backup & Restauração JSON */}
-			<BackupModal isOpen={isBackupOpen} onClose={() => setIsBackupOpen(false)} theme={theme} />
+				{isBackupOpen && (
+					<BackupModal isOpen={isBackupOpen} onClose={() => setIsBackupOpen(false)} theme={theme} />
+				)}
 
-			{/* Modal de Apoio PIX */}
-			<PixDonationModal isOpen={isPixOpen} onClose={() => setIsPixOpen(false)} theme={theme} />
+				{isPixOpen && (
+					<PixDonationModal isOpen={isPixOpen} onClose={() => setIsPixOpen(false)} theme={theme} />
+				)}
 
-			{/* Modal de Política de Privacidade & Termos de Uso (LGPD / AdSense) */}
-			<PrivacyPolicyModal
-				isOpen={isLegalOpen}
-				onClose={() => setIsLegalOpen(false)}
-				initialTab={legalInitialTab}
-				theme={theme}
-			/>
+				{isLegalOpen && (
+					<PrivacyPolicyModal
+						isOpen={isLegalOpen}
+						onClose={() => setIsLegalOpen(false)}
+						initialTab={legalInitialTab}
+						theme={theme}
+					/>
+				)}
 
-			{/* Modal de Leitor de Código de Barras (Câmera & Supermercado) */}
-			<BarcodeScannerModal
-				isOpen={isScannerOpen}
-				onClose={() => setIsScannerOpen(false)}
-				onAddProduct={(unitPrice, qty, name) => applyQuantity(unitPrice, qty, name)}
-				theme={theme}
-				onPlayBeep={playScannerBeep}
-				onPlayClick={playClick}
-			/>
+				{isScannerOpen && (
+					<BarcodeScannerModal
+						isOpen={isScannerOpen}
+						onClose={() => setIsScannerOpen(false)}
+						onAddProduct={(unitPrice, qty, name) => applyQuantity(unitPrice, qty, name)}
+						theme={theme}
+						onPlayBeep={playScannerBeep}
+						onPlayClick={playClick}
+					/>
+				)}
+			</Suspense>
 
 			{/* Notificações Toast do shadcn/ui */}
 			<Toaster />

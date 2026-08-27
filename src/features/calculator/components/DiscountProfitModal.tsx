@@ -3,11 +3,7 @@ import { ArrowRight, Tag, TrendingUp, X } from "lucide-react";
 import { memo, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import type { ThemeConfig } from "../hooks/useThemes";
-import {
-	formatCurrencyInput,
-	formatNumberPtBR,
-	parseCurrencyToNumber,
-} from "../utils/format";
+import { formatCurrencyInput, formatNumberPtBR, parseCurrencyToNumber } from "../utils/format";
 
 type Props = {
 	isOpen: boolean;
@@ -100,9 +96,7 @@ export const DiscountProfitModal = memo(function DiscountProfitModal({
 	const handleTransfer = () => {
 		onPlayConfirm?.();
 		const val =
-			activeTab === "discount"
-				? String(discountCalc.finalPrice)
-				: String(marginCalc.sellPrice);
+			activeTab === "discount" ? String(discountCalc.finalPrice) : String(marginCalc.sellPrice);
 		onTransferToCalculator(val);
 		toast.success(
 			activeTab === "discount"
@@ -157,7 +151,9 @@ export const DiscountProfitModal = memo(function DiscountProfitModal({
 								</div>
 								<div>
 									<h2 className="text-sm sm:text-base font-bold text-white tracking-wide">
-										{activeTab === "discount" ? "Calculadora de Descontos" : "Margem de Lucro & Markup"}
+										{activeTab === "discount"
+											? "Calculadora de Descontos"
+											: "Margem de Lucro & Markup"}
 									</h2>
 									<p className="text-[11px] text-zinc-400">
 										{activeTab === "discount"

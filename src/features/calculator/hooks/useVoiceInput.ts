@@ -104,7 +104,14 @@ export function useVoiceInput({
 				recognitionRef.current.abort();
 			}
 		};
-	}, [isSupported, onProductRecognized, onMathRecognized, onPriceRecognized, onPlaySuccess, onPlayError]);
+	}, [
+		isSupported,
+		onProductRecognized,
+		onMathRecognized,
+		onPriceRecognized,
+		onPlaySuccess,
+		onPlayError,
+	]);
 
 	const startListening = useCallback(() => {
 		if (!isSupported) {

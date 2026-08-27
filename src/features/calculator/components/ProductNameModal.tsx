@@ -245,7 +245,10 @@ export const ProductNameModal = memo(function ProductNameModal({
 								</div>
 								<div className="flex items-center gap-1.5">
 									<div className="relative flex items-center flex-1">
-										<Search size={14} className="absolute left-3 text-zinc-400 pointer-events-none" />
+										<Search
+											size={14}
+											className="absolute left-3 text-zinc-400 pointer-events-none"
+										/>
 										<input
 											type="text"
 											value={productName}
@@ -282,7 +285,11 @@ export const ProductNameModal = memo(function ProductNameModal({
 									<button
 										type="button"
 										onClick={toggleVoice}
-										title={isListeningVoice ? "Parar de ouvir" : "Falar item por voz (ex: '2 leites a 4,50')"}
+										title={
+											isListeningVoice
+												? "Parar de ouvir"
+												: "Falar item por voz (ex: '2 leites a 4,50')"
+										}
 										className={`
 											p-2.5
 											rounded-2xl
@@ -301,7 +308,10 @@ export const ProductNameModal = memo(function ProductNameModal({
 											}
 										`}
 									>
-										<Mic size={15} className={isListeningVoice ? "text-red-400 animate-bounce" : ""} />
+										<Mic
+											size={15}
+											className={isListeningVoice ? "text-red-400 animate-bounce" : ""}
+										/>
 									</button>
 								</div>
 							</div>

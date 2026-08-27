@@ -106,7 +106,9 @@ export const SiteFooter = memo(function SiteFooter({
 
 					{/* Coluna 3: Links & Apoio */}
 					<div className="space-y-2">
-						<h4 className="text-xs font-bold text-zinc-200 uppercase tracking-wider">Legal & Apoio</h4>
+						<h4 className="text-xs font-bold text-zinc-200 uppercase tracking-wider">
+							Legal & Apoio
+						</h4>
 						<ul className="space-y-1.5 text-xs">
 							<li>
 								<button

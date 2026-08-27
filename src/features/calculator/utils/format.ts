@@ -195,4 +195,3 @@ export function formatInitialPrice(initialPrice?: string): string {
 		maximumFractionDigits: 2,
 	});
 }
-
