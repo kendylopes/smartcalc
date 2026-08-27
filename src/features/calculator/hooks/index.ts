@@ -1,4 +1,3 @@
-export * from "./use3dCardTilt";
 export * from "./useCalculator";
 export * from "./useHapticFeedback";
 export * from "./useKeyboard";

@@ -2,8 +2,6 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Check, Copy, History, Mic } from "lucide-react";
 import { memo, useEffect, useMemo, useRef, useState } from "react";
 import { formatDisplay, formatNumberPtBR, tokenizeDisplay } from "../utils/format";
-import { DynamicIsland, type IslandNotification } from "./DynamicIsland";
-import { QuantumSparks } from "./QuantumSparks";
 
 type Props = {
 	value: string;
@@ -19,7 +17,6 @@ type Props = {
 	onToggleVoice?: () => void;
 	isListeningVoice?: boolean;
 	voiceTranscript?: string;
-	islandNotification?: IslandNotification | null;
 };
 
 export const Display = memo(function Display({
@@ -36,7 +33,6 @@ export const Display = memo(function Display({
 	onToggleVoice,
 	isListeningVoice = false,
 	voiceTranscript = "",
-	islandNotification = null,
 }: Props) {
 	const [copied, setCopied] = useState(false);
 	const scrollRef = useRef<HTMLDivElement>(null);
@@ -97,7 +93,7 @@ export const Display = memo(function Display({
 				className="
 					group/display
 					cursor-pointer
-					h-44 sm:h-48
+					h-40 sm:h-44
 					w-full
 					flex
 					flex-col
@@ -105,7 +101,7 @@ export const Display = memo(function Display({
 					overflow-hidden
 					relative
 					px-4
-					py-2.5
+					py-3
 					rounded-[1.8rem]
 					neu-display
 					transition-all
@@ -115,13 +111,10 @@ export const Display = memo(function Display({
 				{/* Borda interna técnica de alta precisão */}
 				<div className="absolute inset-px rounded-[calc(1.8rem-1px)] border border-white/5 pointer-events-none" />
 
-				{/* Efeito de Feixe Laser & Micro-Partículas Quânticas */}
-				<QuantumSparks triggerKey={isResult ? `${safeValue}-${Date.now()}` : 0} />
-
-				{/* Top bar do display: Botão de Histórico + Dynamic Island + Indicador de Copiar */}
-				<div className="w-full flex items-center justify-between z-10 gap-2">
+				{/* Top bar do display: Botão de Histórico + Indicador de Copiar */}
+				<div className="w-full flex items-center justify-between z-10">
 					{/* Canto Esquerdo: Ícone de Histórico & Microfone de Voz */}
-					<div className="flex items-center gap-1.5 shrink-0">
+					<div className="flex items-center gap-1.5">
 						{onToggleHistory && (
 							<button
 								type="button"
@@ -148,7 +141,7 @@ export const Display = memo(function Display({
 									}
 								`}
 							>
-								<History size={13} className={isHistoryOpen ? "text-cyan-400" : "text-zinc-400"} />
+								<History size={14} className={isHistoryOpen ? "text-cyan-400" : "text-zinc-400"} />
 								{historyCount > 0 && (
 									<span className="px-1.5 py-0.2 rounded-full font-mono text-[9px] bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/30">
 										{historyCount}
@@ -184,24 +177,20 @@ export const Display = memo(function Display({
 									}
 								`}
 							>
-								<Mic size={12} className={isListeningVoice ? "text-red-400 animate-bounce" : "text-zinc-400"} />
-								<span className="text-[9px] font-mono text-zinc-400 hidden sm:inline">Voz</span>
+								<Mic size={13} className={isListeningVoice ? "text-red-400 animate-bounce" : "text-zinc-400"} />
+								{isListeningVoice ? (
+									<span className="text-[10px] font-semibold text-red-300 font-mono max-w-32 truncate">
+										{voiceTranscript || "Ouvindo..."}
+									</span>
+								) : (
+									<span className="text-[10px] font-mono text-zinc-400">Voz</span>
+								)}
 							</button>
 						)}
 					</div>
 
-					{/* Centro do Topo: Dynamic Island Morphing */}
-					<div className="flex-1 flex justify-center max-w-[55%]">
-						<DynamicIsland
-							isListeningVoice={isListeningVoice}
-							voiceTranscript={voiceTranscript}
-							notification={islandNotification}
-							onToggleVoice={onToggleVoice}
-						/>
-					</div>
-
 					{/* Canto Direito: Copiar / Copiado */}
-					<div className="pointer-events-none shrink-0">
+					<div className="pointer-events-none">
 						<AnimatePresence>
 							{copied ? (
 								<motion.div
@@ -209,14 +198,14 @@ export const Display = memo(function Display({
 									animate={{ opacity: 1, y: 0 }}
 									exit={{ opacity: 0 }}
 									transition={{ duration: 0.1 }}
-									className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 text-[10px] font-medium"
+									className="flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 text-[11px] font-medium"
 								>
-									<Check size={10} />
+									<Check size={11} />
 									<span>Copiado!</span>
 								</motion.div>
 							) : (
-								<div className="opacity-0 group-hover/display:opacity-60 transition-opacity duration-150 flex items-center gap-1 text-[10px] text-zinc-400">
-									<Copy size={10} />
+								<div className="opacity-0 group-hover/display:opacity-60 transition-opacity duration-150 flex items-center gap-1 text-[11px] text-zinc-400">
+									<Copy size={11} />
 									<span>Copiar</span>
 								</div>
 							)}
@@ -224,7 +213,7 @@ export const Display = memo(function Display({
 					</div>
 				</div>
 
-				{/* Área Principal de Exibição (Linha ÚNICA horizontal estável) */}
+				{/* Área Principal de Exibição (Linha ÚNICA horizontal estável, sem quebrar linhas e sem tremer) */}
 				<div className="flex-1 w-full flex items-center justify-end overflow-hidden my-auto">
 					<div
 						ref={scrollRef}

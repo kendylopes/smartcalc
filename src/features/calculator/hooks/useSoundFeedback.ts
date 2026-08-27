@@ -1,7 +1,5 @@
 import { useCallback, useRef, useState } from "react";
 
-export type SoundProfile = "scifi" | "modern" | "mechanical";
-
 // Feedback Háptico suave para dispositivos móveis
 const triggerHaptic = (durationMs = 12) => {
 	if (typeof window !== "undefined" && "navigator" in window && "vibrate" in navigator) {
@@ -23,15 +21,6 @@ export function useSoundFeedback() {
 		}
 	});
 
-	const [soundProfile, setSoundProfile] = useState<SoundProfile>(() => {
-		try {
-			const saved = localStorage.getItem("smartcalc-sound-profile") as SoundProfile;
-			return saved || "scifi";
-		} catch {
-			return "scifi";
-		}
-	});
-
 	const audioCtxRef = useRef<AudioContext | null>(null);
 
 	const getAudioContext = useCallback(() => {
@@ -48,7 +37,7 @@ export function useSoundFeedback() {
 
 		if (audioCtxRef.current && audioCtxRef.current.state === "suspended") {
 			audioCtxRef.current.resume().catch(() => {
-				// Ignora bloqueio temporário
+				// Ignora bloqueio temporário antes de clique do usuário
 			});
 		}
 
@@ -67,97 +56,65 @@ export function useSoundFeedback() {
 		});
 	}, []);
 
-	const changeSoundProfile = useCallback((profile: SoundProfile) => {
-		setSoundProfile(profile);
-		try {
-			localStorage.setItem("smartcalc-sound-profile", profile);
-		} catch (e) {
-			console.error(e);
-		}
-	}, []);
-
-	// Clique de Teclas (com suporte a Perfil Sci-Fi / Modern / Mechanical)
+	// Clique mecânico limpo e suave para números
 	const playClick = useCallback(() => {
-		triggerHaptic(8);
+		triggerHaptic(10);
 		if (isMuted) return;
 		try {
 			const ctx = getAudioContext();
 			if (!ctx) return;
 
-			const now = ctx.currentTime;
-
-			if (soundProfile === "scifi") {
-				// Sci-Fi Glass Tap (Apple VisionOS / Cyber UI)
-				const osc = ctx.createOscillator();
-				const gain = ctx.createGain();
-				osc.type = "sine";
-				osc.frequency.setValueAtTime(880, now); // A5
-				osc.frequency.exponentialRampToValueAtTime(220, now + 0.025);
-
-				gain.gain.setValueAtTime(0.04, now);
-				gain.gain.exponentialRampToValueAtTime(0.001, now + 0.025);
-
-				osc.connect(gain);
-				gain.connect(ctx.destination);
-				osc.start(now);
-				osc.stop(now + 0.03);
-			} else {
-				// Modern / Mechanical
-				const osc = ctx.createOscillator();
-				const gain = ctx.createGain();
-				osc.type = "sine";
-				osc.frequency.setValueAtTime(520, now);
-				osc.frequency.exponentialRampToValueAtTime(140, now + 0.035);
-
-				gain.gain.setValueAtTime(0.05, now);
-				gain.gain.exponentialRampToValueAtTime(0.001, now + 0.035);
-
-				osc.connect(gain);
-				gain.connect(ctx.destination);
-				osc.start(now);
-				osc.stop(now + 0.04);
-			}
-		} catch {
-			// Ignora falhas de áudio
-		}
-	}, [isMuted, soundProfile, getAudioContext]);
-
-	// Tom dos operadores
-	const playOperator = useCallback(() => {
-		triggerHaptic(12);
-		if (isMuted) return;
-		try {
-			const ctx = getAudioContext();
-			if (!ctx) return;
-
-			const now = ctx.currentTime;
 			const osc = ctx.createOscillator();
 			const gain = ctx.createGain();
 
-			if (soundProfile === "scifi") {
-				osc.type = "triangle";
-				osc.frequency.setValueAtTime(1200, now);
-				osc.frequency.exponentialRampToValueAtTime(600, now + 0.04);
-				gain.gain.setValueAtTime(0.05, now);
-				gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
-			} else {
-				osc.type = "triangle";
-				osc.frequency.setValueAtTime(680, now);
-				osc.frequency.exponentialRampToValueAtTime(340, now + 0.05);
-				gain.gain.setValueAtTime(0.07, now);
-				gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
-			}
+			osc.type = "sine";
+			const now = ctx.currentTime;
+			osc.frequency.setValueAtTime(520, now);
+			osc.frequency.exponentialRampToValueAtTime(140, now + 0.035);
+
+			gain.gain.setValueAtTime(0.05, now);
+			gain.gain.exponentialRampToValueAtTime(0.001, now + 0.035);
 
 			osc.connect(gain);
 			gain.connect(ctx.destination);
+
 			osc.start(now);
-			osc.stop(now + 0.05);
+			osc.stop(now + 0.04);
+		} catch {
+			// Ignora falhas de áudio silenciosamente
+		}
+	}, [isMuted, getAudioContext]);
+
+	// Tom mais brilhante para operadores
+	const playOperator = useCallback(() => {
+		triggerHaptic(14);
+		if (isMuted) return;
+		try {
+			const ctx = getAudioContext();
+			if (!ctx) return;
+
+			const osc = ctx.createOscillator();
+			const gain = ctx.createGain();
+
+			osc.type = "triangle";
+			const now = ctx.currentTime;
+			osc.frequency.setValueAtTime(680, now);
+			osc.frequency.exponentialRampToValueAtTime(340, now + 0.05);
+
+			gain.gain.setValueAtTime(0.07, now);
+			gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+
+			osc.connect(gain);
+			gain.connect(ctx.destination);
+
+			osc.start(now);
+			osc.stop(now + 0.055);
 		} catch {
 			// Ignora
 		}
-	}, [isMuted, soundProfile, getAudioContext]);
+	}, [isMuted, getAudioContext]);
 
-	// Acorde de resolução de cálculo '='
+	// Acorde elegante e melódico para resultado '='
 	const playResult = useCallback(() => {
 		triggerHaptic(20);
 		if (isMuted) return;
@@ -165,36 +122,33 @@ export function useSoundFeedback() {
 			const ctx = getAudioContext();
 			if (!ctx) return;
 
+			const freqs = [523.25, 659.25, 783.99]; // C5, E5, G5
 			const now = ctx.currentTime;
-			const freqs =
-				soundProfile === "scifi"
-					? [523.25, 659.25, 783.99, 1046.5] // C5, E5, G5, C6 (Holographic Arpeggio)
-					: [523.25, 659.25, 783.99];
 
 			freqs.forEach((freq, index) => {
 				const osc = ctx.createOscillator();
 				const gain = ctx.createGain();
 
-				osc.type = soundProfile === "scifi" ? "sine" : "triangle";
-				const startTime = now + index * 0.025;
+				osc.type = "sine";
+				const startTime = now + index * 0.02;
 				osc.frequency.setValueAtTime(freq, startTime);
 
 				gain.gain.setValueAtTime(0, startTime);
 				gain.gain.linearRampToValueAtTime(0.04, startTime + 0.01);
-				gain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.2);
+				gain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.18);
 
 				osc.connect(gain);
 				gain.connect(ctx.destination);
 
 				osc.start(startTime);
-				osc.stop(startTime + 0.22);
+				osc.stop(startTime + 0.2);
 			});
 		} catch {
 			// Ignora
 		}
-	}, [isMuted, soundProfile, getAudioContext]);
+	}, [isMuted, getAudioContext]);
 
-	// Delete / Limpar
+	// Toque suave para delete/clear
 	const playDelete = useCallback(() => {
 		triggerHaptic(12);
 		if (isMuted) return;
@@ -204,11 +158,11 @@ export function useSoundFeedback() {
 
 			const osc = ctx.createOscillator();
 			const gain = ctx.createGain();
-			const now = ctx.currentTime;
 
 			osc.type = "sine";
-			osc.frequency.setValueAtTime(440, now);
-			osc.frequency.exponentialRampToValueAtTime(80, now + 0.04);
+			const now = ctx.currentTime;
+			osc.frequency.setValueAtTime(360, now);
+			osc.frequency.exponentialRampToValueAtTime(90, now + 0.04);
 
 			gain.gain.setValueAtTime(0.06, now);
 			gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
@@ -223,7 +177,7 @@ export function useSoundFeedback() {
 		}
 	}, [isMuted, getAudioContext]);
 
-	// Scanner Beep / Caixa de Mercado
+	// Efeito sonoro satisfatório de Scanner de Código de Barras / Caixa Registradora para itens
 	const playScannerBeep = useCallback(() => {
 		triggerHaptic(25);
 		if (isMuted) return;
@@ -233,20 +187,20 @@ export function useSoundFeedback() {
 
 			const now = ctx.currentTime;
 
-			// Tom 1: Beep de scanner laser de alta precisão
+			// Tom 1: Beep de scanner de alta frequência
 			const osc1 = ctx.createOscillator();
 			const gain1 = ctx.createGain();
 			osc1.type = "sine";
-			osc1.frequency.setValueAtTime(2400, now);
-			osc1.frequency.setValueAtTime(3200, now + 0.035);
+			osc1.frequency.setValueAtTime(2200, now);
+			osc1.frequency.setValueAtTime(2800, now + 0.04);
 
-			gain1.gain.setValueAtTime(0.07, now);
-			gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+			gain1.gain.setValueAtTime(0.08, now);
+			gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.09);
 
 			osc1.connect(gain1);
 			gain1.connect(ctx.destination);
 			osc1.start(now);
-			osc1.stop(now + 0.09);
+			osc1.stop(now + 0.1);
 
 			// Tom 2: Chime harmônico de caixa registradora sutil
 			const osc2 = ctx.createOscillator();
@@ -268,8 +222,6 @@ export function useSoundFeedback() {
 	return {
 		isMuted,
 		toggleMute,
-		soundProfile,
-		changeSoundProfile,
 		playClick,
 		playOperator,
 		playResult,
