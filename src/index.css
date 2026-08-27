@@ -87,237 +87,262 @@ html.light ::-webkit-scrollbar-thumb {
 }
 
 /* ==========================================================================
-   1. DARK NEUMORPHISM DESIGN SYSTEM (SOFT-UI TÁTIL ESCURO)
+   1. CLEAR LIQUID CRYSTAL DESIGN SYSTEM (VIDRO CRISTAL LÍQUIDO TRANSLÚCIDO)
    ========================================================================== */
 
-/* Chassi da Calculadora */
+/* Chassi da Calculadora (Corpo de Cristal Fosco) */
 .neu-chassis {
-	background: linear-gradient(155deg, #141822 0%, #0d1017 100%);
-	border: 1px solid rgba(255, 255, 255, 0.06);
+	background: rgba(16, 21, 33, 0.45);
+	backdrop-filter: blur(28px) saturate(180%);
+	-webkit-backdrop-filter: blur(28px) saturate(180%);
+	border: 1px solid rgba(255, 255, 255, 0.12);
 	box-shadow:
-		18px 18px 45px rgba(0, 0, 0, 0.85),
-		-10px -10px 30px rgba(255, 255, 255, 0.025),
-		inset 1px 1px 1.5px rgba(255, 255, 255, 0.08);
+		0 24px 60px rgba(0, 0, 0, 0.6),
+		0 8px 24px rgba(0, 0, 0, 0.4),
+		inset 0 1px 1.5px rgba(255, 255, 255, 0.22),
+		inset 0 -1px 1.5px rgba(0, 0, 0, 0.3);
 }
 
-/* Painel Lateral */
+/* Painel Lateral (Histórico & Ferramentas Rápidas) */
 .neu-panel {
-	background: linear-gradient(155deg, #131720 0%, #0c0f15 100%);
-	border: 1px solid rgba(255, 255, 255, 0.05);
+	background: rgba(13, 17, 28, 0.4);
+	backdrop-filter: blur(28px) saturate(180%);
+	-webkit-backdrop-filter: blur(28px) saturate(180%);
+	border: 1px solid rgba(255, 255, 255, 0.1);
 	box-shadow:
-		14px 14px 35px rgba(0, 0, 0, 0.75),
-		-8px -8px 25px rgba(255, 255, 255, 0.02),
-		inset 1px 1px 1.5px rgba(255, 255, 255, 0.06);
+		0 20px 48px rgba(0, 0, 0, 0.5),
+		inset 0 1px 1px rgba(255, 255, 255, 0.18);
 }
 
-/* Visor Embutido (Cavidade) */
+/* Visor LCD de Cristal Líquido Embutido */
 .neu-display {
-	background: #06080d;
-	border: 1px solid rgba(255, 255, 255, 0.04);
+	background: rgba(4, 7, 13, 0.62);
+	backdrop-filter: blur(20px);
+	-webkit-backdrop-filter: blur(20px);
+	border: 1px solid rgba(255, 255, 255, 0.08);
 	box-shadow:
-		inset 5px 5px 14px rgba(0, 0, 0, 0.95),
-		inset -3px -3px 10px rgba(255, 255, 255, 0.025),
-		0 1px 1.5px rgba(255, 255, 255, 0.05);
+		inset 0 2px 8px rgba(0, 0, 0, 0.75),
+		0 1px 2px rgba(255, 255, 255, 0.06);
 }
 
-/* Botões Padrão */
+/* Botões em Bloco de Cristal Translúcido (Clear Glass Keys) */
 .neu-btn-default {
-	background: linear-gradient(145deg, #1a202c 0%, #11151f 100%);
-	border: 1px solid rgba(255, 255, 255, 0.06);
+	background: rgba(255, 255, 255, 0.045);
+	backdrop-filter: blur(16px);
+	-webkit-backdrop-filter: blur(16px);
+	border: 1px solid rgba(255, 255, 255, 0.09);
 	box-shadow:
-		5px 5px 12px rgba(0, 0, 0, 0.7),
-		-3px -3px 9px rgba(255, 255, 255, 0.035),
-		inset 0 1px 1px rgba(255, 255, 255, 0.08);
+		0 4px 12px rgba(0, 0, 0, 0.3),
+		inset 0 1px 1px rgba(255, 255, 255, 0.18);
+	transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .neu-btn-default:hover {
-	background: linear-gradient(145deg, #1e2533 0%, #131824 100%);
+	background: rgba(255, 255, 255, 0.09);
+	border-color: rgba(255, 255, 255, 0.22);
 	box-shadow:
-		6px 6px 14px rgba(0, 0, 0, 0.75),
-		-4px -4px 10px rgba(255, 255, 255, 0.05),
-		inset 0 1px 1px rgba(255, 255, 255, 0.12);
+		0 6px 18px rgba(0, 0, 0, 0.35),
+		inset 0 1px 1px rgba(255, 255, 255, 0.28);
 }
 
 .neu-btn-pressed,
 .neu-btn-default:active {
-	background: linear-gradient(145deg, #0e121a 0%, #141822 100%) !important;
+	background: rgba(255, 255, 255, 0.02) !important;
+	border-color: rgba(255, 255, 255, 0.05) !important;
 	box-shadow:
-		inset 4px 4px 9px rgba(0, 0, 0, 0.9),
-		inset -2px -2px 6px rgba(255, 255, 255, 0.03) !important;
-	transform: translateY(1.5px);
+		inset 0 2px 6px rgba(0, 0, 0, 0.7) !important;
+	transform: translateY(1px);
 }
 
-/* Botão de Operador */
+/* Botão de Operador de Cristal Tinted */
 .neu-btn-operator {
-	background: linear-gradient(145deg, #171c27 0%, #0f131c 100%);
-	border: 1px solid rgba(255, 255, 255, 0.06);
+	background: rgba(255, 255, 255, 0.065);
+	backdrop-filter: blur(16px);
+	-webkit-backdrop-filter: blur(16px);
+	border: 1px solid rgba(255, 255, 255, 0.12);
 	box-shadow:
-		5px 5px 12px rgba(0, 0, 0, 0.7),
-		-3px -3px 9px rgba(255, 255, 255, 0.03),
-		inset 0 1px 1px rgba(255, 255, 255, 0.06);
+		0 4px 12px rgba(0, 0, 0, 0.3),
+		inset 0 1px 1px rgba(255, 255, 255, 0.2);
+	transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .neu-btn-operator:hover {
-	background: linear-gradient(145deg, #1c2230 0%, #121622 100%);
+	background: rgba(255, 255, 255, 0.12);
+	border-color: rgba(255, 255, 255, 0.25);
+	box-shadow:
+		0 6px 18px rgba(0, 0, 0, 0.35),
+		inset 0 1px 1px rgba(255, 255, 255, 0.3);
 }
 
 .neu-btn-operator-active {
-	background: linear-gradient(145deg, #0d1018 0%, #151a25 100%) !important;
+	background: rgba(34, 211, 238, 0.16) !important;
+	border-color: rgba(34, 211, 238, 0.45) !important;
 	box-shadow:
-		inset 4px 4px 9px rgba(0, 0, 0, 0.9),
-		inset -2px -2px 6px rgba(255, 255, 255, 0.03),
-		0 0 16px var(--theme-glow) !important;
-	transform: translateY(1.5px);
+		inset 0 2px 6px rgba(0, 0, 0, 0.6),
+		0 0 18px var(--theme-glow) !important;
+	transform: translateY(1px);
 }
 
-/* Botão de Ação */
+/* Botão de Ação C / Del em Cristal Vermelho Translúcido */
 .neu-btn-action {
-	background: linear-gradient(145deg, #181d28 0%, #10141d 100%);
-	border: 1px solid rgba(255, 255, 255, 0.06);
+	background: rgba(239, 68, 68, 0.08);
+	backdrop-filter: blur(16px);
+	-webkit-backdrop-filter: blur(16px);
+	border: 1px solid rgba(239, 68, 68, 0.22);
 	box-shadow:
-		5px 5px 12px rgba(0, 0, 0, 0.7),
-		-3px -3px 9px rgba(255, 255, 255, 0.03),
-		inset 0 1px 1px rgba(255, 255, 255, 0.06);
+		0 4px 12px rgba(0, 0, 0, 0.3),
+		inset 0 1px 1px rgba(255, 255, 255, 0.15);
+	transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .neu-btn-action:hover {
-	background: linear-gradient(145deg, #201b22 0%, #141118 100%);
-	border-color: rgba(248, 113, 113, 0.2);
+	background: rgba(239, 68, 68, 0.16);
+	border-color: rgba(239, 68, 68, 0.4);
+	box-shadow:
+		0 6px 18px rgba(239, 68, 68, 0.25),
+		inset 0 1px 1px rgba(255, 255, 255, 0.25);
 }
 
 .neu-btn-action:active {
-	background: linear-gradient(145deg, #0f0c11 0%, #16121b 100%) !important;
+	background: rgba(239, 68, 68, 0.04) !important;
 	box-shadow:
-		inset 4px 4px 9px rgba(0, 0, 0, 0.9),
-		inset -2px -2px 6px rgba(255, 255, 255, 0.03) !important;
-	transform: translateY(1.5px);
+		inset 0 2px 6px rgba(0, 0, 0, 0.7) !important;
+	transform: translateY(1px);
 }
 
-/* Botão de Igual */
+/* Botão de Igual de Cristal Luminoso */
 .neu-btn-equal {
 	box-shadow:
-		6px 6px 16px rgba(0, 0, 0, 0.8),
-		-3px -3px 10px rgba(255, 255, 255, 0.05),
+		0 6px 20px rgba(0, 0, 0, 0.5),
 		0 0 25px var(--theme-glow),
-		inset 0 1px 1.5px rgba(255, 255, 255, 0.4);
+		inset 0 1px 1.5px rgba(255, 255, 255, 0.5);
+	transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .neu-btn-equal:active {
 	box-shadow:
-		inset 4px 4px 9px rgba(0, 0, 0, 0.9),
-		inset -2px -2px 6px rgba(255, 255, 255, 0.05),
+		inset 0 2px 8px rgba(0, 0, 0, 0.7),
 		0 0 15px var(--theme-glow) !important;
-	transform: translateY(1.5px);
+	transform: translateY(1px);
 }
 
-/* Modais Escuros */
+/* Modais Translúcidos de Cristal */
 .tech-modal {
-	background: linear-gradient(160deg, #131720 0%, #0c0f15 100%);
-	border: 1px solid rgba(255, 255, 255, 0.08);
+	background: rgba(13, 18, 29, 0.78);
+	backdrop-filter: blur(32px) saturate(190%);
+	-webkit-backdrop-filter: blur(32px) saturate(190%);
+	border: 1px solid rgba(255, 255, 255, 0.13);
 	box-shadow:
-		24px 24px 60px rgba(0, 0, 0, 0.95),
-		-12px -12px 35px rgba(255, 255, 255, 0.02),
-		inset 1px 1px 2px rgba(255, 255, 255, 0.08);
+		0 28px 75px rgba(0, 0, 0, 0.8),
+		inset 0 1px 1.5px rgba(255, 255, 255, 0.2);
 }
 
 /* ==========================================================================
-   2. PEARL WHITE NEUMORPHISM DESIGN SYSTEM (SOFT-UI TÁTIL CLARO)
+   2. PEARL CRYSTAL CLEAR DESIGN SYSTEM (MODO CLARO DE CRISTAL BRANCO)
    ========================================================================== */
 
 html.light .neu-chassis {
-	background: linear-gradient(155deg, #f2f6fc 0%, #e2e8f4 100%);
-	border: 1px solid rgba(255, 255, 255, 0.8);
+	background: rgba(255, 255, 255, 0.55);
+	backdrop-filter: blur(28px) saturate(180%);
+	-webkit-backdrop-filter: blur(28px) saturate(180%);
+	border: 1px solid rgba(255, 255, 255, 0.9);
 	box-shadow:
-		18px 18px 45px #cad4e4,
-		-14px -14px 35px #ffffff,
-		inset 1px 1px 2px rgba(255, 255, 255, 0.9);
+		0 20px 48px rgba(180, 195, 215, 0.5),
+		inset 0 1px 1.5px rgba(255, 255, 255, 0.95);
 }
 
 html.light .neu-panel {
-	background: linear-gradient(155deg, #f0f5fb 0%, #e0e7f3 100%);
-	border: 1px solid rgba(255, 255, 255, 0.7);
+	background: rgba(255, 255, 255, 0.5);
+	backdrop-filter: blur(28px) saturate(180%);
+	-webkit-backdrop-filter: blur(28px) saturate(180%);
+	border: 1px solid rgba(255, 255, 255, 0.85);
 	box-shadow:
-		14px 14px 35px #cad4e4,
-		-10px -10px 25px #ffffff,
-		inset 1px 1px 2px rgba(255, 255, 255, 0.8);
+		0 18px 40px rgba(180, 195, 215, 0.4),
+		inset 0 1px 1px rgba(255, 255, 255, 0.9);
 }
 
 html.light .neu-display {
-	background: #dbe3f0;
-	border: 1px solid rgba(255, 255, 255, 0.4);
+	background: rgba(225, 234, 246, 0.65);
+	backdrop-filter: blur(20px);
+	-webkit-backdrop-filter: blur(20px);
+	border: 1px solid rgba(255, 255, 255, 0.7);
 	box-shadow:
-		inset 5px 5px 12px #bcc7d8,
-		inset -3px -3px 9px #ffffff,
-		0 1px 1.5px rgba(255, 255, 255, 0.8);
+		inset 0 2px 6px rgba(160, 180, 205, 0.4),
+		0 1px 2px rgba(255, 255, 255, 0.9);
 	color: #0f172a;
 }
 
 html.light .neu-btn-default {
-	background: linear-gradient(145deg, #f6f9fe 0%, #e1e8f4 100%);
-	border: 1px solid rgba(255, 255, 255, 0.8);
+	background: rgba(255, 255, 255, 0.6);
+	backdrop-filter: blur(16px);
+	-webkit-backdrop-filter: blur(16px);
+	border: 1px solid rgba(255, 255, 255, 0.9);
 	box-shadow:
-		5px 5px 12px #c8d3e3,
-		-4px -4px 10px #ffffff,
-		inset 0 1px 1px rgba(255, 255, 255, 0.9);
+		0 3px 10px rgba(180, 195, 215, 0.35),
+		inset 0 1px 1px rgba(255, 255, 255, 0.95);
 	color: #1e293b !important;
 }
 
 html.light .neu-btn-default:hover {
-	background: linear-gradient(145deg, #ffffff 0%, #e5edf8 100%);
+	background: rgba(255, 255, 255, 0.85);
+	border-color: #ffffff;
 	box-shadow:
-		6px 6px 14px #c2cee0,
-		-5px -5px 12px #ffffff;
+		0 5px 14px rgba(180, 195, 215, 0.45);
 }
 
 html.light .neu-btn-pressed,
 html.light .neu-btn-default:active {
-	background: linear-gradient(145deg, #dce4f1 0%, #edf3fb 100%) !important;
+	background: rgba(225, 235, 248, 0.8) !important;
 	box-shadow:
-		inset 4px 4px 9px #bcc8d9,
-		inset -2px -2px 6px #ffffff !important;
-	transform: translateY(1.5px);
+		inset 0 2px 6px rgba(160, 180, 205, 0.5) !important;
+	transform: translateY(1px);
 }
 
 html.light .neu-btn-operator {
-	background: linear-gradient(145deg, #eff4fb 0%, #dce4f2 100%);
-	border: 1px solid rgba(255, 255, 255, 0.7);
+	background: rgba(240, 246, 254, 0.7);
+	backdrop-filter: blur(16px);
+	-webkit-backdrop-filter: blur(16px);
+	border: 1px solid rgba(255, 255, 255, 0.85);
 	box-shadow:
-		5px 5px 12px #c8d3e3,
-		-4px -4px 10px #ffffff;
+		0 3px 10px rgba(180, 195, 215, 0.35),
+		inset 0 1px 1px rgba(255, 255, 255, 0.9);
 }
 
 html.light .neu-btn-operator-active {
-	background: linear-gradient(145deg, #d8e2f0 0%, #edf3fc 100%) !important;
+	background: rgba(34, 211, 238, 0.2) !important;
+	border-color: rgba(34, 211, 238, 0.6) !important;
 	box-shadow:
-		inset 4px 4px 9px #bcc8d9,
-		inset -2px -2px 6px #ffffff,
+		inset 0 2px 6px rgba(160, 180, 205, 0.4),
 		0 0 16px var(--theme-glow) !important;
-	transform: translateY(1.5px);
+	transform: translateY(1px);
 }
 
 html.light .neu-btn-action {
-	background: linear-gradient(145deg, #fff0f0 0%, #fae2e2 100%);
-	border: 1px solid rgba(248, 113, 113, 0.3);
+	background: rgba(254, 226, 226, 0.65);
+	backdrop-filter: blur(16px);
+	-webkit-backdrop-filter: blur(16px);
+	border: 1px solid rgba(248, 113, 113, 0.4);
 	color: #ef4444 !important;
 	box-shadow:
-		5px 5px 12px #c8d3e3,
-		-4px -4px 10px #ffffff;
+		0 3px 10px rgba(248, 113, 113, 0.15),
+		inset 0 1px 1px rgba(255, 255, 255, 0.9);
 }
 
 html.light .neu-btn-action:active {
-	background: linear-gradient(145deg, #f5d4d4 0%, #fae6e6 100%) !important;
+	background: rgba(254, 202, 202, 0.7) !important;
 	box-shadow:
-		inset 4px 4px 9px #d8b2b2,
-		inset -2px -2px 6px #ffffff !important;
-	transform: translateY(1.5px);
+		inset 0 2px 6px rgba(239, 68, 68, 0.3) !important;
+	transform: translateY(1px);
 }
 
 html.light .tech-modal {
-	background: linear-gradient(160deg, #f0f5fc 0%, #dfe7f4 100%);
-	border: 1px solid rgba(255, 255, 255, 0.9);
+	background: rgba(245, 249, 255, 0.8);
+	backdrop-filter: blur(32px) saturate(190%);
+	-webkit-backdrop-filter: blur(32px) saturate(190%);
+	border: 1px solid rgba(255, 255, 255, 0.95);
 	box-shadow:
-		24px 24px 60px #bcc7d8,
-		-12px -12px 35px #ffffff,
-		inset 1px 1px 2px rgba(255, 255, 255, 0.9);
+		0 24px 60px rgba(170, 190, 215, 0.6),
+		inset 0 1px 2px rgba(255, 255, 255, 0.95);
 	color: #0f172a;
 }
+
