@@ -54,7 +54,15 @@
 
 ---
 
-### ⚖️ 5. Comparador de Embalagens & Preços (kg / Litro)
+### 📷 5. Leitor de Código de Barras (Câmera & Supermercado)
+- **Escaneamento Instantâneo (Atalho `B`)**: Aponte a câmera para códigos de barras EAN-13, EAN-8, UPC e QR Code em embalagens.
+- **Base de Dados Offline Local**: Reconhecimento automático imediato de centenas de produtos comuns brasileiros.
+- **Controle de Lanterna (Torch) e Câmera**: Alternância rápida entre câmera traseira e frontal com lanterna para leitura em locais escuros.
+- **Modo Contínuo de Mercado**: Bipe produtos em sequência e adicione direto à lista de compras e ao visor.
+
+---
+
+### ⚖️ 6. Comparador de Embalagens & Preços (kg / Litro)
 - Compare duas opções em peso (g/kg), volume (ml/L) ou unidades (Atalho `P`).
 - Identifica a embalagem mais econômica, calcula o percentual de economia e permite transferir o valor direto para a calculadora.
 
@@ -113,6 +121,7 @@
 | `Backspace` ou `Del` | Apagar último dígito |
 | `Escape` ou `C` | Limpar visor |
 | `Q` ou `q` | Abrir multiplicador de quantidade / mercado |
+| `B` ou `b` | Abrir Leitor de Código de Barras (Câmera) |
 | `G` ou `g` | Abrir Dashboard de Estatísticas & Gráficos |
 | `P` ou `p` | Abrir comparador de embalagens (kg/L) |
 | `U` ou `u` | Abrir conversor de moedas & unidades |

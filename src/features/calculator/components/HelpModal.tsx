@@ -8,6 +8,7 @@ import {
 	Lightbulb,
 	Mic,
 	Scale,
+	ScanBarcode,
 	ShoppingBag,
 	Smartphone,
 	Tag,
@@ -37,6 +38,33 @@ type HelpSection = {
 };
 
 const HELP_SECTIONS: HelpSection[] = [
+	{
+		id: "scanner",
+		title: "Leitor de Código de Barras (Câmera)",
+		icon: ScanBarcode,
+		color: "text-emerald-400 bg-emerald-500/10 border-emerald-500/20",
+		badge: "Novo",
+		summary: "Aponte a câmera do celular para o código de barras das embalagens para adicionar produtos instantaneamente.",
+		steps: [
+			{
+				title: "1. Abrir o Scanner",
+				desc: "Pressione a tecla B, clique no botão 'Scan' no topo do visor ou no Menu Hambúrguer.",
+			},
+			{
+				title: "2. Apontar a Câmera para o Código",
+				desc: "Enquadre o código de barras (EAN-13, EAN-8, QR Code). O app emitirá um bipe sonoro e identificará o produto.",
+			},
+			{
+				title: "3. Confirmar Preço e Quantidade",
+				desc: "Ajuste o valor e as unidades se necessário e clique em 'Adicionar à Conta'.",
+			},
+			{
+				title: "4. Modo Mercado Contínuo",
+				desc: "Clique em 'Escanear Próximo' para ir bipando item por item no supermercado sem fechar o modal.",
+			},
+		],
+		tip: "Use o botão de Lanterna (Torch) para ler embalagens no escuro e o botão de inverter câmera frontal/traseira.",
+	},
 	{
 		id: "supermarket",
 		title: "Compras de Supermercado & Carrinho",

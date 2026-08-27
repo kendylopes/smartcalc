@@ -42,6 +42,7 @@ import {
 import { PrivacyPolicyModal } from "@/features/legal";
 import { AdBannerSlot } from "@/features/monetization";
 import { PwaInstallBanner, usePwaInstall, useWakeLock } from "@/features/pwa";
+import { BarcodeScannerModal } from "@/features/scanner";
 
 export function App() {
 	const [showHistory, setShowHistory] = useState(false);
@@ -78,6 +79,7 @@ export function App() {
 	const [isDiscountOpen, setIsDiscountOpen] = useState(false);
 	const [isReceiptImageOpen, setIsReceiptImageOpen] = useState(false);
 	const [isAnalyticsOpen, setIsAnalyticsOpen] = useState(false);
+	const [isScannerOpen, setIsScannerOpen] = useState(false);
 	const [isLegalOpen, setIsLegalOpen] = useState(false);
 	const [legalInitialTab, setLegalInitialTab] = useState<"privacy" | "terms">("privacy");
 	const [activeKey, setActiveKey] = useState<string | null>(null);
@@ -176,6 +178,10 @@ export function App() {
 		setIsAnalyticsOpen(true);
 	}, []);
 
+	const handleOpenScanner = useCallback(() => {
+		setIsScannerOpen(true);
+	}, []);
+
 	const handleOpenHelp = useCallback(() => {
 		setIsHelpOpen(true);
 	}, []);
@@ -223,6 +229,7 @@ export function App() {
 		openQuantity: handleOpenQuantity,
 		openComparator: handleOpenComparator,
 		openAnalytics: handleOpenAnalytics,
+		openScanner: handleOpenScanner,
 		openHelp: handleOpenHelp,
 		openConverter: handleOpenConverter,
 		openSplitBill: handleOpenSplitBill,
@@ -318,6 +325,7 @@ export function App() {
 						>
 							<QuickToolsPanel
 								theme={theme}
+								onOpenScanner={handleOpenScanner}
 								onOpenComparator={handleOpenComparator}
 								onOpenAnalytics={handleOpenAnalytics}
 								onOpenSplitBill={handleOpenSplitBill}
@@ -363,6 +371,7 @@ export function App() {
 							onOpenFinance={() => setIsFinanceOpen(true)}
 							onOpenComparator={() => setIsComparatorOpen(true)}
 							onOpenAnalytics={handleOpenAnalytics}
+							onOpenScanner={handleOpenScanner}
 							onOpenHelp={handleOpenHelp}
 							onOpenBackup={handleOpenBackup}
 							onOpenPrivacy={handleOpenPrivacy}
@@ -404,6 +413,7 @@ export function App() {
 							onToggleVoice={toggleVoice}
 							isListeningVoice={isListeningVoice}
 							voiceTranscript={voiceTranscript}
+							onOpenScanner={handleOpenScanner}
 						/>
 
 						{/* BARRA DE AÇÃO RÁPIDA: ITEM & QUANTIDADE (MERCADO) */}
@@ -698,6 +708,16 @@ export function App() {
 				onClose={() => setIsLegalOpen(false)}
 				initialTab={legalInitialTab}
 				theme={theme}
+			/>
+
+			{/* Modal de Leitor de Código de Barras (Câmera & Supermercado) */}
+			<BarcodeScannerModal
+				isOpen={isScannerOpen}
+				onClose={() => setIsScannerOpen(false)}
+				onAddProduct={(unitPrice, qty, name) => applyQuantity(unitPrice, qty, name)}
+				theme={theme}
+				onPlayBeep={playScannerBeep}
+				onPlayClick={playClick}
 			/>
 
 			{/* Notificações Toast do shadcn/ui */}

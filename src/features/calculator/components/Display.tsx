@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { Check, Copy, History, Mic } from "lucide-react";
+import { Check, Copy, History, Mic, ScanBarcode } from "lucide-react";
 import { memo, useEffect, useMemo, useRef, useState } from "react";
 import { formatDisplay, formatNumberPtBR, tokenizeDisplay } from "../utils/format";
 
@@ -17,6 +17,7 @@ type Props = {
 	onToggleVoice?: () => void;
 	isListeningVoice?: boolean;
 	voiceTranscript?: string;
+	onOpenScanner?: () => void;
 };
 
 export const Display = memo(function Display({
@@ -33,6 +34,7 @@ export const Display = memo(function Display({
 	onToggleVoice,
 	isListeningVoice = false,
 	voiceTranscript = "",
+	onOpenScanner,
 }: Props) {
 	const [copied, setCopied] = useState(false);
 	const scrollRef = useRef<HTMLDivElement>(null);
@@ -185,6 +187,39 @@ export const Display = memo(function Display({
 								) : (
 									<span className="text-[10px] font-mono text-zinc-400">Voz</span>
 								)}
+							</button>
+						)}
+
+						{onOpenScanner && (
+							<button
+								type="button"
+								onClick={(e) => {
+									e.stopPropagation();
+									onOpenScanner();
+								}}
+								title="Escanear Código de Barras (Câmera)"
+								aria-label="Escanear código de barras"
+								className="
+									flex
+									items-center
+									gap-1
+									px-2
+									py-1
+									rounded-full
+									border
+									border-white/8
+									bg-white/4
+									text-zinc-400
+									hover:text-white
+									hover:bg-white/8
+									hover:border-white/15
+									transition-all
+									cursor-pointer
+									active:scale-95
+								"
+							>
+								<ScanBarcode size={13} className="text-zinc-400" />
+								<span className="text-[10px] font-mono text-zinc-400">Scan</span>
 							</button>
 						)}
 					</div>

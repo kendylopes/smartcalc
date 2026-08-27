@@ -35,6 +35,7 @@ const SHORTCUT_GROUPS: ShortcutGroup[] = [
 		title: "Recursos Avançados",
 		items: [
 			{ key: "Q", desc: "Item & Quantidade de produto (compras)" },
+			{ key: "B", desc: "Leitor de código de barras (câmera)" },
 			{ key: "G", desc: "Dashboard de Estatísticas & Gráficos" },
 			{ key: "P", desc: "Comparador de embalagens (kg / litro)" },
 			{ key: "U", desc: "Conversor de moedas e unidades" },

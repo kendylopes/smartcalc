@@ -1,4 +1,16 @@
-import { BarChart3, Coins, Database, Fuel, HelpCircle, Repeat, Scale, Tag, TrendingUp, Users } from "lucide-react";
+import {
+	BarChart3,
+	Coins,
+	Database,
+	Fuel,
+	HelpCircle,
+	Repeat,
+	Scale,
+	ScanBarcode,
+	Tag,
+	TrendingUp,
+	Users,
+} from "lucide-react";
 import { memo } from "react";
 import type { ThemeConfig } from "../hooks/useThemes";
 
@@ -8,6 +20,7 @@ type Props = {
 	onOpenFinance: () => void;
 	onOpenConverter: () => void;
 	onOpenAnalytics?: () => void;
+	onOpenScanner?: () => void;
 	onOpenFuel?: () => void;
 	onOpenDiscount?: () => void;
 	onOpenHelp: () => void;
@@ -22,6 +35,7 @@ export const QuickToolsPanel = memo(function QuickToolsPanel({
 	onOpenFinance,
 	onOpenConverter,
 	onOpenAnalytics,
+	onOpenScanner,
 	onOpenFuel,
 	onOpenDiscount,
 	onOpenHelp,
@@ -30,6 +44,15 @@ export const QuickToolsPanel = memo(function QuickToolsPanel({
 	onPlayClick,
 }: Props) {
 	const tools = [
+		{
+			id: "scanner",
+			name: "Leitor de Código de Barras",
+			desc: "Aponte a câmera para embalagens",
+			icon: <ScanBarcode size={16} />,
+			shortcut: "B",
+			action: onOpenScanner || onOpenComparator,
+			color: "text-emerald-400 bg-emerald-500/10 border-emerald-500/20",
+		},
 		{
 			id: "analytics",
 			name: "Estatísticas & Gráficos",

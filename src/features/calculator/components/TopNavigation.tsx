@@ -15,6 +15,7 @@ import {
 	Minimize,
 	Palette,
 	Scale,
+	ScanBarcode,
 	ShieldCheck,
 	Sparkles,
 	SunMedium,
@@ -39,6 +40,7 @@ type Props = {
 	onOpenFinance: () => void;
 	onOpenComparator?: () => void;
 	onOpenAnalytics?: () => void;
+	onOpenScanner?: () => void;
 	onOpenHelp?: () => void;
 	onOpenBackup?: () => void;
 	onOpenPrivacy?: () => void;
@@ -68,6 +70,7 @@ export const TopNavigation = memo(function TopNavigation({
 	onOpenFinance,
 	onOpenComparator,
 	onOpenAnalytics,
+	onOpenScanner,
 	onOpenHelp,
 	onOpenBackup,
 	onOpenPrivacy,
@@ -311,7 +314,27 @@ export const TopNavigation = memo(function TopNavigation({
 												</kbd>
 											</button>
 
-											{/* Rachar Conta / Split Bill */}
+											{/* Leitor de Código de Barras */}
+											{onOpenScanner && (
+												<button
+													type="button"
+													onClick={() => {
+														onOpenScanner();
+														setIsOpen(false);
+													}}
+													className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-zinc-200 hover:text-white hover:bg-white/8 transition-colors outline-none cursor-pointer"
+												>
+													<div className="flex items-center gap-2.5">
+														<ScanBarcode size={15} className="text-emerald-400" />
+														<span>Leitor de Código de Barras</span>
+													</div>
+													<kbd className="px-1.5 py-0.5 text-[10px] font-mono text-zinc-400 rounded bg-zinc-800 border border-zinc-700">
+														B
+													</kbd>
+												</button>
+											)}
+
+											{/* Divisor de Contas */}
 											<button
 												type="button"
 												onClick={() => {
@@ -321,7 +344,7 @@ export const TopNavigation = memo(function TopNavigation({
 												className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-zinc-200 hover:text-white hover:bg-white/8 transition-colors outline-none cursor-pointer"
 											>
 												<div className="flex items-center gap-2.5">
-													<Utensils size={15} className="text-emerald-400" />
+													<Utensils size={15} className="text-teal-400" />
 													<span>{t.splitBill}</span>
 												</div>
 												<kbd className="px-1.5 py-0.5 text-[10px] font-mono text-zinc-400 rounded bg-zinc-800 border border-zinc-700">

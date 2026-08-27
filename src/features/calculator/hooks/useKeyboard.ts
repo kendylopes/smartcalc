@@ -12,6 +12,7 @@ type Props = {
 	openFinance?: () => void;
 	openComparator?: () => void;
 	openAnalytics?: () => void;
+	openScanner?: () => void;
 	openHelp?: () => void;
 };
 
@@ -27,6 +28,7 @@ export const useKeyboard = ({
 	openFinance,
 	openComparator,
 	openAnalytics,
+	openScanner,
 	openHelp,
 }: Props) => {
 	useEffect(() => {
@@ -63,6 +65,13 @@ export const useKeyboard = ({
 			if (key.toLowerCase() === "q" && openQuantity) {
 				event.preventDefault();
 				openQuantity();
+				return;
+			}
+
+			// Leitor de Código de Barras / Câmera com tecla 'b' / 'B'
+			if (key.toLowerCase() === "b" && openScanner) {
+				event.preventDefault();
+				openScanner();
 				return;
 			}
 
@@ -158,6 +167,7 @@ export const useKeyboard = ({
 		openQuantity,
 		openComparator,
 		openAnalytics,
+		openScanner,
 		openHelp,
 		openConverter,
 		openSplitBill,
