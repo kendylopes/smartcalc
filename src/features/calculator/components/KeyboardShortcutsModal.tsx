@@ -35,11 +35,12 @@ const SHORTCUT_GROUPS: ShortcutGroup[] = [
 		title: "Recursos Avançados",
 		items: [
 			{ key: "Q", desc: "Item & Quantidade de produto (compras)" },
+			{ key: "G", desc: "Dashboard de Estatísticas & Gráficos" },
 			{ key: "P", desc: "Comparador de embalagens (kg / litro)" },
-			{ key: "H", desc: "Abrir Central de Ajuda & Guia de Uso" },
 			{ key: "U", desc: "Conversor de moedas e unidades" },
 			{ key: "S", desc: "Rachar conta e gorjeta (WhatsApp)" },
 			{ key: "F", desc: "Simulador de parcelas e finanças" },
+			{ key: "H", desc: "Abrir Central de Ajuda & Guia de Uso" },
 			{ key: "(  )", desc: "Parênteses matemáticos" },
 			{ key: "Swipe no Visor", desc: "Deslizar para apagar último dígito" },
 			{ key: "Clique no Visor", desc: "Copiar resultado atual" },

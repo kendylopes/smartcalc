@@ -1,11 +1,16 @@
 import { AnimatePresence, motion } from "framer-motion";
 import {
+	BarChart3,
 	BookOpen,
 	ChevronDown,
+	Fuel,
+	Globe,
 	Lightbulb,
+	Mic,
 	Scale,
 	ShoppingBag,
 	Smartphone,
+	Tag,
 	Target,
 	TrendingUp,
 	Utensils,
@@ -60,6 +65,29 @@ const HELP_SECTIONS: HelpSection[] = [
 		tip: "O visor recebe diretamente a soma limpa dos itens, enquanto o painel lateral guarda o cupom detalhado.",
 	},
 	{
+		id: "analytics",
+		title: "Dashboard de Estatísticas & Gráficos",
+		icon: BarChart3,
+		color: "text-amber-400 bg-amber-500/10 border-amber-500/20",
+		badge: "Novo",
+		summary: "Análise visual de gastos, média por item e ranking dos produtos mais caros.",
+		steps: [
+			{
+				title: "1. Acessar o Dashboard",
+				desc: "Pressione a tecla G ou clique em 'Estatísticas & Gráficos' no menu do Histórico.",
+			},
+			{
+				title: "2. Indicadores Principais (KPIs)",
+				desc: "Visualize o Total Gasto, Média por Item, Quantidade de Produtos e Maior Despesa.",
+			},
+			{
+				title: "3. Ranking de Impacto (%)",
+				desc: "Veja barras animadas mostrando qual porcentagem cada produto consumiu do valor total.",
+			},
+		],
+		tip: "Clique em 'Copiar Relatório' para gerar um resumo financeiro pronto para anotações.",
+	},
+	{
 		id: "comparator",
 		title: "Comparador de Embalagens (kg / Litro)",
 		icon: Scale,
@@ -85,6 +113,84 @@ const HELP_SECTIONS: HelpSection[] = [
 			},
 		],
 		tip: "Suporta gramas (g), quilos (kg), mililitros (ml), litros (L) e unidades (un).",
+	},
+	{
+		id: "fuel",
+		title: "Calculadora Flex (Etanol vs Gasolina)",
+		icon: Fuel,
+		color: "text-emerald-400 bg-emerald-500/10 border-emerald-500/20",
+		badge: "Novo",
+		summary: "Descubra na hora qual combustível compensa mais no posto de gasolina.",
+		steps: [
+			{
+				title: "1. Inserir Preços na Bomba",
+				desc: "Digite o valor por litro do Etanol e da Gasolina.",
+			},
+			{
+				title: "2. Análise da Paridade (70%)",
+				desc: "O algoritmo verifica a razão de eficiência energética e aponta a opção mais vantajosa.",
+			},
+			{
+				title: "3. Economia por Tanque",
+				desc: "Veja a projeção de economia em Reais para um abastecimento completo de 50 litros.",
+			},
+		],
+		tip: "Pode ser acessado pelo menu ou pelo atalho rápido no modo Studio.",
+	},
+	{
+		id: "discount",
+		title: "Descontos & Margem de Lucro (Markup)",
+		icon: Tag,
+		color: "text-indigo-400 bg-indigo-500/10 border-indigo-500/20",
+		badge: "Novo",
+		summary: "Calcule preços com desconto % OFF ou precifique produtos com margem de lucro markup.",
+		steps: [
+			{
+				title: "Aba Descontos (% OFF)",
+				desc: "Insira o valor original e a porcentagem de desconto para saber o preço final e a economia.",
+			},
+			{
+				title: "Aba Lucro & Margem",
+				desc: "Insira o custo de compra e a margem de lucro almejada para calcular o preço de venda ideal.",
+			},
+		],
+	},
+	{
+		id: "voice",
+		title: "Falar para Somar (Reconhecimento de Voz)",
+		icon: Mic,
+		color: "text-rose-400 bg-rose-500/10 border-rose-500/20",
+		badge: "Novo",
+		summary: "Fale expressões matemáticas ou produtos e o app digita para você.",
+		steps: [
+			{
+				title: "1. Ativar o Microfone",
+				desc: "Clique no ícone de microfone no topo do visor da calculadora.",
+			},
+			{
+				title: "2. Falar Naturalmente",
+				desc: "Exemplos: 'Cinquenta mais trinta e cinco' ou 'Dois leites a quatro reais'.",
+			},
+		],
+		tip: "Funciona direto no navegador Chrome, Safari, Edge e dispositivos móveis.",
+	},
+	{
+		id: "i18n",
+		title: "Multi-Idioma & Moedas Internacionais",
+		icon: Globe,
+		color: "text-sky-400 bg-sky-500/10 border-sky-500/20",
+		badge: "Novo",
+		summary: "Alterne instantaneamente o idioma e a moeda entre Português, Inglês e Espanhol.",
+		steps: [
+			{
+				title: "1. Seleção no Menu",
+				desc: "Abra o Menu Hambúrguer e escolha seu idioma: Português (R$), English ($) ou Español (€).",
+			},
+			{
+				title: "2. Formatação Automática",
+				desc: "Separadores decimais e moedas se adaptam automaticamente ao padrão internacional.",
+			},
+		],
 	},
 	{
 		id: "budget",
