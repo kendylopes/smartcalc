@@ -1,4 +1,4 @@
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useTransform } from "framer-motion";
 import { Delete, ShoppingBag } from "lucide-react";
 import { useCallback, useState } from "react";
 import { Toaster } from "@/components/ui/sonner";
@@ -10,6 +10,7 @@ import {
 	FuelCalculatorModal,
 	HelpModal,
 	HistoryPanel,
+	type IslandNotification,
 	KeyboardShortcutsModal,
 	PriceComparatorModal,
 	ProductNameModal,
@@ -21,6 +22,7 @@ import {
 } from "@/features/calculator/components";
 import { BASIC_BUTTONS, SCIENTIFIC_FUNCTIONS } from "@/features/calculator/constants";
 import {
+	use3dCardTilt,
 	useCalculator,
 	useHapticFeedback,
 	useKeyboard,
@@ -28,6 +30,7 @@ import {
 	useThemes,
 	useVoiceInput,
 } from "@/features/calculator/hooks";
+import { formatNumberPtBR } from "@/features/calculator/utils/format";
 import { ConverterModal } from "@/features/converter";
 import { FinanceModal } from "@/features/finance";
 import {
@@ -44,6 +47,7 @@ export function App() {
 	const [showHistory, setShowHistory] = useState(false);
 	const [isAdvanced, setIsAdvanced] = useState(false);
 	const [isCompactMode, setIsCompactMode] = useState(false);
+	const [islandNotification, setIslandNotification] = useState<IslandNotification | null>(null);
 	const [isStudioMode, setIsStudioMode] = useState<boolean>(() => {
 		try {
 			const saved = localStorage.getItem("smartcalc-studio-mode");
@@ -82,6 +86,17 @@ export function App() {
 	const { triggerHaptic } = useHapticFeedback(true);
 	const { isInstallable, installApp } = usePwaInstall();
 	const { isActive: isWakeLockActive, toggleWakeLock } = useWakeLock();
+
+	// 3D Parallax Tilt & Dynamic Spotlight Aura
+	const {
+		rotateX,
+		rotateY,
+		glareX,
+		glareY,
+		handleMouseMove,
+		handleMouseEnter,
+		handleMouseLeave,
+	} = use3dCardTilt(6);
 
 	const {
 		value,
@@ -143,6 +158,12 @@ export function App() {
 		playResult();
 		triggerHaptic("result");
 		calculate();
+		setIslandNotification({
+			id: Date.now(),
+			type: "result",
+			title: "Cálculo Concluído",
+			subtitle: "Resultado pronto no visor",
+		});
 	}, [playResult, triggerHaptic, calculate]);
 
 	const handleKeyboardClear = useCallback(() => {
@@ -226,10 +247,23 @@ export function App() {
 	} = useVoiceInput({
 		onProductRecognized: (productName, unitPrice, quantity) => {
 			applyQuantity(unitPrice, quantity, productName);
+			const total = (Number(unitPrice.replace(",", ".")) || 0) * quantity;
+			setIslandNotification({
+				id: Date.now(),
+				type: "item",
+				title: `+ R$ ${formatNumberPtBR(total.toFixed(2))}`,
+				subtitle: productName ? `${quantity}x ${productName}` : `${quantity} un`,
+			});
 		},
 		onMathRecognized: (expression) => {
 			handleTransferFromModal(expression);
 			calculate();
+			setIslandNotification({
+				id: Date.now(),
+				type: "result",
+				title: "Cálculo por Voz Concluído",
+				subtitle: expression,
+			});
 		},
 		onPriceRecognized: (price) => {
 			handleTransferFromModal(price);
@@ -251,6 +285,12 @@ export function App() {
 			playResult();
 			triggerHaptic("result");
 			calculate();
+			setIslandNotification({
+				id: Date.now(),
+				type: "result",
+				title: "Cálculo Concluído",
+				subtitle: "Resultado pronto no visor",
+			});
 		} else if (btn === "+/-") {
 			playClick();
 			triggerHaptic("click");
@@ -281,7 +321,7 @@ export function App() {
 			{/* HERO SECTION: CALCULADORA AO VIVO */}
 			<main
 				id="calculadora"
-				className="w-full flex flex-col items-center justify-center py-6 sm:py-10 px-2 sm:px-4 md:px-6"
+				className="w-full flex flex-col items-center justify-center py-6 sm:py-10 px-2 sm:px-4 md:px-6 perspective-3d"
 			>
 				{/* CONTAINER PRINCIPAL DA CALCULADORA */}
 				<div className="w-full max-w-7xl flex flex-col lg:flex-row items-center lg:items-stretch justify-center gap-4 sm:gap-6">
@@ -309,8 +349,16 @@ export function App() {
 						</motion.div>
 					)}
 
-					{/* CARD PRINCIPAL DA CALCULADORA */}
-					<section
+					{/* CARD PRINCIPAL DA CALCULADORA COM PARALLAX 3D TILT E SPOTLIGHT AURA */}
+					<motion.section
+						style={{
+							rotateX,
+							rotateY,
+							transformStyle: "preserve-3d",
+						}}
+						onMouseMove={handleMouseMove}
+						onMouseEnter={handleMouseEnter}
+						onMouseLeave={handleMouseLeave}
 						className={`
 							relative
 							w-full
@@ -328,6 +376,18 @@ export function App() {
 							${isCompactMode ? "max-w-76" : "max-w-90 sm:max-w-95 md:w-95"}
 						`}
 					>
+						{/* Camada de Reflexo Holográfico & Spotlight Aura que segue o cursor */}
+						<motion.div
+							className="absolute inset-0 pointer-events-none rounded-[inherit] z-10 opacity-60 transition-opacity duration-300"
+							style={{
+								background: useTransform(
+									[glareX, glareY],
+									([gx, gy]) =>
+										`radial-gradient(circle 320px at ${gx}% ${gy}%, rgba(255,255,255,0.08), transparent 80%)`,
+								),
+							}}
+						/>
+
 						{/* TOP NAVIGATION COM MENU HAMBÚRGUER */}
 						<TopNavigation
 							isAdvanced={isAdvanced}
@@ -356,7 +416,7 @@ export function App() {
 							onSelectTheme={setTheme}
 						/>
 
-						{/* VISOR DISPLAY */}
+						{/* VISOR DISPLAY COM DYNAMIC ISLAND & QUANTUM SPARKS */}
 						<Display
 							value={value}
 							preview={preview}
@@ -379,6 +439,7 @@ export function App() {
 							onToggleVoice={toggleVoice}
 							isListeningVoice={isListeningVoice}
 							voiceTranscript={voiceTranscript}
+							islandNotification={islandNotification}
 						/>
 
 						{/* BARRA DE AÇÃO RÁPIDA: ITEM & QUANTIDADE (MERCADO) */}
@@ -475,7 +536,7 @@ export function App() {
 								/>
 							))}
 						</div>
-					</section>
+					</motion.section>
 
 					{/* HISTÓRICO PANEL CARD NEUMÓRFICO COM ANIMAÇÃO */}
 					<AnimatePresence>
@@ -547,6 +608,13 @@ export function App() {
 				onClose={() => setIsProductNameModalOpen(false)}
 				onConfirm={(unitPrice, qty, productName) => {
 					applyQuantity(unitPrice, qty, productName);
+					const total = (Number(unitPrice.replace(",", ".")) || 0) * qty;
+					setIslandNotification({
+						id: Date.now(),
+						type: "item",
+						title: `+ R$ ${formatNumberPtBR(total.toFixed(2))}`,
+						subtitle: productName ? `${qty}x ${productName}` : `${qty} un`,
+					});
 				}}
 				theme={theme}
 				onPlayClick={playClick}
@@ -560,6 +628,13 @@ export function App() {
 				onClose={() => setIsQuantityModalOpen(false)}
 				onConfirm={(unitPrice, qty, productName) => {
 					applyQuantity(unitPrice, qty, productName);
+					const total = (Number(unitPrice.replace(",", ".")) || 0) * qty;
+					setIslandNotification({
+						id: Date.now(),
+						type: "item",
+						title: `+ R$ ${formatNumberPtBR(total.toFixed(2))}`,
+						subtitle: productName ? `${qty}x ${productName}` : `${qty} un`,
+					});
 				}}
 				theme={theme}
 				onPlayClick={playClick}

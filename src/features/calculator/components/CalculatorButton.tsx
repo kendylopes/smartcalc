@@ -177,6 +177,7 @@ export const CalculatorButton = memo(function CalculatorButton({
 			className={`
 				group
 				relative
+				edge-lit-button
 				${isCompact ? "h-11 sm:h-12 rounded-[1.2rem] text-sm font-medium" : "h-15 sm:h-18 rounded-[1.6rem] sm:rounded-[1.8rem] text-xl sm:text-2xl font-light"}
 				w-full
 				flex

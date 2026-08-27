@@ -191,42 +191,61 @@ export const BudgetBar = memo(function BudgetBar({ currentTotal }: Props) {
 						</div>
 					</div>
 
-					{/* Barra de Progresso Visual */}
-					<div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden my-1.5">
+					{/* Barra de Progresso Visual: Tubo de Energia Líquida Neon (Liquid Energy Gauge) */}
+					<div className="relative w-full h-2.5 bg-black/70 rounded-full overflow-hidden my-2 border border-white/10 shadow-[inset_0_2px_4px_rgba(0,0,0,0.8)]">
+						{/* Tubo de vidro com reflexo especular */}
+						<div className="absolute inset-x-0 top-0 h-[1.5px] bg-gradient-to-r from-transparent via-white/40 to-transparent z-10 pointer-events-none" />
+
+						{/* Preenchimento Líquido Energético Fluido */}
 						<motion.div
 							initial={{ width: 0 }}
 							animate={{ width: `${percent}%` }}
-							transition={{ duration: 0.3 }}
+							transition={{ type: "spring", stiffness: 180, damping: 20 }}
 							className={`
+								relative
 								h-full
 								rounded-full
+								transition-colors
+								duration-300
 								${
 									isOverBudget
-										? "bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)]"
+										? "bg-gradient-to-r from-red-600 via-rose-500 to-red-400 shadow-[0_0_14px_rgba(239,68,68,0.8)]"
 										: isNearBudget
-											? "bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.5)]"
-											: "bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.5)]"
+											? "bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-300 shadow-[0_0_14px_rgba(251,191,36,0.7)]"
+											: "bg-gradient-to-r from-cyan-500 via-teal-400 to-emerald-400 shadow-[0_0_14px_rgba(34,211,238,0.7)]"
 								}
 							`}
-						/>
+						>
+							{/* Onda de brilho fluida que corre pelo líquido */}
+							<motion.div
+								animate={{ x: ["-100%", "200%"] }}
+								transition={{ repeat: Infinity, duration: 2, ease: "linear" }}
+								className="absolute inset-0 w-1/2 bg-gradient-to-r from-transparent via-white/40 to-transparent skew-x-12"
+							/>
+						</motion.div>
 					</div>
 
 					{/* Status Subtitle */}
 					<div className="flex items-center justify-between text-[10px]">
 						{isOverBudget ? (
-							<span className="text-red-400 font-medium flex items-center gap-1">
-								<AlertCircle size={10} />
-								<span>Ultrapassou R$ {formatNumberPtBR(exceeded.toFixed(2))}</span>
+							<span className="text-red-400 font-bold flex items-center gap-1">
+								<AlertCircle size={11} className="animate-pulse" />
+								<span>Excedeu R$ {formatNumberPtBR(exceeded.toFixed(2))}</span>
 							</span>
 						) : (
-							<span className="text-emerald-400 font-medium">
-								Restam R$ {formatNumberPtBR(remaining.toFixed(2))}
+							<span className="text-emerald-400 font-medium flex items-center gap-1">
+								<span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_#34d399] animate-pulse" />
+								<span>Restam R$ {formatNumberPtBR(remaining.toFixed(2))}</span>
 							</span>
 						)}
 
 						<span
-							className={`font-mono font-medium ${
-								isOverBudget ? "text-red-400" : isNearBudget ? "text-amber-400" : "text-zinc-400"
+							className={`font-mono font-bold ${
+								isOverBudget
+									? "text-red-400"
+									: isNearBudget
+										? "text-amber-400"
+										: "text-cyan-300"
 							}`}
 						>
 							{((currentTotal / (budget || 1)) * 100).toFixed(0)}%
