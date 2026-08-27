@@ -1,4 +1,4 @@
-import { Coins, Database, Fuel, HelpCircle, Repeat, Scale, Tag, TrendingUp, Users } from "lucide-react";
+import { BarChart3, Coins, Database, Fuel, HelpCircle, Repeat, Scale, Tag, TrendingUp, Users } from "lucide-react";
 import { memo } from "react";
 import type { ThemeConfig } from "../hooks/useThemes";
 
@@ -7,6 +7,7 @@ type Props = {
 	onOpenSplitBill: () => void;
 	onOpenFinance: () => void;
 	onOpenConverter: () => void;
+	onOpenAnalytics?: () => void;
 	onOpenFuel?: () => void;
 	onOpenDiscount?: () => void;
 	onOpenHelp: () => void;
@@ -20,6 +21,7 @@ export const QuickToolsPanel = memo(function QuickToolsPanel({
 	onOpenSplitBill,
 	onOpenFinance,
 	onOpenConverter,
+	onOpenAnalytics,
 	onOpenFuel,
 	onOpenDiscount,
 	onOpenHelp,
@@ -29,13 +31,22 @@ export const QuickToolsPanel = memo(function QuickToolsPanel({
 }: Props) {
 	const tools = [
 		{
+			id: "analytics",
+			name: "Estatísticas & Gráficos",
+			desc: "Resumo de gastos e compras",
+			icon: <BarChart3 size={16} />,
+			shortcut: "G",
+			action: onOpenAnalytics || onOpenComparator,
+			color: "text-amber-400 bg-amber-500/10 border-amber-500/20",
+		},
+		{
 			id: "comparator",
 			name: "Comparador",
 			desc: "Qual embalagem compensa mais?",
 			icon: <Scale size={16} />,
 			shortcut: "P",
 			action: onOpenComparator,
-			color: "text-amber-400 bg-amber-500/10 border-amber-500/20",
+			color: "text-cyan-400 bg-cyan-500/10 border-cyan-500/20",
 		},
 		{
 			id: "fuel",

@@ -11,6 +11,7 @@ type Props = {
 	openSplitBill?: () => void;
 	openFinance?: () => void;
 	openComparator?: () => void;
+	openAnalytics?: () => void;
 	openHelp?: () => void;
 };
 
@@ -25,6 +26,7 @@ export const useKeyboard = ({
 	openSplitBill,
 	openFinance,
 	openComparator,
+	openAnalytics,
 	openHelp,
 }: Props) => {
 	useEffect(() => {
@@ -61,6 +63,13 @@ export const useKeyboard = ({
 			if (key.toLowerCase() === "q" && openQuantity) {
 				event.preventDefault();
 				openQuantity();
+				return;
+			}
+
+			// Estatísticas & Gráficos com tecla 'g' / 'G'
+			if (key.toLowerCase() === "g" && openAnalytics) {
+				event.preventDefault();
+				openAnalytics();
 				return;
 			}
 
@@ -148,6 +157,7 @@ export const useKeyboard = ({
 		setActiveKey,
 		openQuantity,
 		openComparator,
+		openAnalytics,
 		openHelp,
 		openConverter,
 		openSplitBill,

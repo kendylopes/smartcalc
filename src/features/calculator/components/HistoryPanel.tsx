@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import {
+	BarChart3,
 	Check,
 	Clock,
 	Copy,
@@ -31,6 +32,7 @@ type Props = {
 	onClearAll?: () => void;
 	onClose?: () => void;
 	onOpenReceiptImage?: () => void;
+	onOpenAnalytics?: () => void;
 	theme?: ThemeConfig;
 };
 
@@ -51,6 +53,7 @@ export const HistoryPanel = memo(function HistoryPanel({
 	onClearAll,
 	onClose,
 	onOpenReceiptImage,
+	onOpenAnalytics,
 	theme,
 }: Props) {
 	const [activeTab, setActiveTab] = useState<"list" | "chart">("list");
@@ -218,6 +221,19 @@ _Calculado via SmartCalc_`;
 											transition={{ duration: 0.12 }}
 											className="absolute right-0 top-7 z-50 w-52 p-1.5 rounded-2xl bg-zinc-900 border border-white/15 tech-modal shadow-[0_16px_40px_rgba(0,0,0,0.9)] space-y-1"
 										>
+											{onOpenAnalytics && (
+												<button
+													type="button"
+													onClick={() => {
+														setShowExportMenu(false);
+														onOpenAnalytics();
+													}}
+													className="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-xs text-zinc-200 hover:text-white hover:bg-white/10 transition-colors cursor-pointer text-left font-medium"
+												>
+													<BarChart3 size={13} className="text-amber-400" />
+													<span>Estatísticas & Gráficos</span>
+												</button>
+											)}
 											<button
 												type="button"
 												onClick={() => {

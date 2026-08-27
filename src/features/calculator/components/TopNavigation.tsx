@@ -1,11 +1,13 @@
 import { AnimatePresence, motion } from "framer-motion";
 import {
 	ArrowLeftRight,
+	BarChart3,
 	BookOpen,
 	Check,
 	Command,
 	Database,
 	Download,
+	Globe,
 	HelpCircle,
 	LayoutDashboard,
 	Maximize,
@@ -22,6 +24,7 @@ import {
 	X,
 } from "lucide-react";
 import { memo, useEffect, useRef, useState } from "react";
+import { useI18n } from "@/features/i18n";
 import type { ThemeConfig, ThemeId } from "../hooks/useThemes";
 
 type Props = {
@@ -34,6 +37,7 @@ type Props = {
 	onOpenSplitBill: () => void;
 	onOpenFinance: () => void;
 	onOpenComparator?: () => void;
+	onOpenAnalytics?: () => void;
 	onOpenHelp?: () => void;
 	onOpenBackup?: () => void;
 	isWakeLockActive?: boolean;
@@ -61,6 +65,7 @@ export const TopNavigation = memo(function TopNavigation({
 	onOpenSplitBill,
 	onOpenFinance,
 	onOpenComparator,
+	onOpenAnalytics,
 	onOpenHelp,
 	onOpenBackup,
 	isWakeLockActive = false,
@@ -76,6 +81,7 @@ export const TopNavigation = memo(function TopNavigation({
 	allThemes,
 	onSelectTheme,
 }: Props) {
+	const { t, language, languages, setLanguage } = useI18n();
 	const [isOpen, setIsOpen] = useState(false);
 	const [isFullscreen, setIsFullscreen] = useState(false);
 	const menuRef = useRef<HTMLDivElement>(null);
@@ -219,10 +225,10 @@ export const TopNavigation = memo(function TopNavigation({
 										</div>
 										<div>
 											<h3 className="text-sm font-semibold text-white tracking-wide">
-												Menu & Configurações
+												{t.menuTitle}
 											</h3>
 											<p className="text-[11px] text-zinc-400">
-												Ferramentas, atalhos e personalização
+												{t.menuSubtitle}
 											</p>
 										</div>
 									</div>
@@ -230,20 +236,40 @@ export const TopNavigation = memo(function TopNavigation({
 										type="button"
 										onClick={() => setIsOpen(false)}
 										className="p-1.5 rounded-xl text-zinc-400 hover:text-white hover:bg-white/8 transition-colors cursor-pointer"
-										title="Fechar menu"
+										title={t.close}
 									>
 										<X size={18} />
 									</button>
 								</div>
 
-								{/* Conteúdo Rolável (Com acesso a todas as seções e temas) */}
+								{/* Conteúdo Rolável (Com acesso a todas as seções, temas e idiomas) */}
 								<div className="overflow-y-auto space-y-4 pr-1 pb-2 custom-scrollbar">
 									{/* Seção 1: Ferramentas & Utilitários */}
 									<div>
 										<p className="text-[11px] uppercase font-semibold text-zinc-400 tracking-wider px-1 py-1 select-none">
-											Ferramentas & Utilitários
+											{t.toolsAndUtilities}
 										</p>
 										<div className="space-y-1 mt-1">
+											{/* Estatísticas & Gráficos de Gastos */}
+											{onOpenAnalytics && (
+												<button
+													type="button"
+													onClick={() => {
+														onOpenAnalytics();
+														setIsOpen(false);
+													}}
+													className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-zinc-200 hover:text-white hover:bg-white/8 transition-colors outline-none cursor-pointer"
+												>
+													<div className="flex items-center gap-2.5">
+														<BarChart3 size={15} className="text-cyan-400" />
+														<span>{t.spendingAnalytics}</span>
+													</div>
+													<kbd className="px-1.5 py-0.5 text-[10px] font-mono text-zinc-400 rounded bg-zinc-800 border border-zinc-700">
+														G
+													</kbd>
+												</button>
+											)}
+
 											{/* Comparador de Embalagens */}
 											{onOpenComparator && (
 												<button
@@ -256,7 +282,7 @@ export const TopNavigation = memo(function TopNavigation({
 												>
 													<div className="flex items-center gap-2.5">
 														<Scale size={15} className="text-cyan-400" />
-														<span>Comparar Embalagens (kg/L)</span>
+														<span>{t.comparePackages}</span>
 													</div>
 													<kbd className="px-1.5 py-0.5 text-[10px] font-mono text-zinc-400 rounded bg-zinc-800 border border-zinc-700">
 														P
@@ -275,7 +301,7 @@ export const TopNavigation = memo(function TopNavigation({
 											>
 												<div className="flex items-center gap-2.5">
 													<ArrowLeftRight size={15} className={currentTheme.accentText} />
-													<span>Conversor de Moedas</span>
+													<span>{t.currencyConverter}</span>
 												</div>
 												<kbd className="px-1.5 py-0.5 text-[10px] font-mono text-zinc-400 rounded bg-zinc-800 border border-zinc-700">
 													U
@@ -293,7 +319,7 @@ export const TopNavigation = memo(function TopNavigation({
 											>
 												<div className="flex items-center gap-2.5">
 													<Utensils size={15} className="text-emerald-400" />
-													<span>Rachar a Conta (Gorjeta)</span>
+													<span>{t.splitBill}</span>
 												</div>
 												<kbd className="px-1.5 py-0.5 text-[10px] font-mono text-zinc-400 rounded bg-zinc-800 border border-zinc-700">
 													D
@@ -311,7 +337,7 @@ export const TopNavigation = memo(function TopNavigation({
 											>
 												<div className="flex items-center gap-2.5">
 													<TrendingUp size={15} className="text-amber-400" />
-													<span>Simulador de Finanças</span>
+													<span>{t.financeSimulator}</span>
 												</div>
 												<kbd className="px-1.5 py-0.5 text-[10px] font-mono text-zinc-400 rounded bg-zinc-800 border border-zinc-700">
 													F
@@ -331,7 +357,7 @@ export const TopNavigation = memo(function TopNavigation({
 														size={15}
 														className={isAdvanced ? currentTheme.accentText : "text-zinc-400"}
 													/>
-													<span>Modo Científico</span>
+													<span>{t.scientificMode}</span>
 												</div>
 												<span
 													className={`text-[10px] font-semibold px-2 py-0.5 rounded-md border ${
@@ -340,7 +366,7 @@ export const TopNavigation = memo(function TopNavigation({
 															: "bg-zinc-800 border-zinc-700 text-zinc-400"
 													}`}
 												>
-													{isAdvanced ? "Ativo" : "Básico"}
+													{isAdvanced ? t.active : t.standard}
 												</span>
 											</button>
 										</div>
@@ -349,7 +375,7 @@ export const TopNavigation = memo(function TopNavigation({
 									{/* Seção 2: Visual & Configurações */}
 									<div className="pt-2 border-t border-white/8">
 										<p className="text-[11px] uppercase font-semibold text-zinc-400 tracking-wider px-1 py-1 select-none">
-											Visual & Configurações
+											{t.visualAndSettings}
 										</p>
 										<div className="space-y-1 mt-1">
 											{/* Modo Estúdio Amplo */}
@@ -361,7 +387,7 @@ export const TopNavigation = memo(function TopNavigation({
 												>
 													<div className="flex items-center gap-2.5">
 														<LayoutDashboard size={15} className="text-indigo-400" />
-														<span>Layout Estúdio Amplo</span>
+														<span>{t.studioLayout}</span>
 													</div>
 													<span
 														className={`text-[10px] font-semibold px-2 py-0.5 rounded-md border ${
@@ -370,7 +396,7 @@ export const TopNavigation = memo(function TopNavigation({
 																: "bg-zinc-800 border-zinc-700 text-zinc-400"
 														}`}
 													>
-														{isStudioMode ? "Ativo" : "Auto"}
+														{isStudioMode ? t.active : t.auto}
 													</span>
 												</button>
 											)}
@@ -384,7 +410,7 @@ export const TopNavigation = memo(function TopNavigation({
 												>
 													<div className="flex items-center gap-2.5">
 														<Command size={15} className="text-zinc-300" />
-														<span>Dicas de Teclas (Keycaps)</span>
+														<span>{t.keycaps}</span>
 													</div>
 													<span
 														className={`text-[10px] font-semibold px-2 py-0.5 rounded-md border ${
@@ -393,7 +419,7 @@ export const TopNavigation = memo(function TopNavigation({
 																: "bg-zinc-800 border-zinc-700 text-zinc-400"
 														}`}
 													>
-														{showKeycaps ? "Visíveis" : "Ocultas"}
+														{showKeycaps ? t.visible : t.hidden}
 													</span>
 												</button>
 											)}
@@ -407,7 +433,7 @@ export const TopNavigation = memo(function TopNavigation({
 												>
 													<div className="flex items-center gap-2.5">
 														<Minimize size={15} className="text-zinc-300" />
-														<span>Modo Compacto</span>
+														<span>{t.compactMode}</span>
 													</div>
 													<span
 														className={`text-[10px] font-semibold px-2 py-0.5 rounded-md border ${
@@ -416,7 +442,7 @@ export const TopNavigation = memo(function TopNavigation({
 																: "bg-zinc-800 border-zinc-700 text-zinc-400"
 														}`}
 													>
-														{isCompactMode ? "Ativo" : "Normal"}
+														{isCompactMode ? t.active : t.standard}
 													</span>
 												</button>
 											)}
@@ -433,7 +459,7 @@ export const TopNavigation = memo(function TopNavigation({
 													) : (
 														<Maximize size={15} className="text-zinc-300" />
 													)}
-													<span>Modo Tela Cheia</span>
+													<span>{t.fullscreen}</span>
 												</div>
 												<kbd className="px-1.5 py-0.5 text-[10px] font-mono text-zinc-400 rounded bg-zinc-800 border border-zinc-700">
 													F11
@@ -454,7 +480,7 @@ export const TopNavigation = memo(function TopNavigation({
 																isWakeLockActive ? "text-amber-400 animate-pulse" : "text-zinc-400"
 															}
 														/>
-														<span>Tela Sempre Acesa</span>
+														<span>{t.screenAlwaysOn}</span>
 													</div>
 													<span
 														className={`text-[10px] font-semibold px-2 py-0.5 rounded-md border ${
@@ -463,7 +489,7 @@ export const TopNavigation = memo(function TopNavigation({
 																: "bg-zinc-800 border-zinc-700 text-zinc-400"
 														}`}
 													>
-														{isWakeLockActive ? "Ativo" : "Padrão"}
+														{isWakeLockActive ? t.active : t.standard}
 													</span>
 												</button>
 											)}
@@ -480,7 +506,7 @@ export const TopNavigation = memo(function TopNavigation({
 													) : (
 														<Volume2 size={15} className="text-emerald-400" />
 													)}
-													<span>Efeitos Sonoros</span>
+													<span>{t.soundEffects}</span>
 												</div>
 												<span
 													className={`text-[10px] font-semibold px-2 py-0.5 rounded-md border ${
@@ -489,7 +515,7 @@ export const TopNavigation = memo(function TopNavigation({
 															: "bg-emerald-500/15 border-emerald-500/30 text-emerald-300"
 													}`}
 												>
-													{isMuted ? "Mudo" : "Ligado"}
+													{isMuted ? t.muted : t.on}
 												</span>
 											</button>
 
@@ -504,7 +530,7 @@ export const TopNavigation = memo(function TopNavigation({
 											>
 												<div className="flex items-center gap-2.5">
 													<HelpCircle size={15} className="text-zinc-300" />
-													<span>Atalhos de Teclado</span>
+													<span>{t.keyboardShortcuts}</span>
 												</div>
 												<kbd className="px-1.5 py-0.5 text-[10px] font-mono text-zinc-400 rounded bg-zinc-800 border border-zinc-700">
 													?
@@ -523,7 +549,7 @@ export const TopNavigation = memo(function TopNavigation({
 												>
 													<div className="flex items-center gap-2.5">
 														<Database size={15} className="text-cyan-400" />
-														<span>Backup & Restauração</span>
+														<span>{t.backupRestore}</span>
 													</div>
 													<span className="text-[10px] px-1.5 py-0.5 rounded bg-zinc-800 border border-zinc-700 text-zinc-400 font-mono">
 														.json
@@ -543,7 +569,7 @@ export const TopNavigation = memo(function TopNavigation({
 												>
 													<div className="flex items-center gap-2.5">
 														<Download size={15} className="text-cyan-400" />
-														<span>Instalar Aplicativo</span>
+														<span>{t.installApp}</span>
 													</div>
 													<span className="text-[10px] px-1.5 py-0.5 rounded bg-cyan-500/15 text-cyan-300 font-semibold">
 														PWA
@@ -563,7 +589,7 @@ export const TopNavigation = memo(function TopNavigation({
 												>
 													<div className="flex items-center gap-2.5">
 														<BookOpen size={15} className={currentTheme.accentText} />
-														<span>Ajuda & Como Usar</span>
+														<span>{t.helpAndGuide}</span>
 													</div>
 													<kbd className="px-1.5 py-0.5 text-[10px] font-mono text-zinc-400 rounded bg-zinc-800 border border-zinc-700">
 														H
@@ -573,23 +599,68 @@ export const TopNavigation = memo(function TopNavigation({
 										</div>
 									</div>
 
-									{/* Seção 3: Temas de Cor da Calculadora */}
+									{/* Seção 3: Idioma & Moeda */}
+									<div className="pt-2 border-t border-white/8">
+										<div className="flex items-center gap-1.5 px-1 py-1 select-none mb-1.5">
+											<Globe size={14} className="text-cyan-400" />
+											<p className="text-[11px] uppercase font-semibold text-zinc-400 tracking-wider">
+												{t.languageSection}
+											</p>
+										</div>
+
+										<div className="grid grid-cols-3 gap-1.5 p-1.5 bg-zinc-950/60 rounded-2xl border border-white/8">
+											{languages.map((l) => {
+												const isSelected = language === l.code;
+												return (
+													<button
+														key={l.code}
+														type="button"
+														onClick={() => setLanguage(l.code)}
+														className={`
+															flex
+															flex-col
+															items-center
+															justify-center
+															py-2
+															px-1
+															rounded-xl
+															transition-all
+															duration-150
+															outline-none
+															cursor-pointer
+															${
+																isSelected
+																	? "bg-white/12 ring-1 ring-white/30 text-white font-semibold shadow-sm"
+																	: "text-zinc-400 hover:text-zinc-200 hover:bg-white/6"
+															}
+														`}
+													>
+														<span className="text-base mb-0.5">{l.flag}</span>
+														<span className="text-[11px] truncate">{l.name}</span>
+														<span className="text-[9px] text-zinc-500 font-mono">({l.currencySymbol})</span>
+													</button>
+												);
+											})}
+										</div>
+									</div>
+
+									{/* Seção 4: Temas de Cor da Calculadora */}
 									<div className="pt-2 border-t border-white/8">
 										<div className="flex items-center gap-1.5 px-1 py-1 select-none mb-1.5">
 											<Palette size={14} className="text-cyan-400" />
 											<p className="text-[11px] uppercase font-semibold text-zinc-400 tracking-wider">
-												Tema da Calculadora
+												{t.themesSection}
 											</p>
 										</div>
 
 										<div className="grid grid-cols-2 sm:grid-cols-3 gap-2 p-2 bg-zinc-950/60 rounded-2xl border border-white/8">
-											{allThemes.map((t) => {
-												const isSelected = currentTheme.id === t.id;
+											{allThemes.map((tTheme) => {
+												const isSelected = currentTheme.id === tTheme.id;
 												return (
 													<button
-														key={t.id}
+														key={tTheme.id}
 														type="button"
-														onClick={() => onSelectTheme(t.id)}
+														onClick={() => onSelectTheme(tTheme.id)}
 														className={`
 															relative
 															group
@@ -611,10 +682,10 @@ export const TopNavigation = memo(function TopNavigation({
 													>
 														<span
 															style={{
-																backgroundColor: t.hex,
+																backgroundColor: tTheme.hex,
 																boxShadow: isSelected
-																	? `0 0 12px ${t.hex}, 0 0 4px ${t.hex}`
-																	: `0 0 5px ${t.hex}80`,
+																	? `0 0 12px ${tTheme.hex}, 0 0 4px ${tTheme.hex}`
+																	: `0 0 5px ${tTheme.hex}80`,
 															}}
 															className={`
 																w-5
@@ -638,7 +709,7 @@ export const TopNavigation = memo(function TopNavigation({
 																isSelected ? "text-white font-semibold" : "text-zinc-300"
 															}`}
 														>
-															{t.name}
+															{tTheme.name}
 														</span>
 													</button>
 												);

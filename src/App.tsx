@@ -2,6 +2,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Delete, ShoppingBag } from "lucide-react";
 import { useCallback, useState } from "react";
 import { Toaster } from "@/components/ui/sonner";
+import { SpendingDashboardModal } from "@/features/analytics";
 import {
 	BackupModal,
 	CalculatorButton,
@@ -74,6 +75,7 @@ export function App() {
 	const [isFuelOpen, setIsFuelOpen] = useState(false);
 	const [isDiscountOpen, setIsDiscountOpen] = useState(false);
 	const [isReceiptImageOpen, setIsReceiptImageOpen] = useState(false);
+	const [isAnalyticsOpen, setIsAnalyticsOpen] = useState(false);
 	const [activeKey, setActiveKey] = useState<string | null>(null);
 
 	const { theme, allThemes, setTheme, colorMode, toggleColorMode } = useThemes();
@@ -165,6 +167,10 @@ export function App() {
 		setIsComparatorOpen(true);
 	}, []);
 
+	const handleOpenAnalytics = useCallback(() => {
+		setIsAnalyticsOpen(true);
+	}, []);
+
 	const handleOpenHelp = useCallback(() => {
 		setIsHelpOpen(true);
 	}, []);
@@ -201,6 +207,7 @@ export function App() {
 		deleteLast: handleKeyboardDeleteLast,
 		openQuantity: handleOpenQuantity,
 		openComparator: handleOpenComparator,
+		openAnalytics: handleOpenAnalytics,
 		openHelp: handleOpenHelp,
 		openConverter: handleOpenConverter,
 		openSplitBill: handleOpenSplitBill,
@@ -297,6 +304,7 @@ export function App() {
 							<QuickToolsPanel
 								theme={theme}
 								onOpenComparator={handleOpenComparator}
+								onOpenAnalytics={handleOpenAnalytics}
 								onOpenSplitBill={handleOpenSplitBill}
 								onOpenFinance={handleOpenFinance}
 								onOpenConverter={handleOpenConverter}
@@ -339,6 +347,7 @@ export function App() {
 							onOpenSplitBill={() => setIsSplitBillOpen(true)}
 							onOpenFinance={() => setIsFinanceOpen(true)}
 							onOpenComparator={() => setIsComparatorOpen(true)}
+							onOpenAnalytics={handleOpenAnalytics}
 							onOpenHelp={handleOpenHelp}
 							onOpenBackup={handleOpenBackup}
 							isWakeLockActive={isWakeLockActive}
@@ -492,6 +501,7 @@ export function App() {
 									theme={theme}
 									onClose={() => setShowHistory(false)}
 									onOpenReceiptImage={() => setIsReceiptImageOpen(true)}
+									onOpenAnalytics={handleOpenAnalytics}
 									onSelect={(res) => {
 										playClick();
 										triggerHaptic("click");
@@ -633,6 +643,15 @@ export function App() {
 			<ReceiptImageModal
 				isOpen={isReceiptImageOpen}
 				onClose={() => setIsReceiptImageOpen(false)}
+				history={history}
+				theme={theme}
+				onPlayClick={playClick}
+			/>
+
+			{/* Modal de Dashboard e Gráficos de Gastos */}
+			<SpendingDashboardModal
+				isOpen={isAnalyticsOpen}
+				onClose={() => setIsAnalyticsOpen(false)}
 				history={history}
 				theme={theme}
 				onPlayClick={playClick}
