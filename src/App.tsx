@@ -39,6 +39,8 @@ import {
 	SiteHeader,
 	WhyUsSection,
 } from "@/features/landing";
+import { PrivacyPolicyModal } from "@/features/legal";
+import { AdBannerSlot } from "@/features/monetization";
 import { PwaInstallBanner, usePwaInstall, useWakeLock } from "@/features/pwa";
 
 export function App() {
@@ -76,6 +78,8 @@ export function App() {
 	const [isDiscountOpen, setIsDiscountOpen] = useState(false);
 	const [isReceiptImageOpen, setIsReceiptImageOpen] = useState(false);
 	const [isAnalyticsOpen, setIsAnalyticsOpen] = useState(false);
+	const [isLegalOpen, setIsLegalOpen] = useState(false);
+	const [legalInitialTab, setLegalInitialTab] = useState<"privacy" | "terms">("privacy");
 	const [activeKey, setActiveKey] = useState<string | null>(null);
 
 	const { theme, allThemes, setTheme, colorMode, toggleColorMode } = useThemes();
@@ -132,11 +136,12 @@ export function App() {
 		});
 	};
 
+	// Handlers de Teclado
 	const handleKeyboardInput = useCallback(
-		(k: string) => {
+		(char: string) => {
 			playClick();
 			triggerHaptic("click");
-			input(k);
+			input(char);
 		},
 		[playClick, triggerHaptic, input],
 	);
@@ -197,6 +202,16 @@ export function App() {
 
 	const handleOpenBackup = useCallback(() => {
 		setIsBackupOpen(true);
+	}, []);
+
+	const handleOpenPrivacy = useCallback(() => {
+		setLegalInitialTab("privacy");
+		setIsLegalOpen(true);
+	}, []);
+
+	const handleOpenTerms = useCallback(() => {
+		setLegalInitialTab("terms");
+		setIsLegalOpen(true);
 	}, []);
 
 	// Atalhos Globais de Teclado
@@ -350,6 +365,7 @@ export function App() {
 							onOpenAnalytics={handleOpenAnalytics}
 							onOpenHelp={handleOpenHelp}
 							onOpenBackup={handleOpenBackup}
+							onOpenPrivacy={handleOpenPrivacy}
 							isWakeLockActive={isWakeLockActive}
 							onToggleWakeLock={toggleWakeLock}
 							isCompactMode={isCompactMode}
@@ -523,6 +539,11 @@ export function App() {
 						)}
 					</AnimatePresence>
 				</div>
+
+				{/* BANNER DE MONETIZAÇÃO / AFILIADOS DISCRETO */}
+				<div className="w-full max-w-5xl mx-auto px-4 mt-6">
+					<AdBannerSlot />
+				</div>
 			</main>
 
 			{/* SEÇÕES INSTITUCIONAIS DO PORTAL WEB */}
@@ -542,7 +563,12 @@ export function App() {
 			<WhyUsSection theme={theme} />
 
 			{/* FOOTER INSTITUCIONAL */}
-			<SiteFooter theme={theme} onOpenPix={() => setIsPixOpen(true)} />
+			<SiteFooter 
+				theme={theme} 
+				onOpenPix={() => setIsPixOpen(true)} 
+				onOpenPrivacy={handleOpenPrivacy}
+				onOpenTerms={handleOpenTerms}
+			/>
 
 			{/* Banner discreto de instalação PWA */}
 			<PwaInstallBanner isInstallable={isInstallable} onInstall={installApp} />
@@ -665,6 +691,14 @@ export function App() {
 
 			{/* Modal de Apoio PIX */}
 			<PixDonationModal isOpen={isPixOpen} onClose={() => setIsPixOpen(false)} theme={theme} />
+
+			{/* Modal de Política de Privacidade & Termos de Uso (LGPD / AdSense) */}
+			<PrivacyPolicyModal
+				isOpen={isLegalOpen}
+				onClose={() => setIsLegalOpen(false)}
+				initialTab={legalInitialTab}
+				theme={theme}
+			/>
 
 			{/* Notificações Toast do shadcn/ui */}
 			<Toaster />

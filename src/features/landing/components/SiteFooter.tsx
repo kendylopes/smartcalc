@@ -6,9 +6,16 @@ import type { ThemeConfig } from "@/features/calculator/hooks/useThemes";
 type Props = {
 	theme: ThemeConfig;
 	onOpenPix: () => void;
+	onOpenPrivacy?: () => void;
+	onOpenTerms?: () => void;
 };
 
-export const SiteFooter = memo(function SiteFooter({ theme, onOpenPix }: Props) {
+export const SiteFooter = memo(function SiteFooter({
+	theme,
+	onOpenPix,
+	onOpenPrivacy,
+	onOpenTerms,
+}: Props) {
 	const handleShareWhatsApp = () => {
 		const text = encodeURIComponent(
 			"Confira o SmartCalc! A melhor calculadora inteligente para supermercado, comparação de embalagens e divisão de contas: https://smartcalc-navy.vercel.app",
@@ -99,23 +106,36 @@ export const SiteFooter = memo(function SiteFooter({ theme, onOpenPix }: Props) 
 
 					{/* Coluna 3: Links & Apoio */}
 					<div className="space-y-2">
-						<h4 className="text-xs font-bold text-zinc-200 uppercase tracking-wider">Comunidade</h4>
+						<h4 className="text-xs font-bold text-zinc-200 uppercase tracking-wider">Legal & Apoio</h4>
 						<ul className="space-y-1.5 text-xs">
+							<li>
+								<button
+									type="button"
+									onClick={onOpenPrivacy}
+									className="hover:text-white transition-colors text-left cursor-pointer"
+								>
+									Política de Privacidade (LGPD)
+								</button>
+							</li>
+							<li>
+								<button
+									type="button"
+									onClick={onOpenTerms}
+									className="hover:text-white transition-colors text-left cursor-pointer"
+								>
+									Termos de Uso
+								</button>
+							</li>
 							<li>
 								<a href="#dicas" className="hover:text-white transition-colors">
 									Guia de Economia
 								</a>
 							</li>
 							<li>
-								<a href="#diferenciais" className="hover:text-white transition-colors">
-									Privacidade & PWA
-								</a>
-							</li>
-							<li>
 								<button
 									type="button"
 									onClick={onOpenPix}
-									className="text-amber-400 hover:text-amber-300 transition-colors flex items-center gap-1 cursor-pointer"
+									className="text-amber-400 hover:text-amber-300 transition-colors flex items-center gap-1 cursor-pointer pt-1"
 								>
 									<Coffee size={12} />
 									<span>Apoiar com PIX</span>
@@ -127,7 +147,25 @@ export const SiteFooter = memo(function SiteFooter({ theme, onOpenPix }: Props) 
 
 				{/* Linha Inferior */}
 				<div className="pt-6 border-t border-white/6 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-zinc-500">
-					<p>© {new Date().getFullYear()} SmartCalc. Todos os direitos reservados.</p>
+					<div className="flex flex-wrap items-center gap-3">
+						<p>© {new Date().getFullYear()} SmartCalc. Todos os direitos reservados.</p>
+						<span className="hidden sm:inline text-zinc-700">•</span>
+						<button
+							type="button"
+							onClick={onOpenPrivacy}
+							className="hover:text-zinc-300 transition-colors cursor-pointer"
+						>
+							Privacidade
+						</button>
+						<span className="text-zinc-700">•</span>
+						<button
+							type="button"
+							onClick={onOpenTerms}
+							className="hover:text-zinc-300 transition-colors cursor-pointer"
+						>
+							Termos
+						</button>
+					</div>
 					<p className="flex items-center gap-1">
 						<span>Desenvolvido com</span>
 						<Heart size={12} className="text-rose-500 fill-rose-500" />

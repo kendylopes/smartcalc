@@ -15,6 +15,7 @@ import {
 	Minimize,
 	Palette,
 	Scale,
+	ShieldCheck,
 	Sparkles,
 	SunMedium,
 	TrendingUp,
@@ -40,6 +41,7 @@ type Props = {
 	onOpenAnalytics?: () => void;
 	onOpenHelp?: () => void;
 	onOpenBackup?: () => void;
+	onOpenPrivacy?: () => void;
 	isWakeLockActive?: boolean;
 	onToggleWakeLock?: () => void;
 	isCompactMode?: boolean;
@@ -68,6 +70,7 @@ export const TopNavigation = memo(function TopNavigation({
 	onOpenAnalytics,
 	onOpenHelp,
 	onOpenBackup,
+	onOpenPrivacy,
 	isWakeLockActive = false,
 	onToggleWakeLock,
 	isCompactMode = false,
@@ -594,6 +597,26 @@ export const TopNavigation = memo(function TopNavigation({
 													<kbd className="px-1.5 py-0.5 text-[10px] font-mono text-zinc-400 rounded bg-zinc-800 border border-zinc-700">
 														H
 													</kbd>
+												</button>
+											)}
+
+											{/* Termos & Privacidade (LGPD) */}
+											{onOpenPrivacy && (
+												<button
+													type="button"
+													onClick={() => {
+														onOpenPrivacy();
+														setIsOpen(false);
+													}}
+													className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-zinc-200 hover:text-white hover:bg-white/8 transition-colors outline-none cursor-pointer"
+												>
+													<div className="flex items-center gap-2.5">
+														<ShieldCheck size={15} className="text-emerald-400" />
+														<span>Privacidade & Termos</span>
+													</div>
+													<span className="text-[9px] px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-300 font-medium">
+														LGPD
+													</span>
 												</button>
 											)}
 										</div>
