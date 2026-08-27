@@ -26,6 +26,7 @@ type Props = {
 	onOpenHelp: () => void;
 	onOpenBackup: () => void;
 	theme?: ThemeConfig;
+	showKeycaps?: boolean;
 	onPlayClick?: () => void;
 };
 
@@ -41,6 +42,7 @@ export const QuickToolsPanel = memo(function QuickToolsPanel({
 	onOpenHelp,
 	onOpenBackup,
 	theme,
+	showKeycaps = false,
 	onPlayClick,
 }: Props) {
 	const tools = [
@@ -178,7 +180,16 @@ export const QuickToolsPanel = memo(function QuickToolsPanel({
 									<p className="text-[10px] text-zinc-400 truncate">{tool.desc}</p>
 								</div>
 							</div>
-							<kbd className="hidden sm:inline-block px-1.5 py-0.5 rounded bg-white/5 border border-white/10 text-[9px] font-mono text-zinc-400 group-hover:text-zinc-200 shrink-0">
+							<kbd
+								className={`
+									px-2 py-0.5 rounded-lg text-[9px] font-mono shrink-0 transition-all duration-200
+									${
+										showKeycaps
+											? "bg-cyan-500/15 border border-cyan-500/35 text-cyan-300 font-bold shadow-[0_0_8px_rgba(6,182,212,0.25)] scale-105"
+											: "hidden sm:inline-block bg-white/5 border border-white/10 text-zinc-400 group-hover:text-zinc-200"
+									}
+								`}
+							>
 								{tool.shortcut}
 							</kbd>
 						</button>

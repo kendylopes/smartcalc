@@ -57,6 +57,7 @@ type Props = {
 	currentTheme: ThemeConfig;
 	allThemes: ThemeConfig[];
 	onSelectTheme: (id: ThemeId) => void;
+	onOpenThemePicker?: () => void;
 };
 
 export const TopNavigation = memo(function TopNavigation({
@@ -86,6 +87,7 @@ export const TopNavigation = memo(function TopNavigation({
 	currentTheme,
 	allThemes,
 	onSelectTheme,
+	onOpenThemePicker,
 }: Props) {
 	const { t, language, languages, setLanguage } = useI18n();
 	const [isOpen, setIsOpen] = useState(false);
@@ -111,18 +113,14 @@ export const TopNavigation = memo(function TopNavigation({
 
 	// Alternar Tela Cheia
 	const toggleFullscreen = () => {
-		try {
-			if (!document.fullscreenElement) {
-				document.documentElement.requestFullscreen();
-				setIsFullscreen(true);
-			} else {
-				if (document.exitFullscreen) {
-					document.exitFullscreen();
-				}
+		if (!document.fullscreenElement) {
+			document.documentElement.requestFullscreen().catch(() => {});
+			setIsFullscreen(true);
+		} else {
+			if (document.exitFullscreen) {
+				document.exitFullscreen().catch(() => {});
 				setIsFullscreen(false);
 			}
-		} catch (e) {
-			console.error(e);
 		}
 	};
 
@@ -141,8 +139,23 @@ export const TopNavigation = memo(function TopNavigation({
 				</span>
 			</div>
 
-			{/* Lado Direito: Ações Rápidas (Menu) */}
+			{/* Lado Direito: Ações Rápidas (Paleta de Temas + Menu) */}
 			<div className="flex items-center gap-1.5">
+				{/* Botão de Galeria de Temas Rápido */}
+				{onOpenThemePicker && (
+					<motion.button
+						type="button"
+						onClick={onOpenThemePicker}
+						whileHover={{ scale: 1.05 }}
+						whileTap={{ scale: 0.95 }}
+						aria-label="Abrir Galeria de Temas"
+						title="Galeria de Temas e Cores"
+						className="p-2 rounded-2xl border bg-white/4 text-zinc-300 border-white/8 hover:text-white hover:bg-white/8 hover:border-white/15 transition-all cursor-pointer flex items-center justify-center"
+					>
+						<Palette size={17} className={currentTheme.accentText} />
+					</motion.button>
+				)}
+
 				{/* Botão Menu Hambúrguer */}
 				<motion.button
 					type="button"
@@ -692,11 +705,25 @@ export const TopNavigation = memo(function TopNavigation({
 
 									{/* Seção 4: Temas de Cor da Calculadora */}
 									<div className="pt-2 border-t border-white/8">
-										<div className="flex items-center gap-1.5 px-1 py-1 select-none mb-1.5">
-											<Palette size={14} className="text-cyan-400" />
-											<p className="text-[11px] uppercase font-semibold text-zinc-400 tracking-wider">
-												{t.themesSection}
-											</p>
+										<div className="flex items-center justify-between px-1 py-1 select-none mb-1.5">
+											<div className="flex items-center gap-1.5">
+												<Palette size={14} className="text-cyan-400" />
+												<p className="text-[11px] uppercase font-semibold text-zinc-400 tracking-wider">
+													{t.themesSection}
+												</p>
+											</div>
+											{onOpenThemePicker && (
+												<button
+													type="button"
+													onClick={() => {
+														setIsOpen(false);
+														onOpenThemePicker();
+													}}
+													className="text-[10px] text-cyan-400 hover:text-cyan-300 font-semibold hover:underline cursor-pointer"
+												>
+													Ver Galeria
+												</button>
+											)}
 										</div>
 
 										<div className="grid grid-cols-2 sm:grid-cols-3 gap-2 p-2 bg-zinc-950/60 rounded-2xl border border-white/8">

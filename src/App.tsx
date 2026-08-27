@@ -98,6 +98,11 @@ const SplitBillModal = lazy(() =>
 		default: m.SplitBillModal,
 	})),
 );
+const ThemePickerModal = lazy(() =>
+	import("@/features/calculator/components/ThemePickerModal").then((m) => ({
+		default: m.ThemePickerModal,
+	})),
+);
 const PixDonationModal = lazy(() =>
 	import("@/features/landing/components/PixDonationModal").then((m) => ({
 		default: m.PixDonationModal,
@@ -146,6 +151,7 @@ export function App() {
 	});
 
 	const [isShortcutsOpen, setIsShortcutsOpen] = useState(false);
+	const [isThemePickerOpen, setIsThemePickerOpen] = useState(false);
 	const [isHelpOpen, setIsHelpOpen] = useState(false);
 	const [isBackupOpen, setIsBackupOpen] = useState(false);
 	const [isPixOpen, setIsPixOpen] = useState(false);
@@ -405,6 +411,7 @@ export function App() {
 						>
 							<QuickToolsPanel
 								theme={theme}
+								showKeycaps={showKeycaps}
 								onOpenScanner={handleOpenScanner}
 								onOpenComparator={handleOpenComparator}
 								onOpenAnalytics={handleOpenAnalytics}
@@ -468,6 +475,7 @@ export function App() {
 							currentTheme={theme}
 							allThemes={allThemes}
 							onSelectTheme={setTheme}
+							onOpenThemePicker={() => setIsThemePickerOpen(true)}
 						/>
 
 						{/* VISOR DISPLAY */}
@@ -781,6 +789,19 @@ export function App() {
 						onClose={() => setIsAnalyticsOpen(false)}
 						history={history}
 						theme={theme}
+						onPlayClick={playClick}
+					/>
+				)}
+
+				{isThemePickerOpen && (
+					<ThemePickerModal
+						isOpen={isThemePickerOpen}
+						onClose={() => setIsThemePickerOpen(false)}
+						currentTheme={theme}
+						allThemes={allThemes}
+						onSelectTheme={setTheme}
+						colorMode={colorMode}
+						onToggleColorMode={toggleColorMode}
 						onPlayClick={playClick}
 					/>
 				)}

@@ -262,12 +262,18 @@ export const Display = memo(function Display({
 						className="w-full overflow-x-auto overflow-y-hidden scrollbar-none flex items-center justify-end text-right whitespace-nowrap scroll-smooth"
 					>
 						{isResult ? (
-							<div className="text-3xl sm:text-4xl md:text-[2.6rem] font-light tracking-tight text-white tabular-nums select-all">
+							<motion.div
+								key={`result-${safeValue}`}
+								initial={{ scale: 0.94, opacity: 0.7, y: 2 }}
+								animate={{ scale: 1, opacity: 1, y: 0 }}
+								transition={{ type: "spring", stiffness: 450, damping: 24, mass: 0.6 }}
+								className="text-3xl sm:text-4xl md:text-[2.6rem] font-light tracking-tight text-white tabular-nums select-all drop-shadow-[0_0_20px_rgba(34,211,238,0.2)]"
+							>
 								{formatNumberPtBR(safeValue)}
-							</div>
+							</motion.div>
 						) : showInitialZero ? (
 							<div className="flex items-baseline justify-end text-3xl sm:text-4xl md:text-[2.6rem] font-light text-white tabular-nums">
-								<span className="font-light">0</span>
+								<span className="font-light text-zinc-400">0</span>
 								<span
 									className={`inline-block w-0.5 h-7 sm:h-9 bg-cyan-400 ml-1.5 animate-pulse rounded-full ${cursorColor}`}
 								/>
@@ -275,8 +281,11 @@ export const Display = memo(function Display({
 						) : (
 							<div className="flex items-baseline justify-end text-3xl sm:text-4xl md:text-[2.6rem] font-light text-white tabular-nums">
 								{tokens.map((token, idx) => (
-									<span
+									<motion.span
 										key={`${token.raw}-${idx}`}
+										initial={{ opacity: 0.6, scale: 0.98 }}
+										animate={{ opacity: 1, scale: 1 }}
+										transition={{ duration: 0.1 }}
 										className={
 											token.type === "operator"
 												? `mx-1 font-medium select-none ${operatorColor}`
@@ -284,7 +293,7 @@ export const Display = memo(function Display({
 										}
 									>
 										{token.formatted}
-									</span>
+									</motion.span>
 								))}
 								<span
 									className={`inline-block w-0.5 h-7 sm:h-9 bg-cyan-400 ml-1.5 animate-pulse rounded-full ${cursorColor}`}

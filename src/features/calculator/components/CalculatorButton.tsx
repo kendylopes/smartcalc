@@ -167,16 +167,18 @@ export const CalculatorButton = memo(function CalculatorButton({
 			onClick={handleClick}
 			disabled={disabled}
 			aria-label={getAriaLabel()}
-			whileTap={disabled ? {} : { scale: 0.96 }}
+			whileHover={disabled ? {} : { scale: 1.02, y: -1 }}
+			whileTap={disabled ? {} : { scale: 0.94, y: 1 }}
 			transition={{
 				type: "spring",
-				stiffness: 450,
-				damping: 25,
-				mass: 0.6,
+				stiffness: 500,
+				damping: 28,
+				mass: 0.5,
 			}}
 			className={`
 				group
 				relative
+				overflow-hidden
 				${isCompact ? "h-11 sm:h-12 rounded-[1.2rem] text-sm font-medium" : "h-15 sm:h-18 rounded-[1.6rem] sm:rounded-[1.8rem] text-xl sm:text-2xl font-light"}
 				w-full
 				flex
@@ -187,14 +189,23 @@ export const CalculatorButton = memo(function CalculatorButton({
 				focus:outline-none
 				transform-gpu
 				transition-all
-				duration-100
+				duration-150
 				${getNeuClasses()}
 				${disabled ? "opacity-35 cursor-not-allowed" : "cursor-pointer"}
 			`}
 		>
+			{/* Reflexo Especular de Vidro Cristal (Sheen de Luz Superior) */}
+			<div className="absolute inset-x-0 top-0 h-[48%] rounded-t-[inherit] bg-gradient-to-b from-white/18 via-white/6 to-transparent pointer-events-none opacity-80 group-hover:opacity-100 transition-opacity duration-200" />
+
+			{/* Micro-brilho radial de refração no clique */}
+			<div className="absolute inset-0 rounded-[inherit] bg-radial from-white/10 to-transparent opacity-0 group-active:opacity-100 pointer-events-none transition-opacity duration-150" />
+
+			{/* Borda interna de refração fina */}
+			<div className="absolute inset-px rounded-[calc(1.6rem-1px)] sm:rounded-[calc(1.8rem-1px)] border border-white/10 pointer-events-none opacity-60 group-hover:opacity-100 transition-opacity duration-200" />
+
 			{/* Legenda visual do atalho de teclado (Keycap Pro) */}
 			{showKeycap && keycap && (
-				<span className="absolute top-1.5 right-2 text-[9px] font-mono text-zinc-500 opacity-60 group-hover:opacity-100 transition-opacity pointer-events-none select-none">
+				<span className="absolute top-1.5 right-2 text-[9px] font-mono text-zinc-400 group-hover:text-zinc-200 opacity-60 group-hover:opacity-100 transition-opacity pointer-events-none select-none z-20">
 					{keycap}
 				</span>
 			)}
@@ -209,7 +220,7 @@ export const CalculatorButton = memo(function CalculatorButton({
 					justify-center
 					${isCompact ? "font-normal" : "font-light tracking-tight"}
 				`}
-				animate={isButtonActive ? { scale: 0.96 } : { scale: 1 }}
+				animate={isButtonActive ? { scale: 0.94 } : { scale: 1 }}
 				transition={{ duration: 0.08 }}
 			>
 				{icon ?? getDisplayLabel(label)}
