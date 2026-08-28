@@ -3,6 +3,7 @@ import { ArrowRight, Check, Mic, Minus, Plus, Search, ShoppingBag, X } from "luc
 import { memo, useEffect, useMemo, useState } from "react";
 import type { ThemeConfig } from "../hooks/useThemes";
 import { useVoiceInput } from "../hooks/useVoiceInput";
+import type { HistoryItem } from "../types/history";
 import {
 	formatCurrencyInput,
 	formatInitialPrice,
@@ -70,6 +71,7 @@ type Props = {
 	initialUnitPrice?: string;
 	onClose: () => void;
 	onConfirm: (unitPrice: string, quantity: number, productName?: string) => void;
+	history?: HistoryItem[];
 	theme?: ThemeConfig;
 	onPlayClick?: () => void;
 	onPlayConfirm?: () => void;
@@ -80,6 +82,7 @@ export const ProductNameModal = memo(function ProductNameModal({
 	initialUnitPrice = "",
 	onClose,
 	onConfirm,
+	history = [],
 	theme,
 	onPlayClick,
 	onPlayConfirm,
@@ -88,6 +91,31 @@ export const ProductNameModal = memo(function ProductNameModal({
 	const [unitPrice, setUnitPrice] = useState("");
 	const [quantity, setQuantity] = useState(1);
 	const [selectedCategory, setSelectedCategory] = useState<string>("Todos");
+	const [hideInCart, setHideInCart] = useState(true);
+
+	// Detecta os produtos e quantidades já adicionados na conta atual
+	const cartItemCounts = useMemo(() => {
+		const counts = new Map<string, number>();
+		if (!history || !Array.isArray(history)) return counts;
+		for (const h of history) {
+			const name = h.productName?.toLowerCase().trim();
+			if (name && name !== "item" && name !== "sem nome" && name !== "cálculo geral") {
+				counts.set(name, (counts.get(name) || 0) + (h.quantity || 1));
+			}
+		}
+		return counts;
+	}, [history]);
+
+	// Total de itens sugeridos que já estão no carrinho
+	const inCartCount = useMemo(() => {
+		let total = 0;
+		for (const prod of COMMON_PRODUCTS) {
+			if (cartItemCounts.has(prod.name.toLowerCase())) {
+				total++;
+			}
+		}
+		return total;
+	}, [cartItemCounts]);
 
 	useEffect(() => {
 		if (isOpen) {
@@ -147,9 +175,14 @@ export const ProductNameModal = memo(function ProductNameModal({
 				productName.trim() === "" ||
 				prod.name.toLowerCase().includes(productName.toLowerCase()) ||
 				prod.category.toLowerCase().includes(productName.toLowerCase());
-			return matchesCategory && matchesSearch;
+
+			const isInCart = cartItemCounts.has(prod.name.toLowerCase());
+			// Se o usuário está buscando texto manualmente, mostra tudo. Caso contrário, respeita o toggle hideInCart
+			const matchesCartFilter = !hideInCart || !isInCart || productName.trim() !== "";
+
+			return matchesCategory && matchesSearch && matchesCartFilter;
 		});
-	}, [selectedCategory, productName]);
+	}, [selectedCategory, productName, hideInCart, cartItemCounts]);
 
 	const handleIncrement = () => {
 		onPlayClick?.();
@@ -316,8 +349,8 @@ export const ProductNameModal = memo(function ProductNameModal({
 								</div>
 							</div>
 
-							{/* Categorias em Chips */}
-							<div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
+							{/* Categorias em Chips com rolagem suave */}
+							<div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none scroll-smooth">
 								{categories.map((cat) => {
 									const isSelected = selectedCategory === cat;
 									return (
@@ -329,17 +362,18 @@ export const ProductNameModal = memo(function ProductNameModal({
 												setSelectedCategory(cat);
 											}}
 											className={`
-												px-2.5
-												py-0.5
+												px-3
+												py-1
 												rounded-full
-												text-[10px]
-												font-medium
+												text-[11px]
+												font-semibold
 												whitespace-nowrap
 												transition-all
 												cursor-pointer
+												active:scale-95
 												${
 													isSelected
-														? "bg-cyan-500/20 text-cyan-300 border border-cyan-500/40"
+														? "bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 shadow-[0_0_8px_rgba(6,182,212,0.2)]"
 														: "bg-white/4 text-zinc-400 hover:text-zinc-200 border border-white/6 hover:bg-white/8"
 												}
 											`}
@@ -350,11 +384,33 @@ export const ProductNameModal = memo(function ProductNameModal({
 								})}
 							</div>
 
-							{/* Grade Compacta de Sugestões */}
-							<div className="max-h-32 overflow-y-auto pr-1 space-y-1 scrollbar-thin scrollbar-thumb-white/10">
-								<div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5">
+							{/* Indicador de Itens Ocultados do Carrinho */}
+							{inCartCount > 0 && productName.trim() === "" && (
+								<div className="flex items-center justify-between px-1 text-[11px] text-zinc-400 select-none">
+									<span className="flex items-center gap-1.5">
+										<span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+										{hideInCart
+											? `${inCartCount} ${inCartCount === 1 ? "item já no carrinho ocultado" : "itens já no carrinho ocultados"}`
+											: "Mostrando todos os itens"}
+									</span>
+									<button
+										type="button"
+										onClick={() => setHideInCart((prev) => !prev)}
+										className="text-cyan-400 hover:text-cyan-300 font-semibold hover:underline cursor-pointer"
+									>
+										{hideInCart ? "Mostrar todos" : "Ocultar adicionados"}
+									</button>
+								</div>
+							)}
+
+							{/* Sugestões em Chips Fluídos (Flex Wrap) — ZERO corte de texto */}
+							<div className="max-h-34 overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-white/10">
+								<div className="flex flex-wrap gap-1.5">
 									{filteredProducts.map((prod) => {
 										const isSelected = productName.toLowerCase() === prod.name.toLowerCase();
+										const inCartQty = cartItemCounts.get(prod.name.toLowerCase()) || 0;
+										const isInCart = inCartQty > 0;
+
 										return (
 											<button
 												key={prod.name}
@@ -364,7 +420,8 @@ export const ProductNameModal = memo(function ProductNameModal({
 													setProductName(prod.name);
 												}}
 												className={`
-													p-2
+													px-2.5
+													py-1.5
 													rounded-xl
 													border
 													text-left
@@ -373,19 +430,26 @@ export const ProductNameModal = memo(function ProductNameModal({
 													gap-1.5
 													transition-all
 													cursor-pointer
+													whitespace-nowrap
+													shrink-0
 													active:scale-95
 													${
 														isSelected
-															? "bg-cyan-500/25 border-cyan-500/50 text-cyan-200 shadow-[0_0_10px_rgba(6,182,212,0.25)]"
-															: "bg-white/4 border-white/6 hover:border-white/12 hover:bg-white/8 text-zinc-300 hover:text-white"
+															? "bg-cyan-500/25 border-cyan-500/50 text-cyan-200 shadow-[0_0_10px_rgba(6,182,212,0.25)] ring-1 ring-cyan-400/40"
+															: isInCart
+																? "bg-white/2 border-white/5 text-zinc-500 hover:text-zinc-300 hover:border-white/15"
+																: "bg-white/4 border-white/6 hover:border-white/15 hover:bg-white/8 text-zinc-300 hover:text-white"
 													}
 												`}
 											>
 												<span className="text-sm select-none">{prod.icon}</span>
-												<span className="text-[11px] font-semibold truncate flex-1">
-													{prod.name}
-												</span>
-												{isSelected && <Check size={11} className="text-cyan-400 shrink-0" />}
+												<span className="text-xs font-semibold">{prod.name}</span>
+												{isInCart && (
+													<span className="text-[9px] px-1.5 py-0.2 rounded-full bg-white/6 text-zinc-400 font-mono">
+														{inCartQty}x
+													</span>
+												)}
+												{isSelected && <Check size={12} className="text-cyan-400 shrink-0" />}
 											</button>
 										);
 									})}

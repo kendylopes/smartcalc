@@ -685,6 +685,7 @@ export function App() {
 						onConfirm={(unitPrice, qty, productName) => {
 							applyQuantity(unitPrice, qty, productName);
 						}}
+						history={history}
 						theme={theme}
 						onPlayClick={playClick}
 						onPlayConfirm={playScannerBeep}

@@ -83,5 +83,5 @@ src/
 ---
 
 ## 📍 6. Onde Paramos (Checkpoint Atual)
-* **Última Ação:** Correção do botão da seção de recursos para abrir diretamente o **Dashboard de Estatísticas & Gráfico de Gastos por Categoria** (`SpendingDashboardModal`).
+* **Última Ação:** Implementação de **Chips Fluídos (Flex Wrap)** com zero corte de texto e **Filtro Inteligente de Ocultar Itens já no Carrinho** no modal de adicionar produtos (`ProductNameModal`).
 * **Próximo Passo Recomendado:** Iniciar a construção da **Calculadora de Salário Líquido (CLT vs. PJ)** ou **Simulador SAC vs. Price**.
