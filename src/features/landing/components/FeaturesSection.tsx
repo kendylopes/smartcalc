@@ -22,6 +22,7 @@ type Props = {
 	onOpenQuantity: () => void;
 	onOpenFuel?: () => void;
 	onOpenDiscount?: () => void;
+	onOpenAnalytics?: () => void;
 };
 
 export const FeaturesSection = memo(function FeaturesSection({
@@ -32,6 +33,7 @@ export const FeaturesSection = memo(function FeaturesSection({
 	onOpenQuantity,
 	onOpenFuel,
 	onOpenDiscount,
+	onOpenAnalytics,
 }: Props) {
 	const features = [
 		{
@@ -119,11 +121,8 @@ export const FeaturesSection = memo(function FeaturesSection({
 			icon: <PieChart size={22} />,
 			badge: "Análise Visual",
 			color: "text-yellow-400 bg-yellow-500/10 border-yellow-500/20",
-			action: () => {
-				const el = document.getElementById("calculadora");
-				el?.scrollIntoView({ behavior: "smooth" });
-			},
-			actionLabel: "Ver no Histórico",
+			action: onOpenAnalytics,
+			actionLabel: "Ver Gráficos & Estatísticas",
 		},
 	];
 

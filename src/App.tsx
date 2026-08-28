@@ -653,6 +653,7 @@ export function App() {
 					onOpenQuantity={handleOpenQuantity}
 					onOpenFuel={handleOpenFuel}
 					onOpenDiscount={handleOpenDiscount}
+					onOpenAnalytics={handleOpenAnalytics}
 				/>
 				<SavingsGuideSection />
 				<WhyUsSection theme={theme} />

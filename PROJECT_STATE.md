@@ -83,5 +83,5 @@ src/
 ---
 
 ## 📍 6. Onde Paramos (Checkpoint Atual)
-* **Última Ação:** Implementação e deploy com sucesso do pacote de melhorias visuais e PWA offline (Commit `3be984e`).
+* **Última Ação:** Correção do botão da seção de recursos para abrir diretamente o **Dashboard de Estatísticas & Gráfico de Gastos por Categoria** (`SpendingDashboardModal`).
 * **Próximo Passo Recomendado:** Iniciar a construção da **Calculadora de Salário Líquido (CLT vs. PJ)** ou **Simulador SAC vs. Price**.
