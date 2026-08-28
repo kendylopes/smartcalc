@@ -224,7 +224,7 @@ export const ProductNameModal = memo(function ProductNameModal({
 						className="
 							relative
 							w-full
-							max-w-md
+							max-w-lg
 							overflow-hidden
 							rounded-[2.2rem]
 							border
@@ -349,8 +349,8 @@ export const ProductNameModal = memo(function ProductNameModal({
 								</div>
 							</div>
 
-							{/* Categorias em Chips com rolagem suave */}
-							<div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none scroll-smooth">
+							{/* Categorias em Chips com Flex Wrap — ZERO corte de texto */}
+							<div className="flex flex-wrap items-center gap-1.5 py-0.5">
 								{categories.map((cat) => {
 									const isSelected = selectedCategory === cat;
 									return (
@@ -362,19 +362,18 @@ export const ProductNameModal = memo(function ProductNameModal({
 												setSelectedCategory(cat);
 											}}
 											className={`
-												px-3
+												px-2.5
 												py-1
 												rounded-full
 												text-[11px]
 												font-semibold
-												whitespace-nowrap
 												transition-all
 												cursor-pointer
 												active:scale-95
 												${
 													isSelected
-														? "bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 shadow-[0_0_8px_rgba(6,182,212,0.2)]"
-														: "bg-white/4 text-zinc-400 hover:text-zinc-200 border border-white/6 hover:bg-white/8"
+														? "bg-cyan-500/25 text-cyan-200 border border-cyan-500/50 shadow-[0_0_8px_rgba(6,182,212,0.25)] ring-1 ring-cyan-400/30"
+														: "bg-white/4 text-zinc-400 hover:text-zinc-200 border border-white/6 hover:bg-white/8 hover:border-white/12"
 												}
 											`}
 										>

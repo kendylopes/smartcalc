@@ -83,5 +83,5 @@ src/
 ---
 
 ## 📍 6. Onde Paramos (Checkpoint Atual)
-* **Última Ação:** Implementação de **Chips Fluídos (Flex Wrap)** com zero corte de texto e **Filtro Inteligente de Ocultar Itens já no Carrinho** no modal de adicionar produtos (`ProductNameModal`).
+* **Última Ação:** Correção das categorias no modal de produtos para **Flex Wrap**, eliminando cortes em "Açougue", "Hortifruti" e todas as categorias.
 * **Próximo Passo Recomendado:** Iniciar a construção da **Calculadora de Salário Líquido (CLT vs. PJ)** ou **Simulador SAC vs. Price**.
