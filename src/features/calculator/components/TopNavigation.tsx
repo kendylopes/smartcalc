@@ -126,7 +126,7 @@ export const TopNavigation = memo(function TopNavigation({
 
 	return (
 		<div
-			className="w-full flex items-center justify-between px-1 mb-3.5 select-none relative"
+			className="w-full flex items-center justify-between px-1 mb-2 sm:mb-3.5 select-none relative"
 			ref={menuRef}
 		>
 			{/* Lado Esquerdo: Identificação Sutil de Status */}

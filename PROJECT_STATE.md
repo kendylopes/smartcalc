@@ -83,5 +83,5 @@ src/
 ---
 
 ## 📍 6. Onde Paramos (Checkpoint Atual)
-* **Última Ação:** Correção das categorias no modal de produtos para **Flex Wrap**, eliminando cortes em "Açougue", "Hortifruti" e todas as categorias.
+* **Última Ação:** Otimização da altura e proporções no mobile para **encaixe 100% na tela (sem rolagem)** e ocultação de legendas de teclado físico em dispositivos touch.
 * **Próximo Passo Recomendado:** Iniciar a construção da **Calculadora de Salário Líquido (CLT vs. PJ)** ou **Simulador SAC vs. Price**.

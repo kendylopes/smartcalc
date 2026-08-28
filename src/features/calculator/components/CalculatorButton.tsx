@@ -179,7 +179,7 @@ export const CalculatorButton = memo(function CalculatorButton({
 				group
 				relative
 				overflow-hidden
-				${isCompact ? "h-11 sm:h-12 rounded-[1.2rem] text-sm font-medium" : "h-15 sm:h-18 rounded-[1.6rem] sm:rounded-[1.8rem] text-xl sm:text-2xl font-light"}
+				${isCompact ? "h-10 sm:h-12 rounded-[1.1rem] sm:rounded-[1.2rem] text-sm font-medium" : "h-13 xs:h-14 sm:h-17.5 rounded-[1.3rem] sm:rounded-[1.8rem] text-xl sm:text-2xl font-light"}
 				w-full
 				flex
 				items-center
@@ -201,11 +201,11 @@ export const CalculatorButton = memo(function CalculatorButton({
 			<div className="absolute inset-0 rounded-[inherit] bg-radial from-white/10 to-transparent opacity-0 group-active:opacity-100 pointer-events-none transition-opacity duration-150" />
 
 			{/* Borda interna de refração fina */}
-			<div className="absolute inset-px rounded-[calc(1.6rem-1px)] sm:rounded-[calc(1.8rem-1px)] border border-white/10 pointer-events-none opacity-60 group-hover:opacity-100 transition-opacity duration-200" />
+			<div className="absolute inset-px rounded-[calc(1.3rem-1px)] sm:rounded-[calc(1.8rem-1px)] border border-white/10 pointer-events-none opacity-60 group-hover:opacity-100 transition-opacity duration-200" />
 
-			{/* Legenda visual do atalho de teclado (Keycap Pro) */}
+			{/* Legenda visual do atalho de teclado (Keycap Pro) - Apenas em desktop com teclado físico */}
 			{showKeycap && keycap && (
-				<span className="absolute top-1.5 right-2 text-[9px] font-mono text-zinc-400 group-hover:text-zinc-200 opacity-60 group-hover:opacity-100 transition-opacity pointer-events-none select-none z-20">
+				<span className="hidden md:block absolute top-1.5 right-2 text-[9px] font-mono text-zinc-400 group-hover:text-zinc-200 opacity-60 group-hover:opacity-100 transition-opacity pointer-events-none select-none z-20">
 					{keycap}
 				</span>
 			)}

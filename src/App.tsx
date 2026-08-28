@@ -396,7 +396,7 @@ export function App() {
 			{/* HERO SECTION: CALCULADORA AO VIVO */}
 			<main
 				id="calculadora"
-				className="w-full flex flex-col items-center justify-center py-6 sm:py-10 px-2 sm:px-4 md:px-6"
+				className="w-full flex flex-col items-center justify-center py-2 sm:py-8 px-2 sm:px-4 md:px-6"
 			>
 				{/* CONTAINER PRINCIPAL DA CALCULADORA */}
 				<div className="w-full max-w-7xl flex flex-col lg:flex-row items-center lg:items-stretch justify-center gap-4 sm:gap-6">
@@ -433,10 +433,10 @@ export function App() {
 							relative
 							w-full
 							overflow-hidden
-							rounded-[2.4rem]
+							rounded-[2.2rem]
 							sm:rounded-[2.6rem]
 							neu-chassis
-							p-4
+							p-3.5
 							sm:p-5
 							flex
 							flex-col
@@ -505,7 +505,7 @@ export function App() {
 						/>
 
 						{/* BARRA DE AÇÃO RÁPIDA: ITEM & QUANTIDADE (MERCADO) */}
-						<div className="my-2.5 px-0.5">
+						<div className="my-1.5 sm:my-2.5 px-0.5">
 							<button
 								type="button"
 								onClick={() => {
@@ -520,8 +520,8 @@ export function App() {
 									items-center
 									justify-center
 									gap-2
-									py-2.5
-									px-4
+									py-2 sm:py-2.5
+									px-3 sm:px-4
 									rounded-2xl
 									bg-white/5
 									hover:bg-white/10
@@ -583,7 +583,7 @@ export function App() {
 						</AnimatePresence>
 
 						{/* TECLADO NUMÉRICO PRINCIPAL */}
-						<div className="grid grid-cols-4 gap-2 sm:gap-2.5">
+						<div className="grid grid-cols-4 gap-1.5 sm:gap-2.5">
 							{BASIC_BUTTONS.map((btn) => (
 								<CalculatorButton
 									key={btn}

@@ -80,7 +80,7 @@ export const Display = memo(function Display({
 	return (
 		<div
 			className={`
-				mb-3
+				mb-2 sm:mb-3
 				w-full
 				transition-all
 				duration-200
@@ -95,23 +95,23 @@ export const Display = memo(function Display({
 				className="
 					group/display
 					cursor-pointer
-					h-40 sm:h-44
+					h-32 xs:h-34 sm:h-44
 					w-full
 					flex
 					flex-col
 					justify-between
 					overflow-hidden
 					relative
-					px-4
-					py-3
-					rounded-[1.8rem]
+					px-3.5 sm:px-4
+					py-2.5 sm:py-3
+					rounded-[1.5rem] sm:rounded-[1.8rem]
 					neu-display
 					transition-all
 					duration-150
 				"
 			>
 				{/* Borda interna técnica de alta precisão */}
-				<div className="absolute inset-px rounded-[calc(1.8rem-1px)] border border-white/5 pointer-events-none" />
+				<div className="absolute inset-px rounded-[calc(1.5rem-1px)] sm:rounded-[calc(1.8rem-1px)] border border-white/5 pointer-events-none" />
 
 				{/* Top bar do display: Botão de Histórico + Indicador de Copiar */}
 				<div className="w-full flex items-center justify-between z-10">
