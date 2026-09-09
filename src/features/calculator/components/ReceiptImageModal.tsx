@@ -100,7 +100,9 @@ export const ReceiptImageModal = memo(function ReceiptImageModal({
 		ctx.textAlign = "left";
 		ctx.fillText("ITEM / PRODUTO", 36, 160);
 		ctx.textAlign = "center";
-		ctx.fillText("QTD", 360, 160);
+		ctx.fillText("QTD", 285, 160);
+		ctx.textAlign = "right";
+		ctx.fillText("UNIT (R$)", 440, 160);
 		ctx.textAlign = "right";
 		ctx.fillText("TOTAL (R$)", width - 36, 160);
 
@@ -127,9 +129,9 @@ export const ReceiptImageModal = memo(function ReceiptImageModal({
 					ctx.fillRect(32, yPos - 22, width - 64, rowHeight);
 				}
 
-				// Nome do produto
+				// Nome do produto (truncado se necessário para não colidir com QTD)
 				const name = item.productName || item.tag || `Cálculo #${history.length - index}`;
-				const cleanName = name.length > 24 ? `${name.substring(0, 22)}...` : name;
+				const cleanName = name.length > 20 ? `${name.substring(0, 18)}...` : name;
 
 				ctx.fillStyle = "#f4f4f5";
 				ctx.font = "13px monospace";
@@ -137,12 +139,20 @@ export const ReceiptImageModal = memo(function ReceiptImageModal({
 				ctx.fillText(cleanName, 36, yPos);
 
 				// Quantidade
+				const qty = item.quantity || 1;
 				ctx.fillStyle = "#a1a1aa";
 				ctx.textAlign = "center";
-				ctx.fillText(`${item.quantity || 1}x`, 360, yPos);
+				ctx.fillText(`${qty}x`, 285, yPos);
+
+				// Preço Unitário
+				const itemTotal = Number(item.result) || 0;
+				const unitPrice =
+					item.unitPrice !== undefined ? item.unitPrice : itemTotal / (item.quantity || 1);
+				ctx.fillStyle = "#93c5fd";
+				ctx.textAlign = "right";
+				ctx.fillText(formatNumberPtBR(unitPrice.toFixed(2)), 440, yPos);
 
 				// Preço Total do item
-				const itemTotal = Number(item.result) || 0;
 				ctx.fillStyle = "#34d399";
 				ctx.font = "bold 13px monospace";
 				ctx.textAlign = "right";

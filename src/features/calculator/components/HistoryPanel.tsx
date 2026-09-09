@@ -94,14 +94,13 @@ export const HistoryPanel = memo(function HistoryPanel({
 			const numRes = Number(item.result) || 0;
 			totalSum += numRes;
 
-			const name = item.productName || "Sem nome";
-			if (item.unitPrice || item.quantity) {
-				const unit = formatNumberPtBR(String(item.unitPrice || item.result));
-				const qty = item.quantity || 1;
-				const res = formatNumberPtBR(item.result);
-				return `${idx + 1}. *${name}*: R$ ${unit} × qtd ${qty} = R$ ${res} +`;
-			}
-			return `${idx + 1}. ${formatDisplay(item.expression)} = R$ ${formatNumberPtBR(item.result)} +`;
+			const name = item.productName || item.tag || `Item #${history.length - idx}`;
+			const qty = item.quantity || 1;
+			const unitPrice = item.unitPrice !== undefined ? item.unitPrice : numRes / qty;
+			const unitStr = formatNumberPtBR(unitPrice.toFixed(2));
+			const totalStr = formatNumberPtBR(numRes.toFixed(2));
+
+			return `${idx + 1}. *${name}* — ${qty} un × R$ ${unitStr} = *R$ ${totalStr}*`;
 		});
 
 		const msg = `🛒 *CUPOM DE COMPRAS — SMARTCALC*
@@ -125,10 +124,17 @@ _Calculado via SmartCalc_`;
 			.map((item, idx) => {
 				const productPart = item.productName ? ` [${item.productName}]` : "";
 				const tagPart = item.tag ? ` {${item.tag}}` : "";
+				const numRes = Number(item.result) || 0;
+				const qty = item.quantity || 1;
+				const unitPrice = item.unitPrice !== undefined ? item.unitPrice : numRes / qty;
+				const priceDetail =
+					item.productName || item.unitPrice || item.quantity
+						? ` (${qty} un × R$ ${formatNumberPtBR(unitPrice.toFixed(2))})`
+						: "";
 				const datePart = item.timestamp
 					? ` (${new Date(item.timestamp).toLocaleString("pt-BR")})`
 					: "";
-				return `${idx + 1}.${productPart}${tagPart} ${formatDisplay(item.expression)} = ${formatNumberPtBR(item.result)}${datePart}`;
+				return `${idx + 1}.${productPart}${tagPart} ${formatDisplay(item.expression)} = R$ ${formatNumberPtBR(item.result)}${priceDetail}${datePart}`;
 			})
 			.join("\n");
 
@@ -157,9 +163,11 @@ _Calculado via SmartCalc_`;
 				const prod = (item.productName || "").replace(/;/g, ",");
 				const tag = (item.tag || "").replace(/;/g, ",");
 				const qty = item.quantity || 1;
-				const unit = item.unitPrice ? formatNumberPtBR(String(item.unitPrice)) : "";
+				const numRes = Number(item.result) || 0;
+				const unitPrice = item.unitPrice !== undefined ? item.unitPrice : numRes / qty;
+				const unit = formatNumberPtBR(unitPrice.toFixed(2));
 				const expr = formatDisplay(item.expression).replace(/;/g, ",");
-				const res = formatNumberPtBR(item.result);
+				const res = formatNumberPtBR(numRes.toFixed(2));
 				return `${idx + 1};${dateStr};${timeStr};"${prod}";"${tag}";${qty};"${unit}";"${expr}";"${res}"`;
 			})
 			.join("\n");
@@ -446,13 +454,20 @@ _Calculado via SmartCalc_`;
 									className="text-left outline-none focus-visible:ring-1 focus-visible:ring-cyan-400 rounded-xl p-0.5 cursor-pointer"
 								>
 									{item.productName || item.unitPrice ? (
-										<p className="text-xs text-zinc-300 font-mono truncate max-w-full">
-											<span className="font-bold text-zinc-100">
+										<div className="space-y-0.5">
+											<p className="text-xs text-zinc-200 font-mono truncate max-w-full font-medium">
 												{item.productName || "Sem nome"}
-											</span>
-											: R$ {formatNumberPtBR(String(item.unitPrice || item.result))} × qtd{" "}
-											{item.quantity || 1}
-										</p>
+											</p>
+											<p className="text-[11px] text-zinc-400 font-mono">
+												{item.quantity || 1} un × R${" "}
+												{formatNumberPtBR(
+													(item.unitPrice !== undefined
+														? item.unitPrice
+														: (Number(item.result) || 0) / (item.quantity || 1)
+													).toFixed(2),
+												)}
+											</p>
+										</div>
 									) : (
 										<p className="text-[11px] text-zinc-400 font-mono truncate max-w-full">
 											{formatDisplay(item.expression)}
