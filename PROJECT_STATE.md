@@ -83,5 +83,5 @@ src/
 ---
 
 ## 📍 6. Onde Paramos (Checkpoint Atual)
-* **Última Ação:** Atualização completa do **Cupom Fiscal Digital (PNG)** e das exportações de histórico (WhatsApp, TXT, CSV e cards da lista): inserção da coluna e detalhamento de **Preço Unitário (`UNIT (R$)`)** e **Valor Total (`TOTAL (R$)`)** para cada produto e cálculo com perfeita harmonia visual no Canvas e no WhatsApp.
+* **Última Ação:** Implementado foco automático do cursor no campo **"1. Nome do Produto (opcional)"** ao abrir os modais de Item/Supermercado e Quantidade (`ProductNameModal` e `QuantityModal`), permitindo digitação instantânea sem necessidade de clique manual.
 * **Próximo Passo Recomendado:** Iniciar a construção da **Calculadora de Salário Líquido (CLT vs. PJ)** ou **Simulador SAC vs. Price**.

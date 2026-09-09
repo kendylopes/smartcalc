@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, Check, Mic, Minus, Plus, Search, ShoppingBag, X } from "lucide-react";
-import { memo, useEffect, useMemo, useState } from "react";
+import { memo, useEffect, useMemo, useRef, useState } from "react";
 import type { ThemeConfig } from "../hooks/useThemes";
 import { useVoiceInput } from "../hooks/useVoiceInput";
 import type { HistoryItem } from "../types/history";
@@ -23,47 +23,66 @@ export const COMMON_PRODUCTS: ProductPreset[] = [
 	{ name: "Feijão", icon: "🫘", category: "Mercearia" },
 	{ name: "Café", icon: "☕", category: "Mercearia" },
 	{ name: "Açúcar", icon: "🧂", category: "Mercearia" },
+	{ name: "Sal", icon: "🧂", category: "Mercearia" },
 	{ name: "Óleo", icon: "🍾", category: "Mercearia" },
+	{ name: "Azeite", icon: "🫒", category: "Mercearia" },
+	{ name: "Vinagre", icon: "🍶", category: "Mercearia" },
+	{ name: "Farinha", icon: "🌾", category: "Mercearia" },
 	{ name: "Macarrão", icon: "🍝", category: "Mercearia" },
 	{ name: "Molho de Tomate", icon: "🥫", category: "Mercearia" },
-	{ name: "Biscoito", icon: "🍪", category: "Mercearia" },
+	{ name: "Milho / Ervilha", icon: "🌽", category: "Mercearia" },
+	{ name: "Sardinha / Atum", icon: "🐟", category: "Mercearia" },
+	{ name: "Biscoito / Bolacha", icon: "🍪", category: "Mercearia" },
+	{ name: "Pão de Forma", icon: "🍞", category: "Mercearia" },
 
-	// Laticínios e Padaria
+	// Laticínios & Frios
 	{ name: "Leite", icon: "🥛", category: "Laticínios" },
-	{ name: "Pão", icon: "🍞", category: "Padaria" },
-	{ name: "Queijo", icon: "🧀", category: "Frios" },
-	{ name: "Presunto", icon: "🥓", category: "Frios" },
 	{ name: "Manteiga", icon: "🧈", category: "Laticínios" },
-	{ name: "Ovos", icon: "🥚", category: "Mercearia" },
-	{ name: "Iogurte", icon: "🍶", category: "Laticínios" },
-
-	// Carnes e Proteínas
-	{ name: "Carne Bovina", icon: "🥩", category: "Açougue" },
-	{ name: "Frango", icon: "🍗", category: "Açougue" },
-	{ name: "Peixe", icon: "🐟", category: "Peixaria" },
-	{ name: "Linguiça", icon: "🌭", category: "Açougue" },
+	{ name: "Requeijão", icon: "🥛", category: "Laticínios" },
+	{ name: "Queijo Muçarela", icon: "🧀", category: "Laticínios" },
+	{ name: "Queijo Prato", icon: "🧀", category: "Laticínios" },
+	{ name: "Presunto", icon: "🍖", category: "Laticínios" },
+	{ name: "Iogurte", icon: "🍓", category: "Laticínios" },
+	{ name: "Creme de Leite", icon: "🥫", category: "Laticínios" },
+	{ name: "Leite Condensado", icon: "🥫", category: "Laticínios" },
 
 	// Hortifruti
 	{ name: "Banana", icon: "🍌", category: "Hortifruti" },
 	{ name: "Maçã", icon: "🍎", category: "Hortifruti" },
+	{ name: "Laranja", icon: "🍊", category: "Hortifruti" },
+	{ name: "Limão", icon: "🍋", category: "Hortifruti" },
 	{ name: "Tomate", icon: "🍅", category: "Hortifruti" },
-	{ name: "Batata", icon: "🥔", category: "Hortifruti" },
 	{ name: "Cebola", icon: "🧅", category: "Hortifruti" },
+	{ name: "Alho", icon: "🧄", category: "Hortifruti" },
+	{ name: "Batata", icon: "🥔", category: "Hortifruti" },
+	{ name: "Cenoura", icon: "🥕", category: "Hortifruti" },
 	{ name: "Alface", icon: "🥬", category: "Hortifruti" },
+	{ name: "Ovos", icon: "🥚", category: "Hortifruti" },
+
+	// Açougue
+	{ name: "Carne Moída", icon: "🥩", category: "Açougue" },
+	{ name: "Frango (Peito/Filé)", icon: "🍗", category: "Açougue" },
+	{ name: "Carne Bovina", icon: "🥩", category: "Açougue" },
+	{ name: "Linguiça", icon: "🌭", category: "Açougue" },
+	{ name: "Bacon", icon: "🥓", category: "Açougue" },
+	{ name: "Peixe / Tilápia", icon: "🐟", category: "Açougue" },
+
+	// Limpeza
+	{ name: "Detergente", icon: "🧼", category: "Limpeza" },
+	{ name: "Sabão em Pó", icon: "🫧", category: "Limpeza" },
+	{ name: "Amaciante", icon: "🌸", category: "Limpeza" },
+	{ name: "Água Sanitária", icon: "🧴", category: "Limpeza" },
+	{ name: "Desinfetante", icon: "✨", category: "Limpeza" },
+	{ name: "Esponja", icon: "🧽", category: "Limpeza" },
+	{ name: "Papel Higiênico", icon: "🧻", category: "Limpeza" },
+	{ name: "Papel Toalha", icon: "🧻", category: "Limpeza" },
+	{ name: "Saco de Lixo", icon: "🗑️", category: "Limpeza" },
 
 	// Bebidas
 	{ name: "Água Mineral", icon: "💧", category: "Bebidas" },
-	{ name: "Suco", icon: "🧃", category: "Bebidas" },
 	{ name: "Refrigerante", icon: "🥤", category: "Bebidas" },
+	{ name: "Suco", icon: "🧃", category: "Bebidas" },
 	{ name: "Cerveja", icon: "🍺", category: "Bebidas" },
-
-	// Limpeza e Higiene
-	{ name: "Detergente", icon: "🧼", category: "Limpeza" },
-	{ name: "Sabão em Pó", icon: "🧺", category: "Limpeza" },
-	{ name: "Amaciante", icon: "🧴", category: "Limpeza" },
-	{ name: "Papel Higiênico", icon: "🧻", category: "Higiene" },
-	{ name: "Sabonete", icon: "🫧", category: "Higiene" },
-	{ name: "Creme Dental", icon: "🪥", category: "Higiene" },
 ];
 
 type Props = {
@@ -87,6 +106,7 @@ export const ProductNameModal = memo(function ProductNameModal({
 	onPlayClick,
 	onPlayConfirm,
 }: Props) {
+	const nameInputRef = useRef<HTMLInputElement>(null);
 	const [productName, setProductName] = useState("");
 	const [unitPrice, setUnitPrice] = useState("");
 	const [quantity, setQuantity] = useState(1);
@@ -124,6 +144,12 @@ export const ProductNameModal = memo(function ProductNameModal({
 			setQuantity(1);
 			setProductName("");
 			setSelectedCategory("Todos");
+
+			// Posiciona o cursor diretamente no campo de nome do produto ao abrir
+			const timer = setTimeout(() => {
+				nameInputRef.current?.focus();
+			}, 60);
+			return () => clearTimeout(timer);
 		}
 	}, [isOpen, initialUnitPrice]);
 
@@ -283,6 +309,7 @@ export const ProductNameModal = memo(function ProductNameModal({
 											className="absolute left-3 text-zinc-400 pointer-events-none"
 										/>
 										<input
+											ref={nameInputRef}
 											type="text"
 											value={productName}
 											onChange={(e) => setProductName(e.target.value)}

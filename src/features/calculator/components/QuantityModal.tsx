@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, Minus, Plus, ShoppingBag, Tag, X } from "lucide-react";
-import { memo, useEffect, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import type { ThemeConfig } from "../hooks/useThemes";
 import {
 	formatCurrencyInput,
@@ -45,6 +45,7 @@ export const QuantityModal = memo(function QuantityModal({
 	onPlayClick,
 	onPlayConfirm,
 }: Props) {
+	const productNameInputRef = useRef<HTMLInputElement>(null);
 	const [productName, setProductName] = useState("");
 	const [unitPrice, setUnitPrice] = useState(initialUnitPrice || "0");
 	const [quantity, setQuantity] = useState(2);
@@ -56,6 +57,12 @@ export const QuantityModal = memo(function QuantityModal({
 			setUnitPrice(cleanPrice);
 			setQuantity(2);
 			setProductName(initialProductName || "");
+
+			// Posiciona o cursor diretamente no campo de nome do produto
+			const timer = setTimeout(() => {
+				productNameInputRef.current?.focus();
+			}, 60);
+			return () => clearTimeout(timer);
 		}
 	}, [isOpen, initialUnitPrice, initialProductName]);
 
@@ -179,6 +186,7 @@ export const QuantityModal = memo(function QuantityModal({
 								</div>
 
 								<input
+									ref={productNameInputRef}
 									type="text"
 									value={productName}
 									onChange={(e) => setProductName(e.target.value)}
