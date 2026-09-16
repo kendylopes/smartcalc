@@ -54,8 +54,9 @@ export const Display = memo(function Display({
 
 	// Mantém o final da conta sempre ancorado e visível na extrema direita (scroll horizontal)
 	useEffect(() => {
-		if (scrollRef.current) {
-			scrollRef.current.scrollLeft = scrollRef.current.scrollWidth;
+		const el = scrollRef.current;
+		if (el && (safeValue !== undefined || isResult !== undefined)) {
+			el.scrollLeft = el.scrollWidth;
 		}
 	}, [safeValue, isResult]);
 
@@ -95,6 +96,8 @@ export const Display = memo(function Display({
 				${isLimitReached ? "drop-shadow-[0_0_18px_rgba(239,68,68,0.3)]" : ""}
 			`}
 		>
+			{/* biome-ignore lint/a11y/noStaticElementInteractions: Visor contém botões internos (histórico, voz, undo/redo); não pode ser um <button> nativo */}
+			{/* biome-ignore lint/a11y/useKeyWithClickEvents: Acessibilidade de teclado e atalhos já são tratados globalmente via useKeyboard */}
 			<div
 				onClick={handleCopy}
 				onTouchStart={handleTouchStart}
@@ -344,9 +347,9 @@ export const Display = memo(function Display({
 							</div>
 						) : (
 							<div className="flex items-baseline justify-end text-3xl sm:text-4xl md:text-[2.6rem] font-light text-white tabular-nums">
-								{tokens.map((token, idx) => (
+								{tokens.map((token) => (
 									<motion.span
-										key={`${token.raw}-${idx}`}
+										key={token.id}
 										initial={{ opacity: 0.6, scale: 0.98 }}
 										animate={{ opacity: 1, scale: 1 }}
 										transition={{ duration: 0.1 }}

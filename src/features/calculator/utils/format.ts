@@ -4,6 +4,7 @@
  */
 
 export type DisplayToken = {
+	id: string;
 	type: "number" | "operator" | "parenthesis" | "other";
 	raw: string;
 	formatted: string;
@@ -64,6 +65,10 @@ export function formatNumberPtBR(numStr: string): string {
 		return `${prefix}${formattedInt},${decimalPart}`;
 	}
 
+	if (hasComma || cleanStr.endsWith(".")) {
+		return `${prefix}${formattedInt},`;
+	}
+
 	return `${prefix}${formattedInt}`;
 }
 
@@ -74,7 +79,7 @@ export function formatNumberPtBR(numStr: string): string {
 export function tokenizeDisplay(expression: string): DisplayToken[] {
 	if (!expression || expression === "undefined" || expression === "null") return [];
 	if (expression === "Error") {
-		return [{ type: "other", raw: "Error", formatted: "Erro" }];
+		return [{ id: "err_0", type: "other", raw: "Error", formatted: "Erro" }];
 	}
 
 	const tokens: DisplayToken[] = [];
@@ -87,6 +92,7 @@ export function tokenizeDisplay(expression: string): DisplayToken[] {
 		if (char === "(" || char === ")") {
 			if (currentNum) {
 				tokens.push({
+					id: `tok_${tokens.length}_${currentNum}`,
 					type: "number",
 					raw: currentNum,
 					formatted: formatNumberPtBR(currentNum),
@@ -94,6 +100,7 @@ export function tokenizeDisplay(expression: string): DisplayToken[] {
 				currentNum = "";
 			}
 			tokens.push({
+				id: `tok_${tokens.length}_${char}`,
 				type: "parenthesis",
 				raw: char,
 				formatted: char,
@@ -104,6 +111,7 @@ export function tokenizeDisplay(expression: string): DisplayToken[] {
 		if (operators.includes(char)) {
 			if (currentNum) {
 				tokens.push({
+					id: `tok_${tokens.length}_${currentNum}`,
 					type: "number",
 					raw: currentNum,
 					formatted: formatNumberPtBR(currentNum),
@@ -117,6 +125,7 @@ export function tokenizeDisplay(expression: string): DisplayToken[] {
 			if (char === "-") opSymbol = "−";
 
 			tokens.push({
+				id: `tok_${tokens.length}_${char}`,
 				type: "operator",
 				raw: char,
 				formatted: opSymbol,
@@ -129,6 +138,7 @@ export function tokenizeDisplay(expression: string): DisplayToken[] {
 
 	if (currentNum) {
 		tokens.push({
+			id: `tok_${tokens.length}_${currentNum}`,
 			type: "number",
 			raw: currentNum,
 			formatted: formatNumberPtBR(currentNum),
