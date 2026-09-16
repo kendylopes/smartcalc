@@ -14,6 +14,9 @@ type Props = {
 	openAnalytics?: () => void;
 	openScanner?: () => void;
 	openHelp?: () => void;
+	undo?: () => void;
+	redo?: () => void;
+	toggleFocusMode?: () => void;
 };
 
 export const useKeyboard = ({
@@ -30,6 +33,9 @@ export const useKeyboard = ({
 	openAnalytics,
 	openScanner,
 	openHelp,
+	undo,
+	redo,
+	toggleFocusMode,
 }: Props) => {
 	useEffect(() => {
 		const triggerActive = (keyName: string) => {
@@ -42,6 +48,31 @@ export const useKeyboard = ({
 		const handleKeyDown = (event: KeyboardEvent) => {
 			// Ignora atalhos globais se o foco estiver dentro de um campo de texto/input
 			if (event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement) {
+				return;
+			}
+
+			// Atalhos com Ctrl / Cmd: Desfazer e Refazer
+			if (event.ctrlKey || event.metaKey) {
+				if (event.key.toLowerCase() === "z") {
+					event.preventDefault();
+					if (event.shiftKey) {
+						if (redo) redo();
+					} else {
+						if (undo) undo();
+					}
+					return;
+				}
+				if (event.key.toLowerCase() === "y") {
+					event.preventDefault();
+					if (redo) redo();
+					return;
+				}
+			}
+
+			// Modo Foco com Alt+F ou Alt+M
+			if (event.altKey && (event.key.toLowerCase() === "f" || event.key.toLowerCase() === "m")) {
+				event.preventDefault();
+				if (toggleFocusMode) toggleFocusMode();
 				return;
 			}
 
@@ -172,5 +203,8 @@ export const useKeyboard = ({
 		openConverter,
 		openSplitBill,
 		openFinance,
+		undo,
+		redo,
+		toggleFocusMode,
 	]);
 };

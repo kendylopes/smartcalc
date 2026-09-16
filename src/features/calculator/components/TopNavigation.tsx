@@ -11,8 +11,10 @@ import {
 	HelpCircle,
 	LayoutDashboard,
 	Maximize,
+	Maximize2,
 	Menu,
 	Minimize,
+	Minimize2,
 	Palette,
 	Scale,
 	ScanBarcode,
@@ -50,6 +52,8 @@ type Props = {
 	onToggleCompactMode?: () => void;
 	isStudioMode?: boolean;
 	onToggleStudioMode?: () => void;
+	isFocusMode?: boolean;
+	onToggleFocusMode?: () => void;
 	showKeycaps?: boolean;
 	onToggleKeycaps?: () => void;
 	isPwaInstallable?: boolean;
@@ -81,6 +85,8 @@ export const TopNavigation = memo(function TopNavigation({
 	onToggleCompactMode,
 	isStudioMode = false,
 	onToggleStudioMode,
+	isFocusMode = false,
+	onToggleFocusMode,
 	showKeycaps = false,
 	onToggleKeycaps,
 	onInstallPwa,
@@ -139,8 +145,34 @@ export const TopNavigation = memo(function TopNavigation({
 				</span>
 			</div>
 
-			{/* Lado Direito: Ações Rápidas (Paleta de Temas + Menu) */}
+			{/* Lado Direito: Ações Rápidas (Modo Foco + Paleta de Temas + Menu) */}
 			<div className="flex items-center gap-1.5">
+				{/* Botão de Modo Foco Imersivo */}
+				{onToggleFocusMode && (
+					<motion.button
+						type="button"
+						onClick={onToggleFocusMode}
+						whileHover={{ scale: 1.05 }}
+						whileTap={{ scale: 0.95 }}
+						aria-label={isFocusMode ? "Sair do Modo Foco" : "Ativar Modo Foco Imersivo"}
+						title={
+							isFocusMode
+								? "Sair do Modo Foco (Atalho: Alt+F)"
+								: "Modo Foco Imersivo / Tela Cheia (Atalho: Alt+F)"
+						}
+						className={`
+							p-2 rounded-2xl border transition-all cursor-pointer flex items-center justify-center
+							${
+								isFocusMode
+									? "bg-cyan-500/20 text-cyan-300 border-cyan-500/40 shadow-[0_0_12px_rgba(6,182,212,0.3)]"
+									: "bg-white/4 text-zinc-300 border-white/8 hover:text-white hover:bg-white/8 hover:border-white/15"
+							}
+						`}
+					>
+						{isFocusMode ? <Minimize2 size={17} /> : <Maximize2 size={17} />}
+					</motion.button>
+				)}
+
 				{/* Botão de Galeria de Temas Rápido */}
 				{onOpenThemePicker && (
 					<motion.button
@@ -209,16 +241,19 @@ export const TopNavigation = memo(function TopNavigation({
 				{/* Modal de Opções & Configurações Perfeitamente Centralizado */}
 				<AnimatePresence>
 					{isOpen && (
-						<div
-							className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/65 backdrop-blur-md"
-							onClick={() => setIsOpen(false)}
-						>
+						<div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4">
+							{/* Backdrop overlay */}
+							<button
+								type="button"
+								aria-label="Fechar menu de opções"
+								onClick={() => setIsOpen(false)}
+								className="fixed inset-0 bg-black/65 backdrop-blur-md cursor-default border-none outline-none w-full h-full"
+							/>
 							<motion.div
 								initial={{ opacity: 0, scale: 0.94, y: 10 }}
 								animate={{ opacity: 1, scale: 1, y: 0 }}
 								exit={{ opacity: 0, scale: 0.94, y: 10 }}
 								transition={{ duration: 0.18, ease: "easeOut" }}
-								onClick={(e) => e.stopPropagation()}
 								className="
 									relative
 									w-full
@@ -481,6 +516,41 @@ export const TopNavigation = memo(function TopNavigation({
 													>
 														{isCompactMode ? t.active : t.standard}
 													</span>
+												</button>
+											)}
+
+											{/* Modo Foco Imersivo */}
+											{onToggleFocusMode && (
+												<button
+													type="button"
+													onClick={() => {
+														onToggleFocusMode();
+														setIsOpen(false);
+													}}
+													className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-zinc-200 hover:text-white hover:bg-white/8 transition-colors outline-none cursor-pointer"
+												>
+													<div className="flex items-center gap-2.5">
+														{isFocusMode ? (
+															<Minimize2 size={15} className="text-cyan-400" />
+														) : (
+															<Maximize2 size={15} className="text-cyan-400" />
+														)}
+														<span>Modo Foco Imersivo</span>
+													</div>
+													<div className="flex items-center gap-1.5">
+														<span
+															className={`text-[10px] font-semibold px-2 py-0.5 rounded-md border ${
+																isFocusMode
+																	? "bg-cyan-500/15 border-cyan-500/30 text-cyan-300"
+																	: "bg-zinc-800 border-zinc-700 text-zinc-400"
+															}`}
+														>
+															{isFocusMode ? t.active : t.standard}
+														</span>
+														<kbd className="px-1.5 py-0.5 text-[10px] font-mono text-zinc-400 rounded bg-zinc-800 border border-zinc-700">
+															Alt+F
+														</kbd>
+													</div>
 												</button>
 											)}
 

@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { Check, Copy, History, Mic, ScanBarcode } from "lucide-react";
+import { Check, Copy, History, Mic, RotateCcw, RotateCw, ScanBarcode } from "lucide-react";
 import { memo, useEffect, useMemo, useRef, useState } from "react";
 import { formatDisplay, formatNumberPtBR, tokenizeDisplay } from "../utils/format";
 
@@ -18,6 +18,10 @@ type Props = {
 	isListeningVoice?: boolean;
 	voiceTranscript?: string;
 	onOpenScanner?: () => void;
+	canUndo?: boolean;
+	canRedo?: boolean;
+	onUndo?: () => void;
+	onRedo?: () => void;
 };
 
 export const Display = memo(function Display({
@@ -35,6 +39,10 @@ export const Display = memo(function Display({
 	isListeningVoice = false,
 	voiceTranscript = "",
 	onOpenScanner,
+	canUndo = false,
+	canRedo = false,
+	onUndo,
+	onRedo,
 }: Props) {
 	const [copied, setCopied] = useState(false);
 	const scrollRef = useRef<HTMLDivElement>(null);
@@ -231,27 +239,83 @@ export const Display = memo(function Display({
 						)}
 					</div>
 
-					{/* Canto Direito: Copiar / Copiado */}
-					<div className="pointer-events-none">
-						<AnimatePresence>
-							{copied ? (
-								<motion.div
-									initial={{ opacity: 0, y: -2 }}
-									animate={{ opacity: 1, y: 0 }}
-									exit={{ opacity: 0 }}
-									transition={{ duration: 0.1 }}
-									className="flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 text-[11px] font-medium"
-								>
-									<Check size={11} />
-									<span>Copiado!</span>
-								</motion.div>
-							) : (
-								<div className="opacity-0 group-hover/display:opacity-60 transition-opacity duration-150 flex items-center gap-1 text-[11px] text-zinc-400">
-									<Copy size={11} />
-									<span>Copiar</span>
-								</div>
-							)}
-						</AnimatePresence>
+					{/* Canto Direito: Ações (Desfazer / Refazer / Copiar) */}
+					<div className="flex items-center gap-1.5 z-20">
+						{(onUndo || onRedo) && (
+							<div className="flex items-center gap-0.5 bg-white/4 border border-white/8 rounded-full p-0.5 shadow-sm">
+								{onUndo && (
+									<button
+										type="button"
+										onClick={(e) => {
+											e.stopPropagation();
+											if (canUndo) onUndo();
+										}}
+										disabled={!canUndo}
+										title="Desfazer dígito/ação (Ctrl+Z)"
+										aria-label="Desfazer ação"
+										className={`
+											p-1
+											rounded-full
+											transition-all
+											${
+												canUndo
+													? "text-zinc-300 hover:text-cyan-300 hover:bg-white/10 active:scale-95 cursor-pointer"
+													: "text-zinc-600 opacity-40 cursor-not-allowed"
+											}
+										`}
+									>
+										<RotateCcw size={12} />
+									</button>
+								)}
+								{onRedo && (
+									<button
+										type="button"
+										onClick={(e) => {
+											e.stopPropagation();
+											if (canRedo) onRedo();
+										}}
+										disabled={!canRedo}
+										title="Refazer dígito/ação (Ctrl+Y)"
+										aria-label="Refazer ação"
+										className={`
+											p-1
+											rounded-full
+											transition-all
+											${
+												canRedo
+													? "text-zinc-300 hover:text-cyan-300 hover:bg-white/10 active:scale-95 cursor-pointer"
+													: "text-zinc-600 opacity-40 cursor-not-allowed"
+											}
+										`}
+									>
+										<RotateCw size={12} />
+									</button>
+								)}
+							</div>
+						)}
+
+						{/* Copiar / Copiado */}
+						<div className="pointer-events-none">
+							<AnimatePresence>
+								{copied ? (
+									<motion.div
+										initial={{ opacity: 0, y: -2 }}
+										animate={{ opacity: 1, y: 0 }}
+										exit={{ opacity: 0 }}
+										transition={{ duration: 0.1 }}
+										className="flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 text-[11px] font-medium"
+									>
+										<Check size={11} />
+										<span>Copiado!</span>
+									</motion.div>
+								) : (
+									<div className="opacity-0 group-hover/display:opacity-60 transition-opacity duration-150 flex items-center gap-1 text-[11px] text-zinc-400">
+										<Copy size={11} />
+										<span>Copiar</span>
+									</div>
+								)}
+							</AnimatePresence>
+						</div>
 					</div>
 				</div>
 

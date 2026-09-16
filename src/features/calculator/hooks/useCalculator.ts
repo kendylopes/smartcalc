@@ -2,16 +2,15 @@ import { useCallback, useEffect, useState } from "react";
 import { evaluateExpression } from "../logic/evaluate";
 import type { HistoryItem } from "../types";
 
-export const useCalculator = () => {
-	const MAX_EXPRESSION_LENGTH = 120;
+const MAX_EXPRESSION_LENGTH = 120;
+const OPERATORS = ["+", "-", "*", "/"];
 
+export const useCalculator = () => {
 	const [value, setValue] = useState("");
 	const [preview, setPreview] = useState("");
 	const [isResult, setIsResult] = useState(false);
 	const [history, setHistory] = useState<HistoryItem[]>([]);
 	const [isLimitReached, setIsLimitReached] = useState(false);
-
-	const operators = ["+", "-", "*", "/"];
 
 	// Carregar histórico do localStorage
 	useEffect(() => {
@@ -43,7 +42,7 @@ export const useCalculator = () => {
 		if (!expression) return "";
 
 		const lastChar = expression.slice(-1);
-		if (operators.includes(lastChar)) {
+		if (OPERATORS.includes(lastChar)) {
 			return "";
 		}
 
@@ -59,6 +58,46 @@ export const useCalculator = () => {
 		}
 	}, []);
 
+	const [undoStack, setUndoStack] = useState<string[]>([]);
+	const [redoStack, setRedoStack] = useState<string[]>([]);
+
+	const recordStateForUndo = useCallback((currentVal: string) => {
+		setUndoStack((prev) => {
+			if (prev.length > 0 && prev[prev.length - 1] === currentVal) return prev;
+			const next = [...prev, currentVal];
+			return next.length > 30 ? next.slice(next.length - 30) : next;
+		});
+		setRedoStack([]);
+	}, []);
+
+	const undo = useCallback(() => {
+		setUndoStack((prevUndo) => {
+			if (prevUndo.length === 0) return prevUndo;
+			const previousVal = prevUndo[prevUndo.length - 1];
+			const newUndo = prevUndo.slice(0, -1);
+
+			setRedoStack((prevRedo) => [...prevRedo, value]);
+			setValue(previousVal);
+			setPreview(calculatePreview(previousVal));
+			setIsResult(false);
+			return newUndo;
+		});
+	}, [value, calculatePreview]);
+
+	const redo = useCallback(() => {
+		setRedoStack((prevRedo) => {
+			if (prevRedo.length === 0) return prevRedo;
+			const nextVal = prevRedo[prevRedo.length - 1];
+			const newRedo = prevRedo.slice(0, -1);
+
+			setUndoStack((prevUndo) => [...prevUndo, value]);
+			setValue(nextVal);
+			setPreview(calculatePreview(nextVal));
+			setIsResult(false);
+			return newRedo;
+		});
+	}, [value, calculatePreview]);
+
 	// Entrada de caracteres
 	const input = useCallback(
 		(val: string) => {
@@ -70,11 +109,13 @@ export const useCalculator = () => {
 				return;
 			}
 
+			recordStateForUndo(value);
+
 			const lastChar = value.slice(-1);
 
 			// Pós resultado
 			if (isResult) {
-				if (operators.includes(val)) {
+				if (OPERATORS.includes(val)) {
 					const nextVal = value + val;
 					setValue(nextVal);
 					setIsResult(false);
@@ -123,7 +164,7 @@ export const useCalculator = () => {
 			}
 
 			// Operadores (+, -, *, /)
-			if (operators.includes(val)) {
+			if (OPERATORS.includes(val)) {
 				if (value === "") {
 					if (val === "-") {
 						setValue("-");
@@ -132,7 +173,7 @@ export const useCalculator = () => {
 				}
 
 				// Evita operadores duplicados substituindo o anterior
-				if (operators.includes(lastChar)) {
+				if (OPERATORS.includes(lastChar)) {
 					if (val === "-" && lastChar !== "-") {
 						const nextVal = value + val;
 						setValue(nextVal);
@@ -151,7 +192,7 @@ export const useCalculator = () => {
 
 			// Ponto / Vírgula decimal
 			if (val === ".") {
-				if (value === "" || operators.includes(lastChar) || lastChar === "(") {
+				if (value === "" || OPERATORS.includes(lastChar) || lastChar === "(") {
 					const nextVal = `${value}0.`;
 					setValue(nextVal);
 					setPreview(calculatePreview(nextVal));
@@ -168,20 +209,24 @@ export const useCalculator = () => {
 			setValue(nextVal);
 			setPreview(calculatePreview(nextVal));
 		},
-		[value, isResult, calculatePreview],
+		[value, isResult, calculatePreview, recordStateForUndo],
 	);
 
 	// Limpar tudo
 	const clear = useCallback(() => {
+		if (value) {
+			recordStateForUndo(value);
+		}
 		setPreview("");
 		setValue("");
 		setIsResult(false);
-	}, []);
+	}, [value, recordStateForUndo]);
 
 	// Apagar último dígito
 	const deleteLast = useCallback(() => {
 		if (!value) return;
 
+		recordStateForUndo(value);
 		const nextVal = value.slice(0, -1);
 		setValue(nextVal);
 
@@ -191,12 +236,13 @@ export const useCalculator = () => {
 		}
 
 		setPreview(calculatePreview(nextVal));
-	}, [value, calculatePreview]);
+	}, [value, calculatePreview, recordStateForUndo]);
 
 	// Alternar sinal (+/-)
 	const toggleSign = useCallback(() => {
 		if (!value) return;
 
+		recordStateForUndo(value);
 		if (/^-?\d+(\.\d+)?$/.test(value)) {
 			const next = value.startsWith("-") ? value.slice(1) : `-${value}`;
 			setValue(next);
@@ -219,7 +265,7 @@ export const useCalculator = () => {
 			setValue(updated);
 			setPreview(calculatePreview(updated));
 		}
-	}, [value, calculatePreview]);
+	}, [value, calculatePreview, recordStateForUndo]);
 
 	// Calcular resultado final
 	const calculate = useCallback(() => {
@@ -233,6 +279,8 @@ export const useCalculator = () => {
 				setPreview("");
 				return;
 			}
+
+			recordStateForUndo(value);
 
 			setHistory((prev) => [
 				{
@@ -250,7 +298,52 @@ export const useCalculator = () => {
 		} catch {
 			setPreview("");
 		}
-	}, [value]);
+	}, [value, recordStateForUndo]);
+
+	// Atualizar item completo do histórico (nome, quantidade, preço unitário)
+	const updateHistoryItem = useCallback(
+		(
+			id: string,
+			updates: {
+				productName?: string;
+				quantity?: number;
+				unitPrice?: number;
+				tag?: string;
+			},
+		) => {
+			setHistory((prev) =>
+				prev.map((item) => {
+					if (item.id !== id) return item;
+
+					const newQty = updates.quantity !== undefined ? updates.quantity : item.quantity;
+					const newUnitPrice = updates.unitPrice !== undefined ? updates.unitPrice : item.unitPrice;
+					const newProductName =
+						updates.productName !== undefined ? updates.productName.trim() : item.productName;
+					const newTag = updates.tag !== undefined ? updates.tag : item.tag;
+
+					let newExpression = item.expression;
+					let newResult = item.result;
+
+					if (newQty !== undefined && newUnitPrice !== undefined) {
+						const subtotal = Math.round(newUnitPrice * newQty * 100) / 100;
+						newResult = String(subtotal);
+						newExpression = `${newUnitPrice} * ${newQty}`;
+					}
+
+					return {
+						...item,
+						productName: newProductName,
+						quantity: newQty,
+						unitPrice: newUnitPrice,
+						tag: newTag,
+						expression: newExpression,
+						result: newResult,
+					};
+				}),
+			);
+		},
+		[],
+	);
 
 	// Atualizar etiqueta de um item do histórico
 	const updateHistoryItemTag = useCallback((id: string, tag?: string) => {
@@ -271,6 +364,7 @@ export const useCalculator = () => {
 					setTimeout(() => setIsLimitReached(false), 1200);
 					return;
 				}
+				recordStateForUndo(value);
 				const res = String(Math.round((Math.sqrt(num) + Number.EPSILON) * 1e10) / 1e10);
 				setValue(res);
 				setPreview("");
@@ -279,7 +373,7 @@ export const useCalculator = () => {
 		} catch {
 			// Ignore
 		}
-	}, [value, isResult]);
+	}, [value, isResult, recordStateForUndo]);
 
 	const applySquare = useCallback(() => {
 		if (!value) return;
@@ -287,6 +381,7 @@ export const useCalculator = () => {
 			const currentVal = isResult ? value : evaluateExpression(value);
 			if (currentVal !== "Error") {
 				const num = Number(currentVal);
+				recordStateForUndo(value);
 				const res = String(Math.round((num * num + Number.EPSILON) * 1e10) / 1e10);
 				setValue(res);
 				setPreview("");
@@ -295,7 +390,7 @@ export const useCalculator = () => {
 		} catch {
 			// Ignore
 		}
-	}, [value, isResult]);
+	}, [value, isResult, recordStateForUndo]);
 
 	const applyInverse = useCallback(() => {
 		if (!value) return;
@@ -304,6 +399,7 @@ export const useCalculator = () => {
 			if (currentVal !== "Error") {
 				const num = Number(currentVal);
 				if (num === 0) return;
+				recordStateForUndo(value);
 				const res = String(Math.round((1 / num + Number.EPSILON) * 1e10) / 1e10);
 				setValue(res);
 				setPreview("");
@@ -312,18 +408,22 @@ export const useCalculator = () => {
 		} catch {
 			// Ignore
 		}
-	}, [value, isResult]);
+	}, [value, isResult, recordStateForUndo]);
 
 	const applyPi = useCallback(() => {
 		input("π");
 	}, [input]);
 
 	// Histórico
-	const selectFromHistory = useCallback((res: string) => {
-		setValue(res);
-		setPreview("");
-		setIsResult(false);
-	}, []);
+	const selectFromHistory = useCallback(
+		(res: string) => {
+			if (value) recordStateForUndo(value);
+			setValue(res);
+			setPreview("");
+			setIsResult(false);
+		},
+		[value, recordStateForUndo],
+	);
 
 	const deleteHistoryItem = useCallback((id: string) => {
 		setHistory((prev) => prev.filter((item) => item.id !== id));
@@ -355,6 +455,8 @@ export const useCalculator = () => {
 			const priceNum = Number(cleanPrice);
 			if (Number.isNaN(priceNum)) return;
 
+			recordStateForUndo(value);
+
 			const itemSubtotal = Math.round(priceNum * quantity * 100) / 100;
 			const itemTerm = String(itemSubtotal);
 
@@ -367,7 +469,7 @@ export const useCalculator = () => {
 				if (lastNumMatch) {
 					const lastNum = lastNumMatch[1];
 					nextVal = value.slice(0, -lastNum.length) + itemTerm;
-				} else if (operators.includes(value.slice(-1))) {
+				} else if (OPERATORS.includes(value.slice(-1))) {
 					nextVal = value + itemTerm;
 				} else {
 					nextVal = `${value}+${itemTerm}`;
@@ -395,13 +497,17 @@ export const useCalculator = () => {
 			setIsResult(false);
 			setPreview(calculatePreview(nextVal));
 		},
-		[value, isResult, calculatePreview],
+		[value, isResult, calculatePreview, recordStateForUndo],
 	);
 
 	return {
 		value,
 		preview,
 		history,
+		canUndo: undoStack.length > 0,
+		canRedo: redoStack.length > 0,
+		undo,
+		redo,
 		input,
 		calculate,
 		clear,
@@ -415,6 +521,7 @@ export const useCalculator = () => {
 		applyQuantity,
 		selectFromHistory,
 		deleteHistoryItem,
+		updateHistoryItem,
 		updateHistoryItemTag,
 		clearHistory,
 		isLimitReached,

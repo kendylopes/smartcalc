@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { AlertCircle, Edit2, Plus, Target, Trash2, X } from "lucide-react";
-import { memo, useEffect, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import type { ThemeConfig } from "../hooks/useThemes";
 import {
@@ -27,6 +27,7 @@ export const BudgetBar = memo(function BudgetBar({ currentTotal }: Props) {
 
 	const [isEditing, setIsEditing] = useState(false);
 	const [inputBudget, setInputBudget] = useState("");
+	const lastAlertRef = useRef<"normal" | "near" | "over">("normal");
 
 	useEffect(() => {
 		try {
@@ -39,6 +40,37 @@ export const BudgetBar = memo(function BudgetBar({ currentTotal }: Props) {
 			console.error(e);
 		}
 	}, [budget]);
+
+	const percent = budget && budget > 0 ? Math.min(100, (currentTotal / budget) * 100) : 0;
+	const isOverBudget = budget !== null && currentTotal > budget;
+	const isNearBudget = budget !== null && currentTotal >= budget * 0.8 && !isOverBudget;
+	const remaining = budget !== null ? Math.max(0, budget - currentTotal) : 0;
+	const exceeded = budget !== null && isOverBudget ? currentTotal - budget : 0;
+
+	// Alerta sensorial / háptico ao transitar para 80% ou estourar a meta
+	useEffect(() => {
+		if (budget === null || currentTotal <= 0) return;
+
+		let currentState: "normal" | "near" | "over" = "normal";
+		if (isOverBudget) {
+			currentState = "over";
+		} else if (isNearBudget) {
+			currentState = "near";
+		}
+
+		if (currentState !== lastAlertRef.current) {
+			if (currentState === "over") {
+				if (typeof navigator !== "undefined" && navigator.vibrate) {
+					navigator.vibrate([100, 50, 150]);
+				}
+			} else if (currentState === "near") {
+				if (typeof navigator !== "undefined" && navigator.vibrate) {
+					navigator.vibrate([50]);
+				}
+			}
+			lastAlertRef.current = currentState;
+		}
+	}, [budget, currentTotal, isOverBudget, isNearBudget]);
 
 	const handleSave = () => {
 		const num = parseCurrencyToNumber(inputBudget);
@@ -57,12 +89,6 @@ export const BudgetBar = memo(function BudgetBar({ currentTotal }: Props) {
 		setInputBudget("");
 		toast.info("Meta de gastos removida.");
 	};
-
-	const percent = budget && budget > 0 ? Math.min(100, (currentTotal / budget) * 100) : 0;
-	const isOverBudget = budget !== null && currentTotal > budget;
-	const isNearBudget = budget !== null && currentTotal >= budget * 0.8 && !isOverBudget;
-	const remaining = budget !== null ? Math.max(0, budget - currentTotal) : 0;
-	const exceeded = budget !== null && isOverBudget ? currentTotal - budget : 0;
 
 	return (
 		<div className="mb-2.5 select-none">
@@ -148,9 +174,9 @@ export const BudgetBar = memo(function BudgetBar({ currentTotal }: Props) {
 						duration-300
 						${
 							isOverBudget
-								? "bg-red-500/10 border-red-500/30"
+								? "bg-red-500/15 border-red-500/50 shadow-[0_0_22px_rgba(239,68,68,0.3)] animate-pulse"
 								: isNearBudget
-									? "bg-amber-500/10 border-amber-500/30"
+									? "bg-amber-500/10 border-amber-500/40 shadow-[0_0_14px_rgba(251,191,36,0.2)]"
 									: "bg-white/3 border-white/8"
 						}
 					`}
@@ -169,6 +195,15 @@ export const BudgetBar = memo(function BudgetBar({ currentTotal }: Props) {
 								}
 							/>
 							<span className="text-zinc-300 font-medium">Meta de Gastos</span>
+							{isOverBudget ? (
+								<span className="px-1.5 py-0.2 rounded font-mono text-[9px] font-bold bg-red-500/30 text-red-300 border border-red-500/50 shadow-xs">
+									Estourado!
+								</span>
+							) : isNearBudget ? (
+								<span className="px-1.5 py-0.2 rounded font-mono text-[9px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40">
+									80%+
+								</span>
+							) : null}
 						</div>
 
 						<div className="flex items-center gap-1.5">
@@ -202,9 +237,9 @@ export const BudgetBar = memo(function BudgetBar({ currentTotal }: Props) {
 								rounded-full
 								${
 									isOverBudget
-										? "bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)]"
+										? "bg-red-500 shadow-[0_0_12px_rgba(239,68,68,0.8)]"
 										: isNearBudget
-											? "bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.5)]"
+											? "bg-amber-400 shadow-[0_0_10px_rgba(251,191,36,0.6)]"
 											: "bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.5)]"
 								}
 							`}

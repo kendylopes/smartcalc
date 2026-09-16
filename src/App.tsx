@@ -149,6 +149,14 @@ export function App() {
 			return true;
 		}
 	});
+	const [isFocusMode, setIsFocusMode] = useState<boolean>(() => {
+		try {
+			const saved = localStorage.getItem("smartcalc-focus-mode");
+			return saved === "true";
+		} catch {
+			return false;
+		}
+	});
 
 	const [isShortcutsOpen, setIsShortcutsOpen] = useState(false);
 	const [isThemePickerOpen, setIsThemePickerOpen] = useState(false);
@@ -180,6 +188,10 @@ export function App() {
 	const {
 		value,
 		preview,
+		canUndo,
+		canRedo,
+		undo,
+		redo,
 		input,
 		calculate,
 		clear,
@@ -193,6 +205,7 @@ export function App() {
 		applyQuantity,
 		history,
 		deleteHistoryItem,
+		updateHistoryItem,
 		updateHistoryItemTag,
 		clearHistory,
 		selectFromHistory,
@@ -211,6 +224,18 @@ export function App() {
 			return next;
 		});
 	};
+
+	const toggleFocusMode = useCallback(() => {
+		setIsFocusMode((prev) => {
+			const next = !prev;
+			try {
+				localStorage.setItem("smartcalc-focus-mode", String(next));
+			} catch (e) {
+				console.error(e);
+			}
+			return next;
+		});
+	}, []);
 
 	const toggleKeycaps = () => {
 		setShowKeycaps((prev) => {
@@ -320,6 +345,9 @@ export function App() {
 		openConverter: handleOpenConverter,
 		openSplitBill: handleOpenSplitBill,
 		openFinance: handleOpenFinance,
+		undo,
+		redo,
+		toggleFocusMode,
 		setActiveKey: setActiveKey,
 	});
 
@@ -382,21 +410,29 @@ export function App() {
 	};
 
 	return (
-		<div className="min-h-screen w-full bg-ambient flex flex-col justify-between select-none overflow-x-hidden font-display transition-colors duration-300">
-			{/* NAVBAR INSTITUCIONAL SUPERIOR */}
-			<SiteHeader
-				colorMode={colorMode}
-				onToggleColorMode={toggleColorMode}
-				onOpenPix={() => setIsPixOpen(true)}
-				isPwaInstallable={isInstallable}
-				onInstallPwa={installApp}
-				theme={theme}
-			/>
+		<div
+			className={`min-h-screen w-full bg-ambient flex flex-col justify-between select-none overflow-x-hidden font-display transition-colors duration-300 ${
+				isFocusMode ? "h-screen overflow-y-auto" : ""
+			}`}
+		>
+			{/* NAVBAR INSTITUCIONAL SUPERIOR (Oculta no Modo Foco) */}
+			{!isFocusMode && (
+				<SiteHeader
+					colorMode={colorMode}
+					onToggleColorMode={toggleColorMode}
+					onOpenPix={() => setIsPixOpen(true)}
+					isPwaInstallable={isInstallable}
+					onInstallPwa={installApp}
+					theme={theme}
+				/>
+			)}
 
 			{/* HERO SECTION: CALCULADORA AO VIVO */}
 			<main
 				id="calculadora"
-				className="w-full flex flex-col items-center justify-center py-2 sm:py-8 px-2 sm:px-4 md:px-6"
+				className={`w-full flex flex-col items-center justify-center transition-all duration-300 ${
+					isFocusMode ? "flex-1 py-4 sm:py-6 px-2 sm:px-4" : "py-2 sm:py-8 px-2 sm:px-4 md:px-6"
+				}`}
 			>
 				{/* CONTAINER PRINCIPAL DA CALCULADORA */}
 				<div className="w-full max-w-7xl flex flex-col lg:flex-row items-center lg:items-stretch justify-center gap-4 sm:gap-6">
@@ -468,6 +504,8 @@ export function App() {
 							onToggleCompactMode={() => setIsCompactMode((prev) => !prev)}
 							isStudioMode={isStudioMode}
 							onToggleStudioMode={toggleStudioMode}
+							isFocusMode={isFocusMode}
+							onToggleFocusMode={toggleFocusMode}
 							showKeycaps={showKeycaps}
 							onToggleKeycaps={toggleKeycaps}
 							isPwaInstallable={isInstallable}
@@ -482,6 +520,10 @@ export function App() {
 						<Display
 							value={value}
 							preview={preview}
+							canUndo={canUndo}
+							canRedo={canRedo}
+							onUndo={undo}
+							onRedo={redo}
 							isLimitReached={isLimitReached}
 							isResult={isResult}
 							cursorColor={theme.accentText}
@@ -624,6 +666,7 @@ export function App() {
 										triggerHaptic("delete");
 										deleteHistoryItem(id);
 									}}
+									onUpdateItem={updateHistoryItem}
 									onUpdateTag={updateHistoryItemTag}
 									onClearAll={() => {
 										playDelete();
@@ -636,34 +679,57 @@ export function App() {
 					</AnimatePresence>
 				</div>
 
-				{/* BANNER DE MONETIZAÇÃO / AFILIADOS DISCRETO */}
-				<div className="w-full max-w-5xl mx-auto px-4 mt-6">
-					<AdBannerSlot />
-				</div>
+				{/* BANNER DE MONETIZAÇÃO / AFILIADOS DISCRETO (Oculto no Modo Foco) */}
+				{!isFocusMode && (
+					<div className="w-full max-w-5xl mx-auto px-4 mt-6">
+						<AdBannerSlot />
+					</div>
+				)}
+
+				{/* Indicador Flutuante no Modo Foco */}
+				{isFocusMode && (
+					<motion.div
+						initial={{ opacity: 0, y: 10 }}
+						animate={{ opacity: 1, y: 0 }}
+						className="mt-4 flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-zinc-900/80 border border-cyan-500/30 text-zinc-300 text-xs backdrop-blur-xl shadow-[0_8px_30px_rgba(0,0,0,0.8)]"
+					>
+						<span className="w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_8px_rgba(6,182,212,0.8)] animate-pulse" />
+						<span className="font-medium">Modo Foco Ativo</span>
+						<button
+							type="button"
+							onClick={toggleFocusMode}
+							className="text-cyan-300 hover:text-white bg-cyan-500/20 hover:bg-cyan-500/30 px-2 py-0.5 rounded-full text-[10px] font-semibold border border-cyan-500/40 transition-colors cursor-pointer ml-1"
+						>
+							Sair (Alt+F)
+						</button>
+					</motion.div>
+				)}
 			</main>
 
-			{/* SEÇÕES INSTITUCIONAIS DO PORTAL WEB (CARREGADAS SOB DEMANDA) */}
-			<Suspense fallback={null}>
-				<FeaturesSection
-					theme={theme}
-					onOpenComparator={handleOpenComparator}
-					onOpenSplitBill={handleOpenSplitBill}
-					onOpenFinance={handleOpenFinance}
-					onOpenConverter={handleOpenConverter}
-					onOpenQuantity={handleOpenQuantity}
-					onOpenFuel={handleOpenFuel}
-					onOpenDiscount={handleOpenDiscount}
-					onOpenAnalytics={handleOpenAnalytics}
-				/>
-				<SavingsGuideSection />
-				<WhyUsSection theme={theme} />
-				<SiteFooter
-					theme={theme}
-					onOpenPix={() => setIsPixOpen(true)}
-					onOpenPrivacy={handleOpenPrivacy}
-					onOpenTerms={handleOpenTerms}
-				/>
-			</Suspense>
+			{/* SEÇÕES INSTITUCIONAIS DO PORTAL WEB (CARREGADAS SOB DEMANDA, Ocultas no Modo Foco) */}
+			{!isFocusMode && (
+				<Suspense fallback={null}>
+					<FeaturesSection
+						theme={theme}
+						onOpenComparator={handleOpenComparator}
+						onOpenSplitBill={handleOpenSplitBill}
+						onOpenFinance={handleOpenFinance}
+						onOpenConverter={handleOpenConverter}
+						onOpenQuantity={handleOpenQuantity}
+						onOpenFuel={handleOpenFuel}
+						onOpenDiscount={handleOpenDiscount}
+						onOpenAnalytics={handleOpenAnalytics}
+					/>
+					<SavingsGuideSection />
+					<WhyUsSection theme={theme} />
+					<SiteFooter
+						theme={theme}
+						onOpenPix={() => setIsPixOpen(true)}
+						onOpenPrivacy={handleOpenPrivacy}
+						onOpenTerms={handleOpenTerms}
+					/>
+				</Suspense>
+			)}
 
 			{/* Banner discreto de instalação PWA */}
 			<PwaInstallBanner isInstallable={isInstallable} onInstall={installApp} />

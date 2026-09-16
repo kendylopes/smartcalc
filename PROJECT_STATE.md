@@ -65,6 +65,13 @@ src/
    - **Galeria Visual de Temas (`ThemePickerModal`)** com miniaturas interativas 3D dos 8 temas.
    - **Badges Flutuantes Neon de Atalhos (`[B]`, `[P]`, `[F]`, `[D]`, `[U]`, `[M]`)** no painel de ferramentas rápidas.
 
+4. **✨ Suite de Usabilidade, Produtividade & Imersão Visual:**
+   - **↩️ Sistema de Desfazer e Refazer (Undo / Redo):** Pilha com limite de 30 estados em [useCalculator.ts](file:///c:/Users/Kennedy/Desktop/dev/calc-app/src/features/calculator/hooks/useCalculator.ts), atalhos `Ctrl+Z`, `Ctrl+Y` e micro-botões táteis no visor [Display.tsx](file:///c:/Users/Kennedy/Desktop/dev/calc-app/src/features/calculator/components/Display.tsx).
+   - **🔍 Busca Textual e Filtro de Tags no Histórico:** Barra de pesquisa em tempo real e chips com contagem e cálculo automático do subtotal dos itens filtrados em [HistoryPanel.tsx](file:///c:/Users/Kennedy/Desktop/dev/calc-app/src/features/calculator/components/HistoryPanel.tsx).
+   - **✏️ Edição Direta de Itens do Histórico:** Modo inline em [HistoryPanel.tsx](file:///c:/Users/Kennedy/Desktop/dev/calc-app/src/features/calculator/components/HistoryPanel.tsx) permitindo alterar nome, preço unitário ou quantidade de qualquer item cadastrado sem refazer a conta.
+   - **🖥️ Modo Foco Imersivo (Kiosk / Balcão):** Alternador no [TopNavigation.tsx](file:///c:/Users/Kennedy/Desktop/dev/calc-app/src/features/calculator/components/TopNavigation.tsx) e atalho `Alt+F` que oculta o portal institucional e foca 100% da tela na calculadora, ideal para uso em supermercados e tablets.
+   - **🚨 Alertas Sensoriais & Visuais na Meta de Gastos:** Vibração tátil (`navigator.vibrate`) e pulso neon com badges de aviso quando a despesa atinge 80% ou estoura o orçamento em [BudgetBar.tsx](file:///c:/Users/Kennedy/Desktop/dev/calc-app/src/features/calculator/components/BudgetBar.tsx).
+
 ---
 
 ## 📋 5. Roadmap de Próximas Funcionalidades (Backlog Priorizado)
@@ -83,5 +90,5 @@ src/
 ---
 
 ## 📍 6. Onde Paramos (Checkpoint Atual)
-* **Última Ação:** Implementado foco automático do cursor no campo **"1. Nome do Produto (opcional)"** ao abrir os modais de Item/Supermercado e Quantidade (`ProductNameModal` e `QuantityModal`), permitindo digitação instantânea sem necessidade de clique manual.
+* **Última Ação:** Concluído o pacote completo de **Usabilidade & UX (Undo/Redo, Busca/Filtro e Edição de Itens no Histórico)** e **Visual & Imersão (Modo Foco Imersivo Alt+F e Alertas Dinâmicos no BudgetBar)**. Validação com `npm run build` e Biome concluída com sucesso (0 erros).
 * **Próximo Passo Recomendado:** Iniciar a construção da **Calculadora de Salário Líquido (CLT vs. PJ)** ou **Simulador SAC vs. Price**.
