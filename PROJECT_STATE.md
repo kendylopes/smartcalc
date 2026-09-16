@@ -90,5 +90,5 @@ src/
 ---
 
 ## 📍 6. Onde Paramos (Checkpoint Atual)
-* **Última Ação:** Concluído o pacote completo de **Usabilidade & UX (Undo/Redo, Busca/Filtro e Edição de Itens no Histórico)** e **Visual & Imersão (Modo Foco Imersivo Alt+F e Alertas Dinâmicos no BudgetBar)**. Eliminadas todas as violações do Biome Linter em `Display.tsx`, `HistoryPanel.tsx`, `BudgetBar.tsx` e `format.ts` (0 erros e 0 warnings).
+* **Última Ação:** Realizada **Auditoria Completa de Qualidade de Código & Tipos em 100% do projeto**: varredura com Biome (`npx biome check .`) e compilação estrita TypeScript (`tsc -b && vite build`). Foram corrigidos 100% dos erros de acessibilidade (`a11y`), imports, keys e dependências de hooks em todos os 88 arquivos, atingindo **0 erros** e **0 falhas de compilação**.
 * **Próximo Passo Recomendado:** Iniciar a construção da **Calculadora de Salário Líquido (CLT vs. PJ)** ou **Simulador SAC vs. Price**.
