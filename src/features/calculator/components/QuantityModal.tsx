@@ -260,7 +260,7 @@ export const QuantityModal = memo(function QuantityModal({
 												outline-none
 												tabular-nums
 											"
-											autoFocus
+											ref={(el) => el?.focus()}
 										/>
 									</div>
 

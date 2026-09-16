@@ -45,7 +45,9 @@ export const AdBannerSlot = memo(function AdBannerSlot({
 		if (type === "adsense" || (type === "auto" && isAdSenseConfigured)) {
 			try {
 				// @ts-expect-error
-				(window.adsbygoogle = window.adsbygoogle || []).push({});
+				window.adsbygoogle = window.adsbygoogle || [];
+				// @ts-expect-error
+				window.adsbygoogle.push({});
 			} catch (e) {
 				console.error("AdSense render error:", e);
 			}

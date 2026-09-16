@@ -43,7 +43,7 @@ export const SpendingDashboardModal: React.FC<Props> = ({
 
 		const validRecords = history.filter((item) => {
 			const resNum = Number(String(item.result).replace(",", "."));
-			return !isNaN(resNum) && isFinite(resNum) && resNum > 0;
+			return !Number.isNaN(resNum) && Number.isFinite(resNum) && resNum > 0;
 		});
 
 		for (const rec of validRecords) {
@@ -116,16 +116,19 @@ export const SpendingDashboardModal: React.FC<Props> = ({
 
 	return (
 		<AnimatePresence>
-			<div
-				className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/65 backdrop-blur-md"
-				onClick={onClose}
-			>
+			<div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4">
+				{/* Backdrop semântico para fechar modal ao clicar fora */}
+				<button
+					type="button"
+					aria-label="Fechar painel de gastos"
+					onClick={onClose}
+					className="fixed inset-0 bg-black/65 backdrop-blur-md cursor-default border-none outline-none w-full h-full"
+				/>
 				<motion.div
 					initial={{ opacity: 0, scale: 0.94, y: 15 }}
 					animate={{ opacity: 1, scale: 1, y: 0 }}
 					exit={{ opacity: 0, scale: 0.94, y: 15 }}
 					transition={{ duration: 0.2, ease: "easeOut" }}
-					onClick={(e) => e.stopPropagation()}
 					className="
 						relative
 						w-full
@@ -243,7 +246,7 @@ export const SpendingDashboardModal: React.FC<Props> = ({
 
 										<div className="space-y-2.5">
 											{stats.topItems.map((item, index) => (
-												<div key={index} className="space-y-1">
+												<div key={`${item.name}-${item.total}`} className="space-y-1">
 													<div className="flex items-center justify-between text-xs">
 														<span className="text-zinc-300 font-medium truncate max-w-[60%]">
 															{item.name}

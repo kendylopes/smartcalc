@@ -260,7 +260,7 @@ export const TopNavigation = memo(function TopNavigation({
 									max-w-md
 									p-4
 									sm:p-5
-									rounded-[2rem]
+									rounded-4xl
 									border
 									border-white/14
 									tech-modal

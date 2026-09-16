@@ -6,7 +6,7 @@ type Props = {
 	theme?: ThemeConfig;
 };
 
-export const WhyUsSection = memo(function WhyUsSection({}: Props) {
+export const WhyUsSection = memo(function WhyUsSection(_props: Props) {
 	const perks = [
 		{
 			title: "100% Privado & Seguro",

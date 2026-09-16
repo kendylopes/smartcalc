@@ -208,7 +208,7 @@ _Calculado via SmartCalc_`;
 											transition-colors
 											tabular-nums
 										"
-										autoFocus
+										ref={(el) => el?.focus()}
 									/>
 								</div>
 							</div>

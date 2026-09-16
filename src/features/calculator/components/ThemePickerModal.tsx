@@ -30,7 +30,12 @@ export const ThemePickerModal = memo(function ThemePickerModal({
 		<AnimatePresence>
 			<div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/70 backdrop-blur-md">
 				{/* Backdrop click to close */}
-				<div className="absolute inset-0" onClick={onClose} />
+				<button
+					type="button"
+					aria-label="Fechar galeria de temas"
+					className="absolute inset-0 bg-transparent cursor-default border-none outline-none w-full h-full"
+					onClick={onClose}
+				/>
 
 				<motion.div
 					initial={{ opacity: 0, scale: 0.94, y: 15 }}

@@ -115,7 +115,7 @@ export const Display = memo(function Display({
 					relative
 					px-3.5 sm:px-4
 					py-2.5 sm:py-3
-					rounded-[1.5rem] sm:rounded-[1.8rem]
+					rounded-3xl sm:rounded-[1.8rem]
 					neu-display
 					transition-all
 					duration-150

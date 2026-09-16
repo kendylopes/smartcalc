@@ -559,8 +559,14 @@ export const BarcodeScannerModal = memo(function BarcodeScannerModal({
 
 								{/* Nome do Produto */}
 								<div className="space-y-1">
-									<label className="text-[11px] font-semibold text-zinc-300">Nome do Produto</label>
+									<label
+										htmlFor="scanner-product-name"
+										className="text-[11px] font-semibold text-zinc-300"
+									>
+										Nome do Produto
+									</label>
 									<input
+										id="scanner-product-name"
 										type="text"
 										value={productName}
 										onChange={(e) => setProductName(e.target.value)}
@@ -572,23 +578,27 @@ export const BarcodeScannerModal = memo(function BarcodeScannerModal({
 								{/* Preço Unitário & Quantidade */}
 								<div className="grid grid-cols-2 gap-3">
 									<div className="space-y-1">
-										<label className="text-[11px] font-semibold text-zinc-300">
+										<label
+											htmlFor="scanner-unit-price"
+											className="text-[11px] font-semibold text-zinc-300"
+										>
 											Preço Unitário (R$)
 										</label>
 										<input
+											id="scanner-unit-price"
 											type="text"
 											inputMode="decimal"
 											value={unitPrice}
 											onChange={(e) => setUnitPrice(e.target.value)}
 											placeholder="0,00"
-											autoFocus
+											ref={(el) => el?.focus()}
 											className="w-full px-3 py-2.5 rounded-xl bg-zinc-900 border border-white/15 text-sm font-mono font-bold text-white placeholder-zinc-500 outline-none focus:border-cyan-400"
 										/>
 									</div>
 
 									{/* Contador de Quantidade */}
 									<div className="space-y-1">
-										<label className="text-[11px] font-semibold text-zinc-300">Quantidade</label>
+										<span className="text-[11px] font-semibold text-zinc-300">Quantidade</span>
 										<div className="flex items-center justify-between p-1 rounded-xl bg-zinc-900 border border-white/15">
 											<button
 												type="button"

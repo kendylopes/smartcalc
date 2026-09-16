@@ -85,7 +85,7 @@ export const FuelCalculatorModal = memo(function FuelCalculatorModal({
 			totalGasoline,
 			savings500km,
 		};
-	}, [ethanolPrice, gasolinePrice, isCustomConsumption, ethanolKmL, gasolineKmL, tankSize]);
+	}, [ethanolPrice, gasolinePrice, isCustomConsumption, ethanolKmL, gasolineKmL]);
 
 	const handleTransfer = () => {
 		if (!result) return;
