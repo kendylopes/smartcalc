@@ -134,7 +134,7 @@ export const BudgetBar = memo(function BudgetBar({ currentTotal }: Props) {
 								value={inputBudget}
 								onChange={(e) => setInputBudget(formatCurrencyInput(e.target.value))}
 								placeholder="0,00"
-								autoFocus
+								ref={(el) => el?.focus()}
 								onKeyDown={(e) => {
 									if (e.key === "Enter") handleSave();
 									if (e.key === "Escape") setIsEditing(false);

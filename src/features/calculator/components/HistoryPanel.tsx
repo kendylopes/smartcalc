@@ -582,18 +582,20 @@ _Calculado via SmartCalc_`;
 												<span className="truncate max-w-35">{item.productName}</span>
 											</span>
 										) : item.tag ? (
-											<span
+											<button
+												type="button"
 												onClick={(e) => {
 													e.stopPropagation();
 													setTagEditingId(item.id);
 													setCustomTagInput(item.tag || "");
 												}}
 												title="Clique para editar etiqueta"
+												aria-label={`Editar etiqueta ${item.tag}`}
 												className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium bg-cyan-500/10 text-cyan-300 border border-cyan-500/20 cursor-pointer hover:bg-cyan-500/20 transition-colors"
 											>
 												<Tag size={9} />
 												<span>{item.tag}</span>
-											</span>
+											</button>
 										) : (
 											<button
 												type="button"
@@ -802,7 +804,7 @@ _Calculado via SmartCalc_`;
 														onChange={(e) => setCustomTagInput(e.target.value)}
 														placeholder="Nome da tag (ex: Aluguel)"
 														className="flex-1 bg-zinc-800 border border-white/15 rounded-lg px-2 py-1 text-xs text-white outline-none focus:border-cyan-400"
-														autoFocus
+														ref={(el) => el?.focus()}
 														onKeyDown={(e) => {
 															if (e.key === "Enter") {
 																handleSaveTag(item.id, customTagInput);
