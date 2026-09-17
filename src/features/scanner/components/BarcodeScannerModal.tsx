@@ -312,7 +312,7 @@ export const BarcodeScannerModal = memo(function BarcodeScannerModal({
 		const cleanPrice = unitPrice.replace(",", ".").trim();
 		const numPrice = Number(cleanPrice);
 
-		if (!cleanPrice || isNaN(numPrice) || numPrice <= 0) {
+		if (!cleanPrice || Number.isNaN(numPrice) || numPrice <= 0) {
 			toast.error("Insira um preço válido para o produto.");
 			return;
 		}

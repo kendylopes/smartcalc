@@ -95,7 +95,7 @@ export const I18nProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
 	const formatMoney = (val: number | string): string => {
 		const num = typeof val === "string" ? Number(val.replace(",", ".")) : val;
-		if (isNaN(num)) return `${currentLanguageInfo.currencySymbol} 0,00`;
+		if (Number.isNaN(num)) return `${currentLanguageInfo.currencySymbol} 0,00`;
 
 		return new Intl.NumberFormat(language, {
 			style: "currency",
@@ -107,7 +107,7 @@ export const I18nProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
 	const formatNumber = (val: number | string, decimals = 2): string => {
 		const num = typeof val === "string" ? Number(val.replace(",", ".")) : val;
-		if (isNaN(num)) return "0";
+		if (Number.isNaN(num)) return "0";
 
 		return new Intl.NumberFormat(language, {
 			minimumFractionDigits: 0,
