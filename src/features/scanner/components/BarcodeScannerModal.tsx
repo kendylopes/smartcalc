@@ -421,7 +421,7 @@ export const BarcodeScannerModal = memo(function BarcodeScannerModal({
 						{/* VISOR DA CÂMERA & MIRA LASER */}
 						{!detectedBarcode ? (
 							<div className="space-y-3">
-								<div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden bg-zinc-950 border border-white/10 flex items-center justify-center">
+								<div className="relative w-full aspect-4/3 rounded-2xl overflow-hidden bg-zinc-950 border border-white/10 flex items-center justify-center">
 									{hasCameraPermission === false ? (
 										<div className="text-center p-6 space-y-2 text-zinc-400">
 											<Camera size={36} className="mx-auto text-zinc-600 mb-1" />
@@ -450,7 +450,7 @@ export const BarcodeScannerModal = memo(function BarcodeScannerModal({
 													<motion.div
 														animate={{ y: [-60, 60, -60] }}
 														transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-														className="w-full h-0.5 bg-gradient-to-r from-transparent via-cyan-400 to-transparent shadow-[0_0_12px_#22d3ee]"
+														className="w-full h-0.5 bg-linear-to-r from-transparent via-cyan-400 to-transparent shadow-[0_0_12px_#22d3ee]"
 													/>
 												</div>
 											</div>
@@ -637,7 +637,7 @@ export const BarcodeScannerModal = memo(function BarcodeScannerModal({
 										w-full
 										py-3.5
 										rounded-2xl
-										bg-gradient-to-r from-emerald-500 to-cyan-500
+										bg-linear-to-r from-emerald-500 to-cyan-500
 										hover:from-emerald-400 hover:to-cyan-400
 										text-zinc-950
 										font-bold

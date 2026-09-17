@@ -22,7 +22,7 @@ O **Smart Calc** é uma calculadora web inteligente e progressiva (PWA) de últi
 
 ## 📁 3. Estrutura de Diretórios & Módulos (`src/features`)
 
-```
+```text
 src/
 ├── App.tsx                        # Componente raiz com Code Splitting (React.lazy + Suspense)
 ├── main.tsx                       # Ponto de entrada com registro do Service Worker

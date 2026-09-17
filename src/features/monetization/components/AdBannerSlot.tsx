@@ -84,7 +84,7 @@ export const AdBannerSlot = memo(function AdBannerSlot({
 				relative
 				w-full
 				overflow-hidden
-				rounded-[2rem]
+				rounded-4xl
 				neu-panel
 				p-4 sm:p-5
 				border
@@ -132,7 +132,7 @@ export const AdBannerSlot = memo(function AdBannerSlot({
 						flex items-center justify-center gap-2
 						px-4 py-2.5
 						rounded-xl
-						bg-gradient-to-r from-amber-500/20 to-cyan-500/20
+						bg-linear-to-r from-amber-500/20 to-cyan-500/20
 						hover:from-amber-500/30 hover:to-cyan-500/30
 						border border-white/15 hover:border-cyan-400/40
 						text-xs font-semibold text-white

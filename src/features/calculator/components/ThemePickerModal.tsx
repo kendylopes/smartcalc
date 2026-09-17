@@ -169,7 +169,7 @@ export const ThemePickerModal = memo(function ThemePickerModal({
 										</div>
 
 										{/* Reflexo de vidro */}
-										<div className="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white/15 to-transparent pointer-events-none" />
+										<div className="absolute inset-x-0 top-0 h-1/2 bg-linear-to-b from-white/15 to-transparent pointer-events-none" />
 									</div>
 
 									{/* Nome do Tema e Cor */}
