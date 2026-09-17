@@ -87,7 +87,6 @@ export const I18nProvider: React.FC<{ children: React.ReactNode }> = ({ children
 				return enUS;
 			case "es-ES":
 				return esES;
-			case "pt-BR":
 			default:
 				return ptBR;
 		}
